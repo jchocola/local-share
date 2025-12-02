@@ -18,4 +18,7 @@ class AppIcon {
   static const videoIcon = LucideIcons.video;
   static const documentIcon = LucideIcons.fileText;
   static const imageIcon = LucideIcons.image;
+  static const historyIcon = LucideIcons.history;
+  static const feedbackIcon = LucideIcons.messageSquare;
+  static const resetIcon = LucideIcons.refreshCcwDot;
 }

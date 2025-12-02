@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
+import 'package:local_share/presentation/send_page/pages/profile_page/profile_page.dart';
 import 'package:local_share/presentation/send_page/widget/founded_devices_list.dart';
 import 'package:local_share/presentation/send_page/widget/invisible_widget.dart';
 import 'package:local_share/presentation/send_page/widget/picked_files.dart';
@@ -39,7 +40,12 @@ class SendPage extends StatelessWidget {
         ),
         leading: Padding(
           padding: EdgeInsetsGeometry.only(left: AppConstant.appPadding),
-          child: CircleAvatar(),
+          child: GestureDetector(
+            onTap: () {
+              showDialog(context: context, builder: (context) => ProfilePage());
+            },
+            child: CircleAvatar(),
+          ),
         ),
         title: 'Local Share',
       ),
@@ -54,7 +60,10 @@ class SendPage extends StatelessWidget {
 
   Widget buildBody(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.symmetric(vertical: AppConstant.appPadding/2, horizontal: AppConstant.appPadding),
+      padding: EdgeInsets.symmetric(
+        vertical: AppConstant.appPadding / 2,
+        horizontal: AppConstant.appPadding,
+      ),
       child: BlocBuilder<SendPageBloc, SendPageBlocState>(
         builder: (context, state) {
           if (state is SendPageBlocState_loaded) {
@@ -63,11 +72,11 @@ class SendPage extends StatelessWidget {
                 spacing: AppConstant.appPadding,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                 SearchingForDevices(),
-                  Gap(AppConstant.appPadding*3),
-                 
+                  SearchingForDevices(),
+                  Gap(AppConstant.appPadding * 3),
+
                   FoundedDevicesList(),
-                // SearchingAnimation(),
+                  // SearchingAnimation(),
                   Spacer(),
                   PickedFiles(),
                 ],
@@ -75,9 +84,7 @@ class SendPage extends StatelessWidget {
             } else {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(child: InvisibleWidget()),
-                ],
+                children: [Center(child: InvisibleWidget())],
               );
             }
           } else {

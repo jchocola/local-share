@@ -23,6 +23,7 @@ class ProfileInfoWidget extends StatelessWidget {
                 spacing: AppConstant.appPadding / 2,
                 children: [
                   Text("Jenny's iPad Pro", style: theme.textTheme.titleMedium),
+                  Text('Device ID: 647743', style: theme.textTheme.bodySmall),
                   Text('Online', style: theme.textTheme.bodySmall),
                   ReadyToReceiveCard(ready: true),
                 ],
