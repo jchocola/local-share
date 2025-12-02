@@ -6,6 +6,8 @@ import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
 import 'package:local_share/presentation/send_page/widget/founded_devices_list.dart';
 import 'package:local_share/presentation/send_page/widget/invisible_widget.dart';
+import 'package:local_share/presentation/send_page/widget/picked_files.dart';
+import 'package:local_share/presentation/send_page/widget/searching_animation.dart';
 import 'package:local_share/presentation/send_page/widget/searching_for_devices.dart';
 import 'package:local_share/widgets/appbar.dart';
 import 'package:local_share/widgets/other_device_card.dart';
@@ -64,7 +66,10 @@ class SendPage extends StatelessWidget {
                  SearchingForDevices(),
                   Gap(AppConstant.appPadding*3),
                  
-                  FoundedDevicesList()
+                 // FoundedDevicesList(),
+                 SearchingAnimation(),
+                  Spacer(),
+                  PickedFiles(),
                 ],
               );
             } else {

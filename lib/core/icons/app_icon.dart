@@ -14,4 +14,8 @@ class AppIcon {
   static const signalIcon = LucideIcons.radio;
 
   static const arrowForwardIcon = Icons.arrow_forward_ios_rounded;
+
+  static const videoIcon = LucideIcons.video;
+  static const documentIcon = LucideIcons.fileText;
+  static const imageIcon = LucideIcons.image;
 }
