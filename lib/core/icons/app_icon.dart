@@ -21,4 +21,16 @@ class AppIcon {
   static const historyIcon = LucideIcons.history;
   static const feedbackIcon = LucideIcons.messageSquare;
   static const resetIcon = LucideIcons.refreshCcwDot;
+
+  static const deleteFile = LucideIcons.fileExclamationPoint;
+
+  static const fileCheck = LucideIcons.fileCheck;
+
+  static const directoryIcon = LucideIcons.folder;
+
+  static const darkThemeIcon = LucideIcons.moon;
+  static const lightThemeIcon = LucideIcons.sun;
+
+  static const notificationOffIcon = LucideIcons.bellMinus;
+  static const notificationOnIcon = LucideIcons.bell;
 }
