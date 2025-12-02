@@ -12,7 +12,6 @@ final GoRouter router = GoRouter(
         return MainPage(navigationShell: navigationShell);
       },
 
-
       branches: [
         ///
         /// ВЕТВЬ 1: (SHARING)

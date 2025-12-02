@@ -4,8 +4,7 @@ import 'package:local_share/core/theme/light_color.dart';
 final ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme.light(
-    
-    
+    primary: LightColor.activeColor
   ),
 
   bottomNavigationBarTheme: BottomNavigationBarThemeData(

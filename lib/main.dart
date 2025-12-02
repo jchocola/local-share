@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
       dark: darkTheme,
       initial: AdaptiveThemeMode.light,
       builder: (theme, darkTheme) => MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         title: 'Local Share',
         theme: theme,
         darkTheme: darkTheme,
