@@ -24,6 +24,7 @@ final ThemeData lightTheme = ThemeData(
 
 
   textTheme: TextTheme(
+    titleLarge: textStyle.copyWith(fontWeight: FontWeight.bold),
     bodySmall: textStyle.copyWith(color: LightColor.subTitleTextColor)
   ),
 

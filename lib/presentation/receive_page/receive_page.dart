@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/presentation/receive_page/widget/waiting_connection_widget.dart';
 import 'package:local_share/widgets/appbar.dart';
 
 class ReceivePage extends StatelessWidget {
@@ -13,7 +15,19 @@ class ReceivePage extends StatelessWidget {
         trailing: IconButton(onPressed: () {}, icon: Icon(AppIcon.settingIcon)),
         title: 'Receive',
       ),
-      body: const Center(child: Text('This is the Receive Page')),
+      body: buildBody(context)
+    );
+  }
+
+  Widget buildBody(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppConstant.appPadding/2 , horizontal: AppConstant.appPadding),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          WaitingConnectionWidget(),
+        ],
+      ),
     );
   }
 }

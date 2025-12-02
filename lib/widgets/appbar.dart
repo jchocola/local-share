@@ -16,12 +16,11 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? trailing;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AppBar(
       leading: withLeading ? leading : null,
-      actions: withTrailing ? [
-        if (trailing != null) trailing!,
-      ] : null,
-      title: Text(title),
+      actions: withTrailing ? [if (trailing != null) trailing!] : null,
+      title: Text(title , style: theme.textTheme.titleLarge),
     );
   }
 
