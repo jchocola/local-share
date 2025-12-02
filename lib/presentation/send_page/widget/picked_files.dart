@@ -20,7 +20,7 @@ class PickedFiles extends StatelessWidget {
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(children: List.generate(4, (index) => PickedFileCard())),
+          child: Row(children: List.generate(4, (index) => PickedFileCard(withFixedWidth: true,))),
         ),
       ],
     );

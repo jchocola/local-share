@@ -5,9 +5,21 @@ final textStyle = TextStyle();
 
 final ThemeData lightTheme = ThemeData(
   useMaterial3: true,
+
+  scaffoldBackgroundColor: LightColor.bgColor,
+
   colorScheme: ColorScheme.light(
     primary: LightColor.activeColor,
     onPrimaryContainer: LightColor.bgColor,
+
+
+    secondary: LightColor.onlineColor,
+    onSecondary: LightColor.subTitleTextColor,
+
+    tertiary: LightColor.offlineColor,
+
+
+
   ),
 
 

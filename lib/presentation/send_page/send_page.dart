@@ -66,8 +66,8 @@ class SendPage extends StatelessWidget {
                  SearchingForDevices(),
                   Gap(AppConstant.appPadding*3),
                  
-                 // FoundedDevicesList(),
-                 SearchingAnimation(),
+                  FoundedDevicesList(),
+                // SearchingAnimation(),
                   Spacer(),
                   PickedFiles(),
                 ],

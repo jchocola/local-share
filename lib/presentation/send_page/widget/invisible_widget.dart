@@ -19,16 +19,24 @@ class InvisibleWidget extends StatelessWidget {
           spacing: AppConstant.appPadding,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(AppIcon.closeEyeIcon, size: AppConstant.bigIcon,),
-            Text('You are invisible to other devices', style: theme.textTheme.titleMedium,),
+            Icon(AppIcon.closeEyeIcon, size: AppConstant.bigIcon),
+            Text(
+              'You are invisible to other devices',
+              style: theme.textTheme.titleMedium,
+            ),
             Text(
               'Turn on visibility to allow other devices to discover and send files to you',
-              style: theme.textTheme.bodyMedium!.copyWith(
-                
-              ),
+              style: theme.textTheme.bodyMedium!.copyWith(),
               textAlign: TextAlign.center,
             ),
-            BigButton(title: 'Become Visible' , onTap: () => context.read<SendPageBloc>().add(SendPageBlocEvent_ChangeVisiblity()),),
+            BigButton(
+              title: 'Become Visible',
+              color: theme.colorScheme.primary,
+              textColor: theme.colorScheme.onPrimaryContainer,
+              onTap: () => context.read<SendPageBloc>().add(
+                SendPageBlocEvent_ChangeVisiblity(),
+              ),
+            ),
           ],
         ),
       ),

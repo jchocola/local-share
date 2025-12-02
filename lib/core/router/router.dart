@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:local_share/main_page.dart';
 import 'package:local_share/presentation/receive_page/receive_page.dart';
+import 'package:local_share/presentation/send_page/pages/confirm_transfer/confirm_transfer_page.dart';
 import 'package:local_share/presentation/send_page/send_page.dart';
 
 final GoRouter router = GoRouter(
@@ -18,7 +19,9 @@ final GoRouter router = GoRouter(
         ///
         
         StatefulShellBranch(routes: [
-          GoRoute(path: '/send_page', builder: (context, state) => const SendPage(),)
+          GoRoute(path: '/send_page', builder: (context, state) => const SendPage(), routes: [
+            GoRoute(path: '/confirm_transfer', builder: (context, state) => const ConfirmTransferPage(),)
+          ])
         ]),
         
 
