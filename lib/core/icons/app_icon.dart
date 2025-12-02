@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class AppIcon {
@@ -9,4 +10,8 @@ class AppIcon {
 
   static const settingIcon = LucideIcons.settings;
   static const addIcon = LucideIcons.plus;
+
+  static const signalIcon = LucideIcons.radio;
+
+  static const arrowForwardIcon = Icons.arrow_forward_ios_rounded;
 }
