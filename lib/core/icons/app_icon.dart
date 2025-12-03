@@ -37,4 +37,6 @@ class AppIcon {
   static const doneIcon = LucideIcons.circleCheck;
 
   static const infoIcon = LucideIcons.info;
+
+  static const multipleFileIcon = LucideIcons.files;
 }

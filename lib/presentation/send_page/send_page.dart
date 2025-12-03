@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:gap/gap.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/profile_page/profile_page.dart';
+import 'package:local_share/presentation/send_page/widget/context_menu.dart';
 import 'package:local_share/presentation/send_page/widget/founded_devices_list.dart';
 import 'package:local_share/presentation/send_page/widget/invisible_widget.dart';
 import 'package:local_share/presentation/send_page/widget/picked_files.dart';
@@ -52,7 +54,15 @@ class SendPage extends StatelessWidget {
       body: buildBody(context),
 
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () {},
+        onPressed: () async{
+          await menu.show(context);
+//           void showMenu() async {
+//   showContextMenu(context, contextMenu: menu);
+//   // or 
+//   // final selectedValue = await menu.show(context);
+//   // print(selectedValue);
+// }
+        },
         child: Icon(AppIcon.addIcon),
       ),
     );
