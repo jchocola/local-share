@@ -33,4 +33,8 @@ class AppIcon {
 
   static const notificationOffIcon = LucideIcons.bellMinus;
   static const notificationOnIcon = LucideIcons.bell;
+
+  static const doneIcon = LucideIcons.circleCheck;
+
+  static const infoIcon = LucideIcons.info;
 }

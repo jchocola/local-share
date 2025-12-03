@@ -3,5 +3,6 @@ class AppConstant {
   static const double appBorder = 14;
 
   static const double bigIcon = 30;
-    static const double smallIcon = 14;
+  static const double smallIcon = 14;
+  static const progressLinearHeight = 14.0;
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/files_to_send_widget.dart';
@@ -13,15 +14,14 @@ class IncomingTransferWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Dialog(
-      
       child: Padding(
         padding: const EdgeInsets.all(AppConstant.appPadding),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Incoming Transfer' , style: theme.textTheme.titleLarge,),
+            Text('Incoming Transfer', style: theme.textTheme.titleLarge),
             ProfileInfoWidget(),
-         
+
             FilesToSendWidget(),
             Divider(),
             Row(
@@ -42,6 +42,9 @@ class IncomingTransferWidget extends StatelessWidget {
                     color: theme.colorScheme.secondary,
                     withIcon: true,
                     icon: AppIcon.receiveIcon,
+                    onTap: () {
+                      context.push('/receive_page/transfer_progress');
+                    },
                   ),
                 ),
               ],
