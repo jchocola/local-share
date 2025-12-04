@@ -10,13 +10,22 @@ class BonsoirDiscoverRepositoryImpl {
     discovery = BonsoirDiscovery(type: _type);
     await discovery.initialize();
     logger.i('Bonsoir discovery Initialized');
+  }
+
+  Future<void> startDiscovery() async {
+    await discovery.start();
+
+    logger.i('Bonsoir discovery started');
 
     discovery.eventStream!.listen((event) {
       switch (event) {
         case BonsoirDiscoveryStartedEvent():
-            logger.e('Service Started : port ${event.service?.port} , name ${event.service?.name}');
-          break; 
+          logger.e(
+            'Service Started : port ${event.service?.port} , name ${event.service?.name}',
+          );
+          break;
         case BonsoirDiscoveryServiceFoundEvent():
+          final BonsoirService bonsoirService = event.service;
           logger.e('Service found : ${event.service.toJson()}');
           event.service!.resolve(
             discovery.serviceResolver,
@@ -36,11 +45,6 @@ class BonsoirDiscoverRepositoryImpl {
           break;
       }
     });
-  }
-
-  Future<void> startDiscovery() async {
-    await discovery.start();
-    logger.i('Bonsoir discovery started');
   }
 
   Future<void> stopDiscovery() async {

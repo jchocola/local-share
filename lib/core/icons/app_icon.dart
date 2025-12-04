@@ -39,4 +39,8 @@ class AppIcon {
   static const infoIcon = LucideIcons.info;
 
   static const multipleFileIcon = LucideIcons.files;
+
+  static const cameraIcon = LucideIcons.camera;
+
+  static const deleteIcon = LucideIcons.trash2;
 }

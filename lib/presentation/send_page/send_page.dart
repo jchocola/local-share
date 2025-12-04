@@ -55,7 +55,7 @@ class SendPage extends StatelessWidget {
 
       floatingActionButton: FloatingActionButton.small(
         onPressed: () async{
-          await menu.show(context);
+          await menu(context).show(context);
 //           void showMenu() async {
 //   showContextMenu(context, contextMenu: menu);
 //   // or 

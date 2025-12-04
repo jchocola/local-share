@@ -5,6 +5,7 @@ import 'package:local_share/core/router/router.dart';
 import 'package:local_share/core/theme/dark_theme.dart';
 import 'package:local_share/core/theme/light_theme.dart';
 import 'package:local_share/main_page.dart';
+import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
 import 'package:logger/web.dart';
 
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context)=> SendPageBloc()),
+        BlocProvider(create: (context)=> PickedFilesBloc()),
 
         
       ],
