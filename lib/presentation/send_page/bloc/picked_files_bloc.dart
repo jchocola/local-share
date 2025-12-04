@@ -28,6 +28,14 @@ class PickedFilesBlocEvent_selectMultipleFile extends PickedFilesBlocEvent {}
 
 class PickedFilesBlocEvent_clearFile extends PickedFilesBlocEvent {}
 
+class PickedFilesBlocEvent_removeFile extends PickedFilesBlocEvent {
+  final int index;
+  PickedFilesBlocEvent_removeFile({required this.index});
+
+  @override
+  List<Object?> get props => [index];
+}
+
 ///
 /// STATE
 ///
@@ -131,13 +139,12 @@ class PickedFilesBloc extends Bloc<PickedFilesBlocEvent, PickedFilesBlocState> {
             .map((file) => File(file.path!))
             .toList();
 
-          final currentState = state;
+        final currentState = state;
         if (currentState is PickedFilesBlocStateLoaded) {
           List<File> newfiles = List.from(currentState.files);
           newfiles = newfiles + list;
           emit(PickedFilesBlocStateLoaded(files: newfiles));
         }
-
       }
     });
 
@@ -147,6 +154,22 @@ class PickedFilesBloc extends Bloc<PickedFilesBlocEvent, PickedFilesBlocState> {
     on<PickedFilesBlocEvent_clearFile>((event, emit) {
       logger.i('Clear file tapped');
       emit(PickedFilesBlocStateLoaded());
+    });
+
+    ///
+    /// ON REMOVE FILE
+    ///
+    on<PickedFilesBlocEvent_removeFile>((event, emit) {
+      logger.i('Remove file');
+
+      final currentState = state;
+
+      if (currentState is PickedFilesBlocStateLoaded) {
+        List<File> newList = List.from(currentState.files);
+
+        newList.removeAt(event.index);
+        emit(PickedFilesBlocStateLoaded(files: newList));
+      }
     });
   }
 }

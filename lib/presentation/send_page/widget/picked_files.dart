@@ -30,7 +30,10 @@ class PickedFiles extends StatelessWidget {
                     '${state.files.length} Files',
                     style: theme.textTheme.bodyMedium,
                   ),
-                  Text(formatFileSize(countFilesSize(files:  state.files)), style: theme.textTheme.titleMedium),
+                  Text(
+                    formatFileSize(countFilesSize(files: state.files)),
+                    style: theme.textTheme.titleMedium,
+                  ),
                 ],
               ),
 
@@ -50,7 +53,15 @@ class PickedFiles extends StatelessWidget {
                       child: Row(
                         children: List.generate(
                           state.files.length,
-                          (index) => PickedFileCard(withFixedWidth: true, file: state.files[index],),
+                          (index) => PickedFileCard(
+                            withFixedWidth: true,
+                            file: state.files[index],
+                            onLongPress: () {
+                              context.read<PickedFilesBloc>().add(
+                                PickedFilesBlocEvent_removeFile(index: index),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
