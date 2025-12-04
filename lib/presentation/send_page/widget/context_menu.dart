@@ -20,21 +20,23 @@ getEntries(BuildContext context) => <ContextMenuEntry>[
         label: const Text('From gallery'),
         value: "gallery",
         icon: const Icon(AppIcon.imageIcon),
-        onSelected: (value) {},
+        onSelected: (value) {
+            context.read<PickedFilesBloc>().add(PickedFilesBlocEvent_selectPhotoFromGallery());
+        },
       ),
       MenuItem(
         label: const Text('From camera'),
         value: 'camera',
         icon: const Icon(AppIcon.cameraIcon),
         onSelected: (value) {
-          // implement redo
+           context.read<PickedFilesBloc>().add(PickedFilesBlocEvent_selectPhotoFromCamera()); 
         },
       ),
     ],
     label: const Text('Select Photo'),
     icon: const Icon(AppIcon.imageIcon),
     onSelected: (value) {
-      // implement cut
+    
     },
   ),
   MenuItem(

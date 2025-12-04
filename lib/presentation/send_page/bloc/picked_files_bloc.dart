@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:local_share/main.dart';
 
 ///
@@ -35,12 +37,16 @@ abstract class PickedFilesBlocState extends Equatable {
 }
 
 class PickedFilesBlocStateLoaded extends PickedFilesBlocState {
-  List<File> files;
+  final List<File> files;
 
   PickedFilesBlocStateLoaded({this.files = const []});
 
   @override
   List<Object?> get props => [files];
+
+  PickedFilesBlocStateLoaded copyWith({List<File>? files}) {
+    return PickedFilesBlocStateLoaded(files: files ?? this.files);
+  }
 }
 
 ///
@@ -63,9 +69,35 @@ class PickedFilesBloc extends Bloc<PickedFilesBlocEvent, PickedFilesBlocState> {
     });
 
     ///
-    /// SELECT PHOTO
+    /// SELECT PHOTO FROM GALLERY
     ///
-    on<PickedFilesBlocEvent_selectPhotoFromGallery>((event, emit) async {});
+    on<PickedFilesBlocEvent_selectPhotoFromGallery>((event, emit) async {
+      logger.i('Select photo from gallery');
+
+      final picker = ImagePicker();
+      final result = await picker.pickMultiImage();
+
+      if (result.isNotEmpty) {
+        final listFile = result.map((xfile) => File(xfile.path)).toList();
+
+        emit(PickedFilesBlocStateLoaded(files: listFile));
+      }
+    });
+
+    ///
+    /// SELECT PHOTO FROM CAMERA
+    ///
+    on<PickedFilesBlocEvent_selectPhotoFromCamera>((event, emit) async {
+      logger.i('Select photo from gallery');
+
+      final picker = ImagePicker();
+      final result = await picker.pickImage(source: ImageSource.camera);
+
+      if (result != null) {
+        final file = File(result.path);
+        emit(PickedFilesBlocStateLoaded(files: [file]));
+      }
+    });
 
     ///
     /// SELECT MULTIPLE FILE
