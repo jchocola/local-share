@@ -64,7 +64,14 @@ class PickedFilesBloc extends Bloc<PickedFilesBlocEvent, PickedFilesBlocState> {
 
       if (result != null) {
         File file = File(result.files.first.path!);
-        emit(PickedFilesBlocStateLoaded(files: [file]));
+
+        final currentState = state;
+
+        if (currentState is PickedFilesBlocStateLoaded) {
+          List<File> newfiles = List.from(currentState.files);
+          newfiles.add(file);
+          emit(PickedFilesBlocStateLoaded(files: newfiles));
+        }
       }
     });
 
@@ -80,7 +87,12 @@ class PickedFilesBloc extends Bloc<PickedFilesBlocEvent, PickedFilesBlocState> {
       if (result.isNotEmpty) {
         final listFile = result.map((xfile) => File(xfile.path)).toList();
 
-        emit(PickedFilesBlocStateLoaded(files: listFile));
+        final currentState = state;
+        if (currentState is PickedFilesBlocStateLoaded) {
+          List<File> newfiles = List.from(currentState.files);
+          newfiles = newfiles + listFile;
+          emit(PickedFilesBlocStateLoaded(files: newfiles));
+        }
       }
     });
 
@@ -95,7 +107,14 @@ class PickedFilesBloc extends Bloc<PickedFilesBlocEvent, PickedFilesBlocState> {
 
       if (result != null) {
         final file = File(result.path);
-        emit(PickedFilesBlocStateLoaded(files: [file]));
+
+        final currentState = state;
+
+        if (currentState is PickedFilesBlocStateLoaded) {
+          List<File> newfiles = List.from(currentState.files);
+          newfiles.add(file);
+          emit(PickedFilesBlocStateLoaded(files: newfiles));
+        }
       }
     });
 
@@ -111,7 +130,14 @@ class PickedFilesBloc extends Bloc<PickedFilesBlocEvent, PickedFilesBlocState> {
         final List<File> list = result.files
             .map((file) => File(file.path!))
             .toList();
-        emit(PickedFilesBlocStateLoaded(files: list));
+
+          final currentState = state;
+        if (currentState is PickedFilesBlocStateLoaded) {
+          List<File> newfiles = List.from(currentState.files);
+          newfiles = newfiles + list;
+          emit(PickedFilesBlocStateLoaded(files: newfiles));
+        }
+
       }
     });
 
