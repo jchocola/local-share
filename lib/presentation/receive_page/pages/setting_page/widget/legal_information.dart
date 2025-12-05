@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/setting_bloc.dart';
@@ -26,6 +27,7 @@ class LegalInformation extends StatelessWidget {
                 icon: AppIcon.infoIcon,
                 title: 'About App',
                 subtitle: '',
+                onTap: () => context.push('/receive_page/setting/about_app'),
                // trailingWidget: Text('Light'),
               ), 
               Divider(), 

@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:local_share/main_page.dart';
+import 'package:local_share/presentation/receive_page/pages/setting_page/page/about_app_page/about_app_page.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/setting_page.dart';
 import 'package:local_share/presentation/receive_page/pages/transfer_progress_page/transfer_progress_page.dart';
 import 'package:local_share/presentation/receive_page/receive_page.dart';
@@ -19,26 +20,49 @@ final GoRouter router = GoRouter(
         ///
         /// ВЕТВЬ 1: (SHARING)
         ///
-        
-        StatefulShellBranch(routes: [
-          GoRoute(path: '/send_page', builder: (context, state) => const SendPage(), routes: [
-            GoRoute(path: '/confirm_transfer', builder: (context, state) => const ConfirmTransferPage(),)
-          ])
-        ]),
-        
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/send_page',
+              builder: (context, state) => const SendPage(),
+              routes: [
+                GoRoute(
+                  path: '/confirm_transfer',
+                  builder: (context, state) => const ConfirmTransferPage(),
+                ),
+              ],
+            ),
+          ],
+        ),
 
         ///
         /// ВЕТВЬ 2: (RECEIVING)
         ///
-        
-         StatefulShellBranch(routes: [
-          GoRoute(path: '/receive_page', builder: (context, state) => const ReceivePage(), routes: [
-            GoRoute(path: '/setting', builder: (context, state) => const SettingPage(),),
-             GoRoute(path: '/transfer_progress', builder: (context, state) => const TransferProgressPage(),)
-          ])
-         ]),
-        
-        ],
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/receive_page',
+              builder: (context, state) => const ReceivePage(),
+              routes: [
+                GoRoute(
+                  path: '/setting',
+                  builder: (context, state) => const SettingPage(),
+                  routes: [
+                    GoRoute(
+                      path: '/about_app',
+                      builder: (context, state) => const AboutAppPage(),
+                    ),
+                  ],
+                ),
+                GoRoute(
+                  path: '/transfer_progress',
+                  builder: (context, state) => const TransferProgressPage(),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     ),
   ],
 );
