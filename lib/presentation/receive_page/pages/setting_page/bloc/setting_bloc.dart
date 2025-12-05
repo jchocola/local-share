@@ -43,10 +43,12 @@ class SettingBlocState_loaded extends SettingBlocState {
   final bool overwriteExistingFile;
   final bool autoAcceptSmallFile;
   final bool transferNotification;
+  final String downloadLocation;
   SettingBlocState_loaded({
     required this.overwriteExistingFile,
     required this.autoAcceptSmallFile,
     required this.transferNotification,
+    required this.downloadLocation,
   });
 
   @override
@@ -54,6 +56,7 @@ class SettingBlocState_loaded extends SettingBlocState {
     overwriteExistingFile,
     autoAcceptSmallFile,
     transferNotification,
+    downloadLocation,
   ];
 }
 
@@ -67,13 +70,14 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
     ///
     /// ON LOAD
     ///
-    on<SettingBlocEvent_load>((event, emit) {
+    on<SettingBlocEvent_load>((event, emit) async{
       final overwrite = sharedRepo.getOverwriteExistingFile();
       final autoAccept = sharedRepo.getAutoAcceptSmallFile();
       final transferNot = sharedRepo.getTransferNotification();
+      final downloadLocation = await sharedRepo.getDownloadLocation();
 
       logger.i(
-        'Setting bloc loaded : overwrite $overwrite, autoAccept $autoAccept , transferNot $transferNot',
+        'Setting bloc loaded : overwrite $overwrite, autoAccept $autoAccept , transferNot $transferNot , dowloadLocation $downloadLocation',
       );
 
       emit(
@@ -81,6 +85,7 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
           overwriteExistingFile: overwrite,
           autoAcceptSmallFile: autoAccept,
           transferNotification: transferNot,
+          downloadLocation: downloadLocation
         ),
       );
     });
@@ -112,15 +117,14 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
     ///
     /// Terms of service
     ///
-    on<SettingBlocEvent_termsOfServiceTapped>((event, emit) async{
-        await launchUrl(Uri.parse(AppConstant.termOfServiceUrl));
-   
-  });
+    on<SettingBlocEvent_termsOfServiceTapped>((event, emit) async {
+      await launchUrl(Uri.parse(AppConstant.termOfServiceUrl));
+    });
 
     ///
     ///  Privacy Policy
     ///
-    on<SettingBlocEvent_privacyPolicyTapped>((event, emit) async{
+    on<SettingBlocEvent_privacyPolicyTapped>((event, emit) async {
       await launchUrl(Uri.parse(AppConstant.privacyPolicyUrl));
     });
   }

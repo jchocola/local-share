@@ -12,6 +12,7 @@ class TransferSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: AppConstant.appPadding,
@@ -28,7 +29,9 @@ class TransferSetting extends StatelessWidget {
                       icon: AppIcon.directoryIcon,
                       title: 'Download Location',
                       subtitle: 'Where received files are saved.',
-                      trailingWidget: Text('/storage/emula...'),
+                      trailingWidget: SizedBox(
+                        width: size.width * 0.3,
+                        child: Text(state.downloadLocation )),
                     ),
                     Divider(),
                     SettingTitle(
