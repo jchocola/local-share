@@ -43,4 +43,10 @@ class AppIcon {
   static const cameraIcon = LucideIcons.camera;
 
   static const deleteIcon = LucideIcons.trash2;
+
+  static const languageIcon = LucideIcons.languages;
+
+  static const privacyPolicyIcon = LucideIcons.lock;
+
+  static const termSeriveIcon = LucideIcons.userRoundCog;
 }

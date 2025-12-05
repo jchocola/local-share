@@ -45,7 +45,7 @@ class PickedFiles extends StatelessWidget {
                         PickedFilesBlocEvent_clearFile(),
                       );
                     },
-                    icon: Icon(AppIcon.deleteIcon),
+                    icon: Icon(AppIcon.deleteIcon ,color: theme.colorScheme.primary,),
                   ),
                   Expanded(
                     child: SingleChildScrollView(
