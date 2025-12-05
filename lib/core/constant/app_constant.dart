@@ -5,4 +5,10 @@ class AppConstant {
   static const double bigIcon = 30;
   static const double smallIcon = 14;
   static const progressLinearHeight = 14.0;
+
+  static const String privacyPolicyUrl =
+      'https://www.freeprivacypolicy.com/live/83e25a6d-af27-4d2f-bcbf-516cb78f6bed';
+
+  static const String termOfServiceUrl =
+      'https://www.termsfeed.com/live/1bfb0e42-2c70-4414-91cf-6c2bfbaaec4a';
 }

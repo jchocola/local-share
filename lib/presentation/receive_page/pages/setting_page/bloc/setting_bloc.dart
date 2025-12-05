@@ -1,9 +1,11 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_share/core/constant/app_constant.dart';
 
 import 'package:local_share/data/repo/shared_prefs_repository_impl.dart';
 import 'package:local_share/main.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 ///
 /// EVENT
@@ -22,6 +24,10 @@ class SettingBlocEvent_toogleAutoAcceptSmallFile extends SettingBlocEvent {}
 class SettingBlocEvent_toogleTransferNotification extends SettingBlocEvent {}
 
 class SettingBlocEvent_toogleTheme extends SettingBlocEvent {}
+
+class SettingBlocEvent_termsOfServiceTapped extends SettingBlocEvent {}
+
+class SettingBlocEvent_privacyPolicyTapped extends SettingBlocEvent {}
 
 ///
 /// STATE
@@ -103,7 +109,19 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
       add(SettingBlocEvent_load());
     });
 
-    
+    ///
+    /// Terms of service
+    ///
+    on<SettingBlocEvent_termsOfServiceTapped>((event, emit) async{
+        await launchUrl(Uri.parse(AppConstant.termOfServiceUrl));
+   
+  });
 
+    ///
+    ///  Privacy Policy
+    ///
+    on<SettingBlocEvent_privacyPolicyTapped>((event, emit) async{
+      await launchUrl(Uri.parse(AppConstant.privacyPolicyUrl));
+    });
   }
 }
