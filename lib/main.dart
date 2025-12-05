@@ -9,7 +9,7 @@ import 'package:local_share/di/DI.dart';
 import 'package:local_share/main_page.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/setting_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
-import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
+import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/receive_page_bloc.dart';
 import 'package:logger/web.dart';
 
 final logger = Logger();
@@ -30,9 +30,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => SendPageBloc()),
+        BlocProvider(create: (context) => ReceivePageBloc()),
         BlocProvider(create: (context) => PickedFilesBloc()),
-        BlocProvider(create: (context)=> SettingBloc(sharedRepo: getIt<SharedPrefsRepositoryImpl>())..add(SettingBlocEvent_load()))
+        BlocProvider(
+          create: (context) =>
+              SettingBloc(sharedRepo: getIt<SharedPrefsRepositoryImpl>())
+                ..add(SettingBlocEvent_load()),
+        ),
       ],
       child: AdaptiveTheme(
         light: lightTheme,

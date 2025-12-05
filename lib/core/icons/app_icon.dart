@@ -49,4 +49,6 @@ class AppIcon {
   static const privacyPolicyIcon = LucideIcons.lock;
 
   static const termSeriveIcon = LucideIcons.userRoundCog;
+
+  static const stopIcon = LucideIcons.circlePause;
 }

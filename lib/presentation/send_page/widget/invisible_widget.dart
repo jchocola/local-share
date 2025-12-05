@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
-import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
+import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/widgets/big_button.dart';
 
 class InvisibleWidget extends StatelessWidget {
@@ -33,8 +33,8 @@ class InvisibleWidget extends StatelessWidget {
               title: 'Become Visible',
               color: theme.colorScheme.primary,
               textColor: theme.colorScheme.onPrimaryContainer,
-              onTap: () => context.read<SendPageBloc>().add(
-                SendPageBlocEvent_ChangeVisiblity(),
+              onTap: () => context.read<ReceivePageBloc>().add(
+                RecievePageBlocEvent_ChangeVisiblity(),
               ),
             ),
           ],

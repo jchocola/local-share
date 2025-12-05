@@ -4,7 +4,7 @@ import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:gap/gap.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
-import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
+import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/profile_page/profile_page.dart';
 import 'package:local_share/presentation/send_page/widget/context_menu.dart';
 import 'package:local_share/presentation/send_page/widget/founded_devices_list.dart';
@@ -24,22 +24,22 @@ class SendPage extends StatelessWidget {
       appBar: Appbar(
         withLeading: true,
         withTrailing: true,
-        trailing: BlocBuilder<SendPageBloc, SendPageBlocState>(
-          builder: (context, state) {
-            if (state is SendPageBlocState_loaded) {
-              return IconButton(
-                onPressed: () => context.read<SendPageBloc>().add(
-                  SendPageBlocEvent_ChangeVisiblity(),
-                ),
-                icon: Icon(
-                  state.visible ? AppIcon.openEyeIcon : AppIcon.closeEyeIcon,
-                ),
-              );
-            } else {
-              return CircularProgressIndicator();
-            }
-          },
-        ),
+        // trailing: BlocBuilder<ReceivePageBloc, ReceivePageBlocState>(
+        //   builder: (context, state) {
+        //     if (state is ReceivePageBlocState_loaded) {
+        //       return IconButton(
+        //         onPressed: () => context.read<ReceivePageBloc>().add(
+        //           RecievePageBlocEvent_ChangeVisiblity(),
+        //         ),
+        //         icon: Icon(
+        //           state.visible ? AppIcon.openEyeIcon : AppIcon.closeEyeIcon,
+        //         ),
+        //       );
+        //     } else {
+        //       return CircularProgressIndicator();
+        //     }
+        //   },
+        // ),
         leading: Padding(
           padding: EdgeInsetsGeometry.only(left: AppConstant.appPadding),
           child: GestureDetector(
@@ -54,14 +54,14 @@ class SendPage extends StatelessWidget {
       body: buildBody(context),
 
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () async{
+        onPressed: () async {
           await menu(context).show(context);
-//           void showMenu() async {
-//   showContextMenu(context, contextMenu: menu);
-//   // or 
-//   // final selectedValue = await menu.show(context);
-//   // print(selectedValue);
-// }
+          //           void showMenu() async {
+          //   showContextMenu(context, contextMenu: menu);
+          //   // or
+          //   // final selectedValue = await menu.show(context);
+          //   // print(selectedValue);
+          // }
         },
         child: Icon(AppIcon.addIcon),
       ),
@@ -74,11 +74,7 @@ class SendPage extends StatelessWidget {
         vertical: AppConstant.appPadding / 2,
         horizontal: AppConstant.appPadding,
       ),
-      child: BlocBuilder<SendPageBloc, SendPageBlocState>(
-        builder: (context, state) {
-          if (state is SendPageBlocState_loaded) {
-            if (state.visible) {
-              return Column(
+      child: Column(
                 spacing: AppConstant.appPadding,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -90,18 +86,7 @@ class SendPage extends StatelessWidget {
                   Spacer(),
                   PickedFiles(),
                 ],
-              );
-            } else {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Center(child: InvisibleWidget())],
-              );
-            }
-          } else {
-            return CircularProgressIndicator();
-          }
-        },
-      ),
+              ),
     );
   }
 }
