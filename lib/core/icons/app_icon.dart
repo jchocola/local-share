@@ -51,4 +51,8 @@ class AppIcon {
   static const termSeriveIcon = LucideIcons.userRoundCog;
 
   static const stopIcon = LucideIcons.circlePause;
+
+  static const qrCodeIcon = LucideIcons.qrCode;
+
+  static const copyIcon = LucideIcons.copy;
 }

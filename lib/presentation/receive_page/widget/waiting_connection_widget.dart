@@ -21,11 +21,11 @@ class WaitingConnectionWidget extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            showDialog(
-              context: context,
-              builder: (context) => TransferCompleteCard(),
-            );
-            // showDialog(context: context, builder: (context) => IncomingTransferWidget());
+            // showDialog(
+            //   context: context,
+            //   builder: (context) => TransferCompleteCard(),
+            // );
+             showDialog(context: context, builder: (context) => IncomingTransferWidget());
           },
           child: Stack(
             alignment: AlignmentGeometry.center,

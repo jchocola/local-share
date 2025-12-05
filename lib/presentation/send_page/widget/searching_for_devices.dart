@@ -19,6 +19,7 @@ class SearchingForDevices extends StatelessWidget {
           isRepeatingAnimation: true,
           animatedTexts: [
         WavyAnimatedText('Searching for devices...',textStyle: theme.textTheme.bodySmall , ),
+         WavyAnimatedText('Please select files to send',textStyle: theme.textTheme.bodySmall , ),
         ])
 
        // Text('' , style: theme.textTheme.bodySmall,)

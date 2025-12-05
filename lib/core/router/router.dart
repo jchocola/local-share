@@ -5,6 +5,7 @@ import 'package:local_share/presentation/receive_page/pages/setting_page/setting
 import 'package:local_share/presentation/receive_page/pages/transfer_progress_page/transfer_progress_page.dart';
 import 'package:local_share/presentation/receive_page/receive_page.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/confirm_transfer_page.dart';
+import 'package:local_share/presentation/send_page/pages/send_via_qr_page/send_via_qr_page.dart';
 import 'package:local_share/presentation/send_page/send_page.dart';
 
 final GoRouter router = GoRouter(
@@ -30,6 +31,10 @@ final GoRouter router = GoRouter(
                   path: '/confirm_transfer',
                   builder: (context, state) => const ConfirmTransferPage(),
                 ),
+                GoRoute(
+                  path: '/send_via_qr',
+                  builder: (context, state) => const SendViaQrPage(),
+                ), 
               ],
             ),
           ],

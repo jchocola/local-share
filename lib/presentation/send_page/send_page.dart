@@ -12,6 +12,7 @@ import 'package:local_share/presentation/send_page/widget/invisible_widget.dart'
 import 'package:local_share/presentation/send_page/widget/picked_files.dart';
 import 'package:local_share/presentation/send_page/widget/searching_animation.dart';
 import 'package:local_share/presentation/send_page/widget/searching_for_devices.dart';
+import 'package:local_share/presentation/send_page/widget/send_via_qr.dart';
 import 'package:local_share/widgets/appbar.dart';
 import 'package:local_share/widgets/other_device_card.dart';
 
@@ -79,10 +80,11 @@ class SendPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SearchingForDevices(),
+                  SendViaQr(),
                   Gap(AppConstant.appPadding * 3),
 
-                  FoundedDevicesList(),
-                  // SearchingAnimation(),
+                  //FoundedDevicesList(),
+                   SearchingAnimation(),
                   Spacer(),
                   PickedFiles(),
                 ],
