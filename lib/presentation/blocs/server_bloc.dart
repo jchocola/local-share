@@ -1,3 +1,4 @@
+import 'dart:io'; // Add this import
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,7 +15,14 @@ abstract class ServerBlocEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class ServerBlocEvent_openServer extends ServerBlocEvent {}
+class ServerBlocEvent_openServer extends ServerBlocEvent {
+  final List<File> files; // Add files parameter
+  
+  ServerBlocEvent_openServer({required this.files});
+  
+  @override
+  List<Object?> get props => [files];
+}
 
 class ServerBlocEvent_closeServer extends ServerBlocEvent {}
 
@@ -82,12 +90,34 @@ class ServerBloc extends Bloc<ServerBlocEvent, ServerBlocState> {
     on<ServerBlocEvent_openServer>((event, emit) async {
       try {
         emit(ServerBlocState_loadding());
+        
+        logger.i('Starting server with ${event.files.length} files');
+        for (var i = 0; i < event.files.length; i++) {
+          logger.i('File $i: ${event.files[i].path}');
+          
+          // Validate file
+          if (event.files[i].path.isEmpty) {
+            logger.w('File $i has empty path');
+            continue;
+          }
+          
+          if (!event.files[i].existsSync()) {
+            logger.w('File $i does not exist: ${event.files[i].path}');
+            continue;
+          }
+        }
+        
+        // Set picked files in server repo
+        serverRepo.setPickedFiles(event.files);
+        
         // Запускаем сервер
         await serverRepo.start();
 
         emit(ServerBlocState_success(success: APP_ERROR_SUCCESS.OPENED_SERVER));
         emit(ServerBlocState_opened(switcherValue: AppConstant.SEND_KEY));
-      } catch (e) {
+      } catch (e, stackTrace) {
+        logger.e('Error starting server: $e');
+        logger.e('Stack trace: $stackTrace');
         emit(ServerBlocState_error(error: e as APP_ERROR_SUCCESS));
         emit(ServerBlocState_waiting());
       }

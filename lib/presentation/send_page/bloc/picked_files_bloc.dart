@@ -61,6 +61,15 @@ class PickedFilesBlocStateLoaded extends PickedFilesBlocState {
 /// BLOC
 ///
 class PickedFilesBloc extends Bloc<PickedFilesBlocEvent, PickedFilesBlocState> {
+  // Expose files for external access
+  List<File> get files {
+    final result = state is PickedFilesBlocStateLoaded 
+        ? (state as PickedFilesBlocStateLoaded).files 
+        : <File>[];
+    logger.i('Accessing files, count: ${result.length}');
+    return result;
+  }
+      
   PickedFilesBloc() : super(PickedFilesBlocStateLoaded()) {
     ///
     /// SELECT FILE
@@ -72,12 +81,32 @@ class PickedFilesBloc extends Bloc<PickedFilesBlocEvent, PickedFilesBlocState> {
 
       if (result != null) {
         File file = File(result.files.first.path!);
+        logger.i('Selected file: ${file.path}');
+        
+        // Validate file
+        if (file.path.isEmpty) {
+          logger.e('Selected file has empty path');
+          return;
+        }
+        
+        if (!file.existsSync()) {
+          logger.e('Selected file does not exist: ${file.path}');
+          return;
+        }
+        
+        try {
+          final length = await file.length();
+          logger.i('Selected file size: $length bytes');
+        } catch (e) {
+          logger.e('Cannot read selected file size: $e');
+        }
 
         final currentState = state;
 
         if (currentState is PickedFilesBlocStateLoaded) {
           List<File> newfiles = List.from(currentState.files);
           newfiles.add(file);
+          logger.i('Total files: ${newfiles.length}');
           emit(PickedFilesBlocStateLoaded(files: newfiles));
         }
       }
@@ -94,11 +123,37 @@ class PickedFilesBloc extends Bloc<PickedFilesBlocEvent, PickedFilesBlocState> {
 
       if (result.isNotEmpty) {
         final listFile = result.map((xfile) => File(xfile.path)).toList();
+        logger.i('Selected ${listFile.length} photos from gallery');
+        
+        // Validate files
+        final validFiles = <File>[];
+        for (var i = 0; i < listFile.length; i++) {
+          final file = listFile[i];
+          if (file.path.isEmpty) {
+            logger.w('Skipping empty file path at index $i');
+            continue;
+          }
+          
+          if (!file.existsSync()) {
+            logger.w('File does not exist: ${file.path}');
+            continue;
+          }
+          
+          try {
+            final length = await file.length();
+            logger.i('File $i size: $length bytes');
+          } catch (e) {
+            logger.e('Cannot read file size: $e');
+          }
+          
+          validFiles.add(file);
+        }
 
         final currentState = state;
         if (currentState is PickedFilesBlocStateLoaded) {
           List<File> newfiles = List.from(currentState.files);
-          newfiles = newfiles + listFile;
+          newfiles = newfiles + validFiles;
+          logger.i('Total files: ${newfiles.length}');
           emit(PickedFilesBlocStateLoaded(files: newfiles));
         }
       }
@@ -115,12 +170,32 @@ class PickedFilesBloc extends Bloc<PickedFilesBlocEvent, PickedFilesBlocState> {
 
       if (result != null) {
         final file = File(result.path);
+        logger.i('Selected photo from camera: ${file.path}');
+        
+        // Validate file
+        if (file.path.isEmpty) {
+          logger.e('Camera photo has empty path');
+          return;
+        }
+        
+        if (!file.existsSync()) {
+          logger.e('Camera photo does not exist: ${file.path}');
+          return;
+        }
+        
+        try {
+          final length = await file.length();
+          logger.i('Camera photo size: $length bytes');
+        } catch (e) {
+          logger.e('Cannot read camera photo size: $e');
+        }
 
         final currentState = state;
 
         if (currentState is PickedFilesBlocStateLoaded) {
           List<File> newfiles = List.from(currentState.files);
           newfiles.add(file);
+          logger.i('Total files: ${newfiles.length}');
           emit(PickedFilesBlocStateLoaded(files: newfiles));
         }
       }
@@ -138,11 +213,37 @@ class PickedFilesBloc extends Bloc<PickedFilesBlocEvent, PickedFilesBlocState> {
         final List<File> list = result.files
             .map((file) => File(file.path!))
             .toList();
+        logger.i('Selected ${list.length} files');
+        
+        // Validate files
+        final validFiles = <File>[];
+        for (var i = 0; i < list.length; i++) {
+          final file = list[i];
+          if (file.path.isEmpty) {
+            logger.w('Skipping empty file path at index $i');
+            continue;
+          }
+          
+          if (!file.existsSync()) {
+            logger.w('File does not exist: ${file.path}');
+            continue;
+          }
+          
+          try {
+            final length = await file.length();
+            logger.i('File $i size: $length bytes');
+          } catch (e) {
+            logger.e('Cannot read file size: $e');
+          }
+          
+          validFiles.add(file);
+        }
 
         final currentState = state;
         if (currentState is PickedFilesBlocStateLoaded) {
           List<File> newfiles = List.from(currentState.files);
-          newfiles = newfiles + list;
+          newfiles = newfiles + validFiles;
+          logger.i('Total files: ${newfiles.length}');
           emit(PickedFilesBlocStateLoaded(files: newfiles));
         }
       }
