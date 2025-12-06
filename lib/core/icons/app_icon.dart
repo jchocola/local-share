@@ -55,4 +55,6 @@ class AppIcon {
   static const qrCodeIcon = LucideIcons.qrCode;
 
   static const copyIcon = LucideIcons.copy;
+
+  static const serverIcon = LucideIcons.server;
 }

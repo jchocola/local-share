@@ -7,6 +7,7 @@ import 'package:local_share/presentation/receive_page/receive_page.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/confirm_transfer_page.dart';
 import 'package:local_share/presentation/send_page/pages/send_via_qr_page/send_via_qr_page.dart';
 import 'package:local_share/presentation/send_page/send_page.dart';
+import 'package:local_share/presentation/server_page/server_page.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/send_page',
@@ -39,6 +40,18 @@ final GoRouter router = GoRouter(
             ),
           ],
         ),
+
+
+
+        ///
+        /// SERVER
+        ///
+
+       StatefulShellBranch(
+          routes: [
+          GoRoute(path: '/server', builder: (context, state) => const ServerPage(),)
+          ],
+        ), 
 
         ///
         /// ВЕТВЬ 2: (RECEIVING)

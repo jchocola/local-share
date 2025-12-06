@@ -21,7 +21,13 @@ class EmbbededServer {
     this.port = port;
     _server = await HttpServer.bind(InternetAddress.anyIPv4, port);
 
+    logger.e( '${_server?.address} + ${_server?.port}');
     _server!.listen(_handleRequest);
+  }
+
+  Future<void> close() async {
+    await _server?.close();
+    logger.e('Server closed');
   }
 
   ///
@@ -81,4 +87,10 @@ class EmbbededServer {
       }
     }
   }
+
+  ///singleton
+  EmbbededServer._();
+
+  static final EmbbededServer _instance = EmbbededServer._();
+  static EmbbededServer get instance => _instance;
 }

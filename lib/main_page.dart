@@ -20,6 +20,12 @@ class MainPage extends StatelessWidget {
             icon: Icon(AppIcon.sendIcon),
             label: 'Send',
           ),
+
+           BottomNavigationBarItem(
+            icon: Icon(AppIcon.serverIcon),
+            label: 'Server',
+          ),
+
           BottomNavigationBarItem(
             icon: Icon(AppIcon.receiveIcon),
             label: 'Receive',
