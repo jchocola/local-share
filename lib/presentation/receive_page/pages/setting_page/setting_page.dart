@@ -65,13 +65,13 @@ class SettingPage extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () async {
-                await EmbbededServer.instance.start();
+                await EmbbededServerRepoImpl.instance.start();
               },
               child: Text('Start server'),
             ),
             ElevatedButton(
               onPressed: () async {
-                await EmbbededServer.instance.close();
+                await EmbbededServerRepoImpl.instance.close();
               },
               child: Text('Close server'),
             ),

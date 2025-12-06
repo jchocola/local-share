@@ -43,10 +43,20 @@ class MyApp extends StatelessWidget {
                 ..add(SettingBlocEvent_load()),
         ),
 
-        BlocProvider(create: (context)=> CurrentDeviceBloc(deviceInfoRepo: getIt<DeviceInfoRepositoryImpl>())..add(CurrentDeviceBlocEvent_load())),
-        BlocProvider(create: (context)=> ServerPageBloc()..add(ServerPageBlocState_load())),
+        BlocProvider(
+          create: (context) => CurrentDeviceBloc(
+            deviceInfoRepo: getIt<DeviceInfoRepositoryImpl>(),
+          )..add(CurrentDeviceBlocEvent_load()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              ServerPageBloc()..add(ServerPageBlocState_load()),
+        ),
 
-        BlocProvider(create: (context)=> ServerBloc(embbededServer: getIt<EmbbededServer>()))
+        BlocProvider(
+          create: (context) =>
+              ServerBloc(serverRepo: getIt<EmbbededServerRepoImpl>()),
+        ),
       ],
       child: AdaptiveTheme(
         light: lightTheme,

@@ -13,7 +13,9 @@ Future<void> DI() async {
 
   getIt.registerSingleton<DeviceInfoRepositoryImpl>(DeviceInfoRepositoryImpl());
 
-  getIt.registerSingleton<EmbbededServer>(EmbbededServer.instance);
+  getIt.registerSingleton<EmbbededServerRepoImpl>(
+    EmbbededServerRepoImpl.instance,
+  );
 
   logger.i('DI inited');
 }

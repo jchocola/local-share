@@ -27,24 +27,30 @@ class ServerBlocState_error extends ServerBlocState {}
 /// BLOC
 ///
 class ServerBloc extends Bloc<ServerBlocEvent, ServerBlocState> {
-  final EmbbededServer embbededServer;
-  ServerBloc({required this.embbededServer})
-    : super(ServerBlocState_waiting()) {
+  final EmbbededServerRepoImpl serverRepo;
+  ServerBloc({required this.serverRepo}) : super(ServerBlocState_waiting()) {
     ///
     /// ON OPEN SERVER
     ///
     on<ServerBlocEvent_openServer>((event, emit) async {
       emit(ServerBlocState_loadding());
-      await Future.delayed(Duration(seconds: 2));
+
+      // Запускаем сервер
+      await serverRepo.start();
+
+    
       emit(ServerBlocState_opened());
     });
 
     ///
     /// ON CLOSE SERVER
     ///
-    on<ServerBlocEvent_closeServer>((event, emit) async{
-       emit(ServerBlocState_loadding());
-      await Future.delayed(Duration(seconds: 2));
+    on<ServerBlocEvent_closeServer>((event, emit) async {
+      emit(ServerBlocState_loadding());
+
+      // close server
+      await serverRepo.close();
+
       emit(ServerBlocState_waiting());
     });
   }
