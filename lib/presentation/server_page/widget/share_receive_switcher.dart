@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
+import 'package:local_share/presentation/blocs/server_bloc.dart';
 import 'package:local_share/presentation/server_page/bloc/server_page_bloc.dart';
 
 class ShareReceiveSwitcher extends StatelessWidget {
@@ -9,9 +10,9 @@ class ShareReceiveSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ServerPageBloc, ServerPageBlocState>(
+    return BlocBuilder<ServerBloc, ServerBlocState>(
       builder: (context, state) {
-        if (state is ServerPageBlocState_loaded) {
+        if (state is ServerBlocState_opened) {
           return CupertinoSlidingSegmentedControl(
             groupValue: state.switcherValue,
             children: {
@@ -19,8 +20,8 @@ class ShareReceiveSwitcher extends StatelessWidget {
               AppConstant.RECEIVE_KEY: Text('Receive'),
             },
             onValueChanged: (value) {
-              context.read<ServerPageBloc>().add(
-                ServerPageBlocState_changeSwitcherValue(value: value!),
+              context.read<ServerBloc>().add(
+                ServerBlocState_changeSwitcherValue(value: value!),
               );
             },
           );

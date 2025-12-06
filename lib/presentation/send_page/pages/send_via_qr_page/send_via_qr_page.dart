@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/presentation/send_page/pages/send_via_qr_page/widget/host_text_copy.dart';
 import 'package:local_share/presentation/send_page/pages/send_via_qr_page/widget/connected_list_widget.dart';
-import 'package:local_share/presentation/send_page/pages/send_via_qr_page/widget/qr_widget.dart';
+import 'package:local_share/widgets/qr_widget.dart';
 import 'package:local_share/widgets/big_button.dart';
 
 class SendViaQrPage extends StatelessWidget {

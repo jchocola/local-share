@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/data/repo/network_repository_impl.dart';
 import 'package:local_share/main.dart';
 import 'package:uuid/uuid.dart';
@@ -12,9 +13,17 @@ class EmbbededServerRepoImpl {
 
   int port = 4820;
 
+  String? localIP;
+
   String deviceName = 'my device name';
 
   String deviceId = const Uuid().v4();
+
+  String _sendUrl = '';
+  String _receiveUrl = '';
+
+  String get sendUrl => _sendUrl;
+  String get receiveUrl => _receiveUrl;
 
   // WebSocket connections
   final Map<String, WebSocket> _clients = {};
@@ -22,9 +31,16 @@ class EmbbededServerRepoImpl {
   /// Start server
   Future<void> start({int port = 4820}) async {
     this.port = port;
-    server = await HttpServer.bind(InternetAddress.loopbackIPv4, port);
 
-    await networkRepositoryImpl.getLocalIPAddress();
+     localIP = await networkRepositoryImpl.getLocalIPAddress();
+
+    if (localIP == null) {
+      throw APP_ERROR_SUCCESS.NOT_CONNECTED_WIFI;
+    }
+    server = await HttpServer.bind(localIP, port);
+
+    _sendUrl = 'http://${localIP}:$port/send';
+    _receiveUrl = 'http://${localIP}:$port/receive';
 
     logger.e('${server?.address} + ${server?.port}');
     server!.listen(_handleRequest);
@@ -83,6 +99,24 @@ class EmbbededServerRepoImpl {
             ..headers.contentType = ContentType.json
             ..write(
               jsonEncode({'id': deviceId, 'name': deviceName, 'port': port}),
+            )
+            ..close();
+          break;
+
+        case '/send':
+          request.response
+            ..headers.contentType = ContentType.json
+            ..write(
+              jsonEncode({'id': 'Send it', 'name': 'Fuck you', 'port': port}),
+            )
+            ..close();
+          break;
+
+        case '/receive':
+          request.response
+            ..headers.contentType = ContentType.json
+            ..write(
+              jsonEncode({'id': 'Hello My Friend', 'name': 'Hahah', 'port': port}),
             )
             ..close();
           break;

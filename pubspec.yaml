@@ -61,6 +61,7 @@ dependencies:
   device_info_plus: ^12.3.0
   avatar_plus: ^0.0.5
   network_info_plus: ^7.0.0
+  toastification: ^3.0.3
 
 dev_dependencies:
   flutter_test:

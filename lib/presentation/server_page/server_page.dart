@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
+import 'package:local_share/core/error/app_error.dart';
+import 'package:local_share/core/utils/show_toastification.dart';
 import 'package:local_share/presentation/blocs/server_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/note.dart';
 import 'package:local_share/presentation/send_page/pages/send_via_qr_page/send_via_qr_page.dart';
 import 'package:local_share/presentation/send_page/pages/send_via_qr_page/widget/host_text_copy.dart';
-import 'package:local_share/presentation/send_page/pages/send_via_qr_page/widget/qr_widget.dart';
+import 'package:local_share/widgets/qr_widget.dart';
 import 'package:local_share/presentation/server_page/widget/received_file_widget.dart';
 import 'package:local_share/presentation/server_page/widget/server_info_card.dart';
 import 'package:local_share/presentation/server_page/widget/share_receive_switcher.dart';
@@ -29,7 +31,22 @@ class ServerPage extends StatelessWidget {
         vertical: AppConstant.appPadding / 2,
         horizontal: AppConstant.appPadding,
       ),
-      child: BlocBuilder<ServerBloc, ServerBlocState>(
+      child: BlocConsumer<ServerBloc, ServerBlocState>(
+        listener: (context, state) {
+          if (state is ServerBlocState_error) {
+            showErrorToatification(
+              context,
+              title: AppErrorConverter(error: state.error),
+            );
+          }
+          if (state is ServerBlocState_success) {
+            showSuccessToatification(
+              context,
+              title: AppErrorConverter(error: state.success),
+            );
+          }
+        },
+
         builder: (context, state) {
           if (state is ServerBlocState_waiting) {
             return buildWaitingOpenServer(context);
@@ -64,25 +81,35 @@ class ServerPage extends StatelessWidget {
   }
 
   Widget buildOpenedServer(BuildContext context) {
-    return Column(
-      spacing: AppConstant.appPadding,
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              spacing: AppConstant.appPadding / 2,
-              children: [
-                Center(child: QrWidget()),
-                HostTextCopy(),
-                ShareReceiveSwitcher(),
-                ServerInfoCard(),
-              ],
-            ),
-          ),
-        ),
+    return BlocBuilder<ServerBloc, ServerBlocState>(
+      builder: (context, state) {
+        if (state is ServerBlocState_opened) {
+          final sendUrl = context.watch<ServerBloc>().serverRepo.sendUrl;
+          final receiveUrl = context.watch<ServerBloc>().serverRepo.receiveUrl;
+          return Column(
+            spacing: AppConstant.appPadding,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    spacing: AppConstant.appPadding / 2,
+                    children: [
+                      Center(child: QrWidget(data: state.switcherValue == AppConstant.SEND_KEY ? sendUrl : receiveUrl,)),
+                      HostTextCopy(data:   state.switcherValue == AppConstant.SEND_KEY ? sendUrl : receiveUrl,),
+                      ShareReceiveSwitcher(),
+                      ServerInfoCard(),
+                    ],
+                  ),
+                ),
+              ),
 
-        ReceivedFileWidget(),
-      ],
+              ReceivedFileWidget(),
+            ],
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 }

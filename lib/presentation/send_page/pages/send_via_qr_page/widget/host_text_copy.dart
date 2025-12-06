@@ -4,8 +4,8 @@ import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 
 class HostTextCopy extends StatelessWidget {
-  const HostTextCopy({super.key});
-
+  const HostTextCopy({super.key , this.data = 'http://localhoast:8080'});
+  final String data;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -18,10 +18,10 @@ class HostTextCopy extends StatelessWidget {
         spacing: AppConstant.appPadding,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('http://localhoast:8080', style: theme.textTheme.titleMedium),
+          Text(data, style: theme.textTheme.titleMedium),
           IconButton(
             onPressed: () {
-              Clipboard.setData(ClipboardData(text: 'localhoast'));
+              Clipboard.setData(ClipboardData(text: data));
             },
             icon: Icon(AppIcon.copyIcon),
           ),

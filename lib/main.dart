@@ -16,6 +16,7 @@ import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/presentation/server_page/bloc/server_page_bloc.dart';
 import 'package:logger/web.dart';
+import 'package:toastification/toastification.dart';
 
 final logger = Logger();
 Future<void> main() async {
@@ -48,10 +49,10 @@ class MyApp extends StatelessWidget {
             deviceInfoRepo: getIt<DeviceInfoRepositoryImpl>(),
           )..add(CurrentDeviceBlocEvent_load()),
         ),
-        BlocProvider(
-          create: (context) =>
-              ServerPageBloc()..add(ServerPageBlocState_load()),
-        ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       ServerPageBloc()..add(ServerPageBlocState_load()),
+        // ),
 
         BlocProvider(
           create: (context) =>
@@ -62,12 +63,14 @@ class MyApp extends StatelessWidget {
         light: lightTheme,
         dark: darkTheme,
         initial: AdaptiveThemeMode.light,
-        builder: (theme, darkTheme) => MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          title: 'Local Share',
-          theme: theme,
-          darkTheme: darkTheme,
-          routerConfig: router,
+        builder: (theme, darkTheme) => ToastificationWrapper(
+          child: MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            title: 'Local Share',
+            theme: theme,
+            darkTheme: darkTheme,
+            routerConfig: router,
+          ),
         ),
       ),
     );
