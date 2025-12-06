@@ -26,7 +26,7 @@ class ConfirmTransferPage extends StatelessWidget {
         horizontal: AppConstant.appPadding,
       ),
       child: Column(
-        spacing: AppConstant.appPadding/2,
+        spacing: AppConstant.appPadding / 2,
         children: [
           Expanded(
             child: SingleChildScrollView(
@@ -35,7 +35,7 @@ class ConfirmTransferPage extends StatelessWidget {
                 children: [
                   ProfileInfoWidget(),
                   FilesToSendWidget(),
-                  NoteWidget(),
+                  NoteWidget2(),
                 ],
               ),
             ),
@@ -56,7 +56,7 @@ class ConfirmTransferPage extends StatelessWidget {
                 flex: 1,
                 child: BigButton(
                   title: 'Send Files',
-                     color: theme.colorScheme.primary,
+                  color: theme.colorScheme.primary,
                   withIcon: true,
                   icon: AppIcon.sendIcon,
                 ),

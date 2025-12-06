@@ -11,7 +11,7 @@ class HostTextCopy extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withOpacity(0.3),
+        color: theme.colorScheme.primary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(AppConstant.appBorder),
       ),
       child: Row(

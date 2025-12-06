@@ -19,6 +19,9 @@ final ThemeData lightTheme = ThemeData(
     tertiary: LightColor.offlineColor,
 
 
+    error:  LightColor.errorColor,
+  
+
 
   ),
 

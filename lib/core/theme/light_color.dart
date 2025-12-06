@@ -7,4 +7,5 @@ class LightColor {
   static final Color subTitleTextColor = Color(0xff737373);
   static final Color onlineColor = Color(0xff21c55d);
   static final Color offlineColor = Color.fromARGB(0, 235, 11, 8);
+  static final Color errorColor = Color(0xFFff3333);
 }

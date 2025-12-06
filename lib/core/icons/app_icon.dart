@@ -57,4 +57,6 @@ class AppIcon {
   static const copyIcon = LucideIcons.copy;
 
   static const serverIcon = LucideIcons.server;
+
+  static const onOffIcon = LucideIcons.power;
 }
