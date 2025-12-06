@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/data/repo/network_repository_impl.dart';
 import 'package:local_share/main.dart';
@@ -32,7 +33,7 @@ class EmbbededServerRepoImpl {
   Future<void> start({int port = 4820}) async {
     this.port = port;
 
-     localIP = await networkRepositoryImpl.getLocalIPAddress();
+    localIP = await networkRepositoryImpl.getLocalIPAddress();
 
     if (localIP == null) {
       throw APP_ERROR_SUCCESS.NOT_CONNECTED_WIFI;
@@ -104,19 +105,34 @@ class EmbbededServerRepoImpl {
           break;
 
         case '/send':
-          request.response
-            ..headers.contentType = ContentType.json
-            ..write(
-              jsonEncode({'id': 'Send it', 'name': 'Fuck you', 'port': port}),
-            )
-            ..close();
+          // take sendfile
+          final htmlFile = await rootBundle.loadString('assets/public/send.html');
+
+          // if (!await htmlFile.exists()) {
+          //   logger.e('File not exists');
+          //   request.response
+          //     ..statusCode = 404
+          //     ..headers.contentType = ContentType.text
+          //     ..write('404');
+          // } else {
+            request.response
+              ..headers.contentType = ContentType.html
+              ..write(htmlFile);
+         // }
+
+          request.response.close();
+
           break;
 
         case '/receive':
           request.response
             ..headers.contentType = ContentType.json
             ..write(
-              jsonEncode({'id': 'Hello My Friend', 'name': 'Hahah', 'port': port}),
+              jsonEncode({
+                'id': 'Hello My Friend',
+                'name': 'Hahah',
+                'port': port,
+              }),
             )
             ..close();
           break;

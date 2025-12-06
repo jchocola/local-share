@@ -91,6 +91,7 @@ flutter:
     - assets/Searching_Animation.json
     - assets/share.png
     - assets/ServerConnect.json
+    - assets/public/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
