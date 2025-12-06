@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/data/repo/bonsoir_broadcast_repository_impl.dart';
 import 'package:local_share/data/repo/bonsoir_discover_repository_impl.dart';
+import 'package:local_share/data/repo/device_info_repository_impl.dart';
 import 'package:local_share/data/repo/embbeded_server.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/widget/apperance_setting.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/widget/legal_information.dart';
@@ -68,11 +69,18 @@ class SettingPage extends StatelessWidget {
               },
               child: Text('Start server'),
             ),
-             ElevatedButton(
+            ElevatedButton(
               onPressed: () async {
                 await EmbbededServer.instance.close();
               },
               child: Text('Close server'),
+            ),
+
+            ElevatedButton(
+              onPressed: () async {
+                await DeviceInfoRepositoryImpl().getAndroidInfo();
+              },
+              child: Text('Get Device Info'),
             ),
           ],
         ),
