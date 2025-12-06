@@ -53,11 +53,11 @@ class SettingBlocState_loaded extends SettingBlocState {
 
   @override
   List<Object?> get props => [
-    overwriteExistingFile,
-    autoAcceptSmallFile,
-    transferNotification,
-    downloadLocation,
-  ];
+        overwriteExistingFile,
+        autoAcceptSmallFile,
+        transferNotification,
+        downloadLocation,
+      ];
 }
 
 ///
@@ -127,5 +127,14 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
     on<SettingBlocEvent_privacyPolicyTapped>((event, emit) async {
       await launchUrl(Uri.parse(AppConstant.privacyPolicyUrl));
     });
+  }
+  
+  // Method to get download location
+  Future<String> getDownloadLocation() async {
+    if (state is SettingBlocState_loaded) {
+      return (state as SettingBlocState_loaded).downloadLocation;
+    }
+    // Return default download location if not loaded
+    return await sharedRepo.getDownloadLocation();
   }
 }

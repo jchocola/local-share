@@ -7,6 +7,23 @@ import 'package:local_share/data/repo/network_repository_impl.dart';
 import 'package:local_share/main.dart';
 import 'package:path/path.dart' as path;
 import 'package:uuid/uuid.dart';
+import 'package:mime/mime.dart';
+import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/setting_bloc.dart';
+
+// Model for received files
+class ReceivedFile {
+  final String name;
+  final String path;
+  final int size;
+  final DateTime receivedAt;
+  
+  ReceivedFile({
+    required this.name,
+    required this.path,
+    required this.size,
+    required this.receivedAt,
+  });
+}
 
 class EmbbededServerRepoImpl {
   NetworkRepositoryImpl networkRepositoryImpl = NetworkRepositoryImpl.instance;
@@ -36,7 +53,13 @@ class EmbbededServerRepoImpl {
 
   // Store reference to picked files
   List<File> pickedFiles = [];
-
+  
+  // Store received files
+  List<ReceivedFile> receivedFiles = [];
+  
+  // Store download location
+  String? _downloadLocation;
+  
   // Set picked files from the bloc
   void setPickedFiles(List<File> files) {
     logger.i('Setting ${files.length} files in server');
@@ -44,6 +67,11 @@ class EmbbededServerRepoImpl {
       logger.i('File $i: ${files[i].path}');
     }
     pickedFiles = files;
+  }
+  
+  // Set download location
+  void setDownloadLocation(String downloadLocation) {
+    _downloadLocation = downloadLocation;
   }
   
   // Update picked files while server is running
@@ -147,19 +175,26 @@ class EmbbededServerRepoImpl {
         },
       );
     } else {
-      // Simple HTTP responses for discovery
-      final path = request.uri.path;
-      logger.i('HTTP request path: $path');
+      // Handle HTTP requests
+      final requestPath = request.uri.path;
+      logger.i('HTTP request path: $requestPath');
 
       // Handle file downloads
-      if (path.startsWith('/files/')) {
-        final fileName = path.substring(7); // Remove '/files/' prefix
+      if (requestPath.startsWith('/files/')) {
+        final fileName = requestPath.substring(7); // Remove '/files/' prefix
         logger.i('File download request for: $fileName');
         await _serveFile(request, fileName);
         return;
       }
+      
+      // Handle file uploads
+      if (requestPath == '/upload' && request.method == 'POST') {
+        logger.i('File upload request');
+        await _handleFileUpload(request);
+        return;
+      }
 
-      switch (path) {
+      switch (requestPath) {
         case '/info':
           logger.i('Info request');
           request.response
@@ -178,27 +213,11 @@ class EmbbededServerRepoImpl {
 
         case '/receive':
           logger.i('Receive page request');
-           // take sendfile
-          final htmlFile = await rootBundle.loadString('assets/public/receive.html');
-
-          // if (!await htmlFile.exists()) {
-          //   logger.e('File not exists');
-          //   request.response
-          //     ..statusCode = 404
-          //     ..headers.contentType = ContentType.text
-          //     ..write('404');
-          // } else {
-            request.response
-              ..headers.contentType = ContentType.html
-              ..write(htmlFile);
-         // }
-
-          request.response.close();
-
+          await _serveReceivePage(request);
           break;
 
         default:
-          logger.i('Not found: $path');
+          logger.i('Not found: $requestPath');
           request.response
             ..statusCode = HttpStatus.notFound
             ..write('Not Found')
@@ -207,7 +226,123 @@ class EmbbededServerRepoImpl {
       }
     }
   }
-
+  
+  // Serve the receive page
+  Future<void> _serveReceivePage(HttpRequest request) async {
+    try {
+      final htmlFile = await rootBundle.loadString('assets/public/receive.html');
+      request.response
+        ..headers.contentType = ContentType.html
+        ..write(htmlFile)
+        ..close();
+    } catch (e, stackTrace) {
+      logger.e('Error serving receive page: $e\nStack trace: $stackTrace');
+      request.response
+        ..statusCode = HttpStatus.internalServerError
+        ..write('Internal Server Error')
+        ..close();
+    }
+  }
+  
+  // Handle file upload
+  Future<void> _handleFileUpload(HttpRequest request) async {
+    try {
+      // Parse multipart form data
+      final boundary = request.headers.contentType?.parameters['boundary'];
+      if (boundary == null) {
+        request.response
+          ..statusCode = HttpStatus.badRequest
+          ..write('Missing boundary in content type')
+          ..close();
+        return;
+      }
+      
+      final transformer = MimeMultipartTransformer(boundary);
+      final bodyStream = request.cast<List<int>>();
+      final parts = await transformer.bind(bodyStream).toList();
+      
+      // Use stored download location
+      if (_downloadLocation == null) {
+        request.response
+          ..statusCode = HttpStatus.internalServerError
+          ..write('Download location not set')
+          ..close();
+        return;
+      }
+      
+      final downloadLocation = _downloadLocation!;
+      
+      int filesSaved = 0;
+      
+      // Process each part (file)
+      for (final part in parts) {
+        final headers = part.headers;
+        final contentDisposition = headers['content-disposition'];
+        
+        if (contentDisposition != null) {
+          // Extract filename from content-disposition header
+          final filenameMatch = RegExp(r'filename="([^"]*)"').firstMatch(contentDisposition);
+          if (filenameMatch != null) {
+            final fileName = filenameMatch.group(1);
+            if (fileName != null && fileName.isNotEmpty) {
+              // Save file to download location
+              final filePath = path.join(downloadLocation, fileName);
+              final file = File(filePath);
+              
+              // Ensure directory exists
+              await file.parent.create(recursive: true);
+              
+              // Write file content
+              final sink = file.openWrite();
+              await part.pipe(sink);
+              await sink.close();
+              
+              // Add to received files list
+              final fileSize = await file.length();
+              receivedFiles.add(ReceivedFile(
+                name: fileName,
+                path: filePath,
+                size: fileSize,
+                receivedAt: DateTime.now(),
+              ));
+              
+              filesSaved++;
+              logger.i('Saved uploaded file: $fileName to $filePath');
+            }
+          }
+        }
+      }
+      
+      request.response
+        ..headers.contentType = ContentType.json
+        ..write(jsonEncode({'status': 'success', 'message': 'Files uploaded successfully', 'count': filesSaved}))
+        ..close();
+        
+      logger.i('File upload request completed, total received files: ${receivedFiles.length}');
+    } catch (e, stackTrace) {
+      logger.e('Error handling file upload: $e\nStack trace: $stackTrace');
+      request.response
+        ..statusCode = HttpStatus.internalServerError
+        ..write('Internal Server Error: $e')
+        ..close();
+    }
+  }
+  
+  // Get received files count
+  int getReceivedFilesCount() {
+    return receivedFiles.length;
+  }
+  
+  // Get received files
+  List<ReceivedFile> getReceivedFiles() {
+    return receivedFiles;
+  }
+  
+  // Clear received files
+  void clearReceivedFiles() {
+    receivedFiles.clear();
+  }
+  
   // Serve the send page with actual files
   Future<void> _serveSendPage(HttpRequest request) async {
     try {
@@ -452,102 +587,3 @@ class EmbbededServerRepoImpl {
   static final EmbbededServerRepoImpl _instance = EmbbededServerRepoImpl._();
   static EmbbededServerRepoImpl get instance => _instance;
 }
-
-
-// import 'dart:convert';
-// import 'dart:io';
-
-// import 'package:local_share/main.dart';
-// import 'package:uuid/uuid.dart';
-
-// class EmbbededServer {
-//   HttpServer? _server;
-
-//   int port = 4820;
-
-//   String deviceName = 'my device name';
-
-//   String deviceId = const Uuid().v4();
-
-//   // WebSocket connections
-//   final Map<String, WebSocket> _clients = {};
-
-//   /// Start server
-//   Future<void> start({int port = 4820}) async {
-//     this.port = port;
-//     _server = await HttpServer.bind(InternetAddress.anyIPv4, port);
-
-//     logger.e( '${_server?.address} + ${_server?.port}');
-//     _server!.listen(_handleRequest);
-//   }
-
-//   Future<void> close() async {
-//     await _server?.close();
-//     logger.e('Server closed');
-//   }
-
-//   ///
-//   /// HANDLE REQUEST
-//   ///
-//   void _handleRequest(HttpRequest request) async {
-//     if (WebSocketTransformer.isUpgradeRequest(request)) {
-//       final ws = await WebSocketTransformer.upgrade(request);
-//       final clientId = const Uuid().v4();
-
-//       _clients[clientId] = ws;
-
-//       print('Client connected: $clientId');
-
-//       ws.listen(
-//         (message) async {
-//           try {
-//             final data = jsonDecode(message);
-
-//             final type = data['type'];
-
-//             switch (type) {
-//               case 'ping':
-//                 ws.add(jsonEncode({'type': 'pong'}));
-//                 break;
-//               default:
-//                 break;
-//             }
-//           } catch (e) {
-//             logger.e(e.toString());
-//           }
-//         },
-
-//         onDone: () {
-//           _clients.remove(clientId);
-//         },
-//         onError: () {
-//           _clients.remove(clientId);
-//         },
-//       );
-//     } else {
-//       // Simple HTTP responses for discovery
-//       final path = request.uri.path;
-
-//       if (path == '/info') {
-//         request.response
-//           ..headers.contentType = ContentType.json
-//           ..write(
-//             jsonEncode({'id': deviceId, 'name': deviceName, 'port': port}),
-//           )
-//           ..close();
-//       } else {
-//         request.response
-//           ..statusCode = HttpStatus.notFound
-//           ..write('Not Found')
-//           ..close();
-//       }
-//     }
-//   }
-
-//   ///singleton
-//   EmbbededServer._();
-
-//   static final EmbbededServer _instance = EmbbededServer._();
-//   static EmbbededServer get instance => _instance;
-// }
-

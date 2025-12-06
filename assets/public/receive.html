@@ -298,30 +298,32 @@
         <p class="page-subtitle">Share your files with others on the network</p>
 
         <div class="upload-container">
-            <div class="upload-area" id="drop-area">
-                <div class="upload-icon">📁</div>
-                <p class="upload-text">Drag & drop files here</p>
-                <p class="upload-hint">or</p>
-                <button class="browse-btn">Browse Files</button>
-                <input type="file" id="file-input" multiple>
-            </div>
+            <form id="upload-form" enctype="multipart/form-data">
+                <div class="upload-area" id="drop-area">
+                    <div class="upload-icon">📁</div>
+                    <p class="upload-text">Drag & drop files here</p>
+                    <p class="upload-hint">or</p>
+                    <button class="browse-btn" type="button">Browse Files</button>
+                    <input type="file" id="file-input" multiple>
+                </div>
 
-            <div class="selected-files">
-                <h3>Selected Files</h3>
-                <div class="file-list" id="file-list">
-                    <!-- Files will be listed here -->
-                    <div class="empty-state" id="empty-state">
-                        <p>No files selected</p>
+                <div class="selected-files">
+                    <h3>Selected Files</h3>
+                    <div class="file-list" id="file-list">
+                        <!-- Files will be listed here -->
+                        <div class="empty-state" id="empty-state">
+                            <p>No files selected</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="status-message" id="status-message"></div>
+                <div class="status-message" id="status-message"></div>
 
-            <div class="actions">
-                <button class="clear-btn" id="clear-btn">Clear All</button>
-                <button class="upload-btn" id="upload-btn" disabled>Upload Files</button>
-            </div>
+                <div class="actions">
+                    <button class="clear-btn" type="button" id="clear-btn">Clear All</button>
+                    <button class="upload-btn" type="submit" id="upload-btn" disabled>Upload Files</button>
+                </div>
+            </form>
         </div>
 
         <footer>
@@ -340,6 +342,7 @@
         const clearBtn = document.getElementById('clear-btn');
         const uploadBtn = document.getElementById('upload-btn');
         const statusMessage = document.getElementById('status-message');
+        const uploadForm = document.getElementById('upload-form');
 
         // Store selected files
         let selectedFiles = [];
@@ -373,7 +376,11 @@
         });
 
         clearBtn.addEventListener('click', clearAllFiles);
-        uploadBtn.addEventListener('click', uploadFiles);
+        
+        uploadForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            uploadFiles();
+        });
 
         // Functions
         function handleFileSelect(e) {
@@ -425,7 +432,7 @@
                         <div class="file-name">${file.name}</div>
                         <div class="file-size">${fileSize}</div>
                     </div>
-                    <button class="remove-file" data-index="${index}">×</button>
+                    <button class="remove-file" data-index="${index}" type="button">×</button>
                 `;
                 
                 fileList.appendChild(fileItem);
@@ -457,17 +464,36 @@
             showStatus('Uploading files...', 'info');
             uploadBtn.disabled = true;
             
-            // Simulate upload process
-            setTimeout(() => {
-                // In a real implementation, this would send files to the server
-                showStatus(`Successfully uploaded ${selectedFiles.length} file(s)!`, 'success');
-                clearAllFiles();
-                
+            // Create FormData object
+            const formData = new FormData();
+            selectedFiles.forEach(file => {
+                formData.append('files', file);
+            });
+            
+            // Send files to server
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showStatus(`Successfully uploaded ${selectedFiles.length} file(s)!`, 'success');
+                    clearAllFiles();
+                } else {
+                    showStatus('Upload failed: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showStatus('Upload failed: ' + error.message, 'error');
+            })
+            .finally(() => {
                 // Re-enable upload button after delay
                 setTimeout(() => {
                     uploadBtn.disabled = false;
                 }, 3000);
-            }, 2000);
+            });
         }
 
         function formatFileSize(bytes) {

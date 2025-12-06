@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
 
         BlocProvider(
           create: (context) =>
-              ServerBloc(serverRepo: getIt<EmbbededServerRepoImpl>()),
+              ServerBloc(serverRepo: getIt<EmbbededServerRepoImpl>(), settingBloc: context.read<SettingBloc>()),
         ),
       ],
       child: AdaptiveTheme(

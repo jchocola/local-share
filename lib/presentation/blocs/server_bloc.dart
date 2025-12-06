@@ -6,6 +6,7 @@ import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/data/repo/embbeded_server.dart';
 import 'package:local_share/main.dart';
+import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/setting_bloc.dart';
 
 ///
 /// EVENT
@@ -83,7 +84,8 @@ class ServerBlocState_success extends ServerBlocState {
 ///
 class ServerBloc extends Bloc<ServerBlocEvent, ServerBlocState> {
   final EmbbededServerRepoImpl serverRepo;
-  ServerBloc({required this.serverRepo}) : super(ServerBlocState_waiting()) {
+  final SettingBloc settingBloc;
+  ServerBloc({required this.serverRepo, required this.settingBloc}) : super(ServerBlocState_waiting()) {
     ///
     /// ON OPEN SERVER
     ///
@@ -109,6 +111,10 @@ class ServerBloc extends Bloc<ServerBlocEvent, ServerBlocState> {
         
         // Set picked files in server repo
         serverRepo.setPickedFiles(event.files);
+        
+        // Get download location from settings and set it in server repo
+        final downloadLocation = await settingBloc.getDownloadLocation();
+        serverRepo.setDownloadLocation(downloadLocation);
         
         // Запускаем сервер
         await serverRepo.start();
@@ -138,8 +144,6 @@ class ServerBloc extends Bloc<ServerBlocEvent, ServerBlocState> {
         emit(ServerBlocState_waiting());
       } catch (e) {}
     });
-
-
 
     ///
     /// CHANGE SWITHCER VALUE
