@@ -6,6 +6,9 @@ class AppConstant {
   static const double smallIcon = 14;
   static const progressLinearHeight = 14.0;
 
+  static const String SEND_KEY = 'SEND';
+  static const String RECEIVE_KEY = 'RECEIVE';
+
   static const String copyrightText = '2025 BacDev';
   static const String allRightsReserved = 'All rights recerved';
   static const String appVersion = '1.0.0+1';

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
+import 'package:local_share/presentation/blocs/server_bloc.dart';
 import 'package:local_share/widgets/big_button.dart';
 import 'package:lottie/lottie.dart';
 
@@ -13,9 +15,19 @@ class WaitOpenServerWidget extends StatelessWidget {
     return Column(
       spacing: AppConstant.appPadding,
       children: [
-        Lottie.asset('assets/ServerConnect.json' , width: size.width * 0.6, height:size.width * 0.6 ),
+        Lottie.asset(
+          'assets/ServerConnect.json',
+          width: size.width * 0.6,
+          height: size.width * 0.6,
+        ),
 
-        BigButton(title: 'Open Server', color: theme.colorScheme.primary),
+        BigButton(
+          title: 'Open Server',
+          color: theme.colorScheme.primary,
+          onTap: () {
+            context.read<ServerBloc>().add(ServerBlocEvent_openServer());
+          },
+        ),
       ],
     );
   }

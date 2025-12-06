@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/presentation/blocs/server_bloc.dart';
 import 'package:local_share/widgets/big_button.dart';
 
 class ServerInfoCard extends StatelessWidget {
@@ -15,7 +17,7 @@ class ServerInfoCard extends StatelessWidget {
         child: Column(
           spacing: AppConstant.appPadding,
           children: [
-            Text('Server' , style: theme.textTheme.titleLarge,),
+            Text('Server', style: theme.textTheme.titleLarge),
             _customInfo(context, title: 'IP Address', value: '1.0.0.4'),
             _customInfo(context, title: 'Port', value: '8303'),
             BigButton(
@@ -24,6 +26,9 @@ class ServerInfoCard extends StatelessWidget {
               textColor: theme.colorScheme.error,
               color: theme.colorScheme.error.withOpacity(0.2),
               withIcon: true,
+              onTap: () {
+                context.read<ServerBloc>().add(ServerBlocEvent_closeServer());
+              },
             ),
           ],
         ),
@@ -39,7 +44,10 @@ class ServerInfoCard extends StatelessWidget {
     final theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [Text(title, style: theme.textTheme.titleMedium,), Text(value , style: theme.textTheme.bodyMedium,)],
+      children: [
+        Text(title, style: theme.textTheme.titleMedium),
+        Text(value, style: theme.textTheme.bodyMedium),
+      ],
     );
   }
 }
