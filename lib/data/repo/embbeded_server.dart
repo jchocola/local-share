@@ -125,16 +125,23 @@ class EmbbededServerRepoImpl {
           break;
 
         case '/receive':
-          request.response
-            ..headers.contentType = ContentType.json
-            ..write(
-              jsonEncode({
-                'id': 'Hello My Friend',
-                'name': 'Hahah',
-                'port': port,
-              }),
-            )
-            ..close();
+           // take sendfile
+          final htmlFile = await rootBundle.loadString('assets/public/receive.html');
+
+          // if (!await htmlFile.exists()) {
+          //   logger.e('File not exists');
+          //   request.response
+          //     ..statusCode = 404
+          //     ..headers.contentType = ContentType.text
+          //     ..write('404');
+          // } else {
+            request.response
+              ..headers.contentType = ContentType.html
+              ..write(htmlFile);
+         // }
+
+          request.response.close();
+
           break;
 
         default:
