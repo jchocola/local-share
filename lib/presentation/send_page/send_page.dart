@@ -14,6 +14,7 @@ import 'package:local_share/presentation/send_page/widget/searching_animation.da
 import 'package:local_share/presentation/send_page/widget/searching_for_devices.dart';
 import 'package:local_share/presentation/send_page/widget/send_via_qr.dart';
 import 'package:local_share/widgets/appbar.dart';
+import 'package:local_share/widgets/custom_avatar.dart';
 import 'package:local_share/widgets/other_device_card.dart';
 
 class SendPage extends StatelessWidget {
@@ -47,7 +48,7 @@ class SendPage extends StatelessWidget {
             onTap: () {
               showDialog(context: context, builder: (context) => ProfilePage());
             },
-            child: CircleAvatar(),
+            child: CustomAvatar(),
           ),
         ),
         title: 'Local Share',

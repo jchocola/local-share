@@ -10,11 +10,11 @@ class ReadyToReceiveCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppConstant.appBorder),
-        color: ready ? theme.colorScheme.secondary.withOpacity(0.2) : theme.colorScheme.tertiary.withOpacity(0.2) 
+        color: ready ? theme.colorScheme.secondary.withOpacity(0.2) : theme.colorScheme.error.withOpacity(0.2) 
       ),
       padding: EdgeInsets.symmetric(horizontal: AppConstant.appPadding , vertical: AppConstant.appPadding/2),
-      child: Text('Ready to receive', style: theme.textTheme.bodySmall!.copyWith(
-         color: ready ? theme.colorScheme.secondary : theme.colorScheme.tertiary 
+      child: Text(ready ? 'Ready to receive' : 'Not ready to receive', style: theme.textTheme.bodySmall!.copyWith(
+         color: ready ? theme.colorScheme.secondary : theme.colorScheme.error
       ),),
     );
   }
