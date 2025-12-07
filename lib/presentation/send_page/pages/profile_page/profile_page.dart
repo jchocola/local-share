@@ -6,6 +6,7 @@ import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/presentation/blocs/current_device_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/profile_info_widget.dart';
 import 'package:local_share/widgets/info_listile.dart';
+import 'package:wiredash/wiredash.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -37,7 +38,9 @@ class ProfilePage extends StatelessWidget {
               },
             ),
             // InfoListile(icon: AppIcon.historyIcon, title: 'Transfer History'),
-            InfoListile(icon: AppIcon.feedbackIcon, title: 'Send Feedback'),
+            InfoListile(icon: AppIcon.feedbackIcon, title: 'Send Feedback', onTap: () {
+               Wiredash.of(context).show(inheritMaterialTheme: true);
+            },),
             InfoListile(
               icon: AppIcon.resetIcon,
               title: 'Reset Device ID',
