@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
-import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/receive_page_bloc.dart';
+import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/presentation/receive_page/widget/waiting_connection_widget.dart';
 import 'package:local_share/presentation/send_page/widget/invisible_widget.dart';
 import 'package:local_share/widgets/appbar.dart';

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
-import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/receive_page_bloc.dart';
+import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/presentation/receive_page/pages/transfer_progress_page/widget/transfer_complete_card.dart';
 import 'package:local_share/presentation/receive_page/widget/incoming_transfer_widget.dart';
 import 'package:local_share/presentation/receive_page/widget/waiting_annimation_widget.dart';

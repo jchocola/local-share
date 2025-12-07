@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/data/model/device_info_model.dart';
 import 'package:local_share/presentation/blocs/current_device_bloc.dart';
-import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/receive_page_bloc.dart';
+import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/widgets/custom_avatar.dart';
 import 'package:local_share/widgets/ready_to_receive_card.dart';
 

@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
-import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/receive_page_bloc.dart';
+import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/widgets/big_button.dart';
 
 class InvisibleWidget extends StatelessWidget {

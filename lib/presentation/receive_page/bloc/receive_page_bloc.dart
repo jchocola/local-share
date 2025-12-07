@@ -2,6 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_share/data/repo/bonsoir_broadcast_repository_impl.dart';
 import 'package:local_share/main.dart';
 
 ///
@@ -45,16 +46,28 @@ class ReceivePageBlocState_error extends ReceivePageBlocState {}
 /// BLOC
 ///
 class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
-  ReceivePageBloc() : super(ReceivePageBlocState_loaded(visible: true)) {
+  final BonsoirBroadcastRepositoryImpl bonsoirBroadcastRepositoryImpl;
+
+  ReceivePageBloc({required this.bonsoirBroadcastRepositoryImpl})
+    : super(ReceivePageBlocState_loaded(visible: false)) {
     ///
     /// CHANGE VISIBILITY
     ///
-    on<RecievePageBlocEvent_ChangeVisiblity>((event, emit) {
+    on<RecievePageBlocEvent_ChangeVisiblity>((event, emit) async {
       final currentState = state;
 
       logger.i('Changed visiblity');
 
       if (currentState is ReceivePageBlocState_loaded) {
+        // open or close bonsoir broadcast
+        if (!currentState.visible == true) {
+          // open broatcast
+          await bonsoirBroadcastRepositoryImpl.broadcastInitialize();
+          await bonsoirBroadcastRepositoryImpl.broadcastStart();
+        } else {
+          await bonsoirBroadcastRepositoryImpl.broadcastStop();
+        }
+
         emit(currentState.copyWith(visible: !currentState.visible));
       }
     });

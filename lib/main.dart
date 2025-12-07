@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:local_share/core/router/router.dart';
 import 'package:local_share/core/theme/dark_theme.dart';
 import 'package:local_share/core/theme/light_theme.dart';
+import 'package:local_share/data/repo/bonsoir_broadcast_repository_impl.dart';
 import 'package:local_share/data/repo/device_info_repository_impl.dart';
 import 'package:local_share/data/repo/embbeded_server.dart';
 import 'package:local_share/data/repo/shared_prefs_repository_impl.dart';
@@ -15,7 +16,7 @@ import 'package:local_share/presentation/blocs/current_device_bloc.dart';
 import 'package:local_share/presentation/blocs/server_bloc.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/setting_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
-import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/receive_page_bloc.dart';
+import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/presentation/server_page/bloc/server_page_bloc.dart';
 import 'package:logger/web.dart';
 import 'package:toastification/toastification.dart';
@@ -32,10 +33,10 @@ Future<void> main() async {
 
   await dotenv.load(fileName: ".env");
 
-   await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   runApp(const MyApp());
 }
@@ -47,7 +48,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => ReceivePageBloc()),
+        BlocProvider(
+          create: (context) => ReceivePageBloc(
+            bonsoirBroadcastRepositoryImpl:
+                getIt<BonsoirBroadcastRepositoryImpl>(),
+          ),
+        ),
         BlocProvider(create: (context) => PickedFilesBloc()),
         BlocProvider(
           create: (context) =>

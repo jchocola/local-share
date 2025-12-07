@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/presentation/blocs/current_device_bloc.dart';
-import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/receive_page_bloc.dart';
+import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/profile_page/profile_page.dart';
 import 'package:local_share/presentation/send_page/widget/context_menu.dart';
 import 'package:local_share/presentation/send_page/widget/founded_devices_list.dart';
