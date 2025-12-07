@@ -65,7 +65,12 @@ dependencies:
   ai_barcode_scanner: ^7.1.0
   wiredash: ^2.6.0
   flutter_dotenv: ^6.0.0
-  
+  intl_utils: ^2.8.13
+  flutter_localizations:
+    sdk: flutter
+
+flutter_intl:
+  enabled: true  
 
 dev_dependencies:
   flutter_test:

@@ -1,0 +1,10 @@
+{
+  "fromCamera": "Từ camera",
+  "fromGallery": "Từ gallery",
+  "receive": "Nhận",
+  "selectFile": "Chọn File",
+  "selectMultipleFiles": "Chọn nhiều File",
+  "selectPhoto": "Chọn Photo",
+  "send": "Gửi",
+  "server": "Server"
+}

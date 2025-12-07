@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:local_share/core/router/router.dart';
 import 'package:local_share/core/theme/dark_theme.dart';
 import 'package:local_share/core/theme/light_theme.dart';
@@ -11,6 +12,7 @@ import 'package:local_share/data/repo/device_info_repository_impl.dart';
 import 'package:local_share/data/repo/embbeded_server.dart';
 import 'package:local_share/data/repo/shared_prefs_repository_impl.dart';
 import 'package:local_share/di/DI.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/main_page.dart';
 import 'package:local_share/presentation/blocs/current_device_bloc.dart';
 import 'package:local_share/presentation/blocs/server_bloc.dart';
@@ -91,6 +93,14 @@ class MyApp extends StatelessWidget {
           initial: AdaptiveThemeMode.light,
           builder: (theme, darkTheme) => ToastificationWrapper(
             child: MaterialApp.router(
+              localizationsDelegates: [
+                S.delegate,  
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: S.delegate.supportedLocales,
+              locale: Locale('vi'),
               debugShowCheckedModeBanner: false,
               title: 'Local Share',
               theme: theme,

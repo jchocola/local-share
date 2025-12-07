@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
 
 getEntries(BuildContext context) => <ContextMenuEntry>[
   //const MenuHeader(text: "Context Menu"),
   MenuItem(
-    label: const Text('Select File'),
+    label:  Text(S.of(context).selectFile),
     icon: const Icon(AppIcon.documentIcon),
     onSelected: (value) {
       context.read<PickedFilesBloc>().add(PickedFilesBlocEvent_selectFile());
@@ -17,7 +18,7 @@ getEntries(BuildContext context) => <ContextMenuEntry>[
   MenuItem.submenu(
     items: [
       MenuItem(
-        label: const Text('From gallery'),
+        label:  Text(S.of(context).fromGallery),
         value: "gallery",
         icon: const Icon(AppIcon.imageIcon),
         onSelected: (value) {
@@ -25,7 +26,7 @@ getEntries(BuildContext context) => <ContextMenuEntry>[
         },
       ),
       MenuItem(
-        label: const Text('From camera'),
+        label:  Text(S.of(context).fromCamera),
         value: 'camera',
         icon: const Icon(AppIcon.cameraIcon),
         onSelected: (value) {
@@ -33,14 +34,14 @@ getEntries(BuildContext context) => <ContextMenuEntry>[
         },
       ),
     ],
-    label: const Text('Select Photo'),
+    label:  Text(S.of(context).selectPhoto),
     icon: const Icon(AppIcon.imageIcon),
     onSelected: (value) {
     
     },
   ),
   MenuItem(
-    label: const Text('Select Multiple Files'),
+    label:  Text(S.of(context).selectMultipleFiles),
     icon: const Icon(AppIcon.multipleFileIcon),
     onSelected: (value) {
       context.read<PickedFilesBloc>().add(

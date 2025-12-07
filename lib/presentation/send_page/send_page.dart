@@ -63,7 +63,7 @@ class SendPage extends StatelessWidget {
             },
           ),
         ),
-        title: 'Local Share',
+        title: 'LocalShare'
       ),
       body: buildBody(context),
 

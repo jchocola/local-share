@@ -1,0 +1,10 @@
+{
+  "send": "Send",
+  "server": "Server",
+  "receive": "Receive",
+  "selectFile": "Select File",
+  "fromGallery": "From gallery",
+  "fromCamera": "From camera",
+  "selectPhoto": "Select Photo",
+  "selectMultipleFiles": "Select Multiple Files"
+}
