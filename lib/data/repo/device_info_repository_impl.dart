@@ -9,7 +9,7 @@ class DeviceInfoRepositoryImpl {
 
   Future<DeviceInfoModel> getAndroidInfo() async {
     final AndroidDeviceInfo androidDeviceInfo = await _deviceInfo.androidInfo;
-    final deviceID =  _sharedPrefs.getDeviceID();
+    final deviceID = await _sharedPrefs.getDeviceID();
 
     logger.i(androidDeviceInfo.device);
     logger.i(androidDeviceInfo.brand);
@@ -20,4 +20,6 @@ class DeviceInfoRepositoryImpl {
       deviceId: deviceID
     );
   }
+
+
 }

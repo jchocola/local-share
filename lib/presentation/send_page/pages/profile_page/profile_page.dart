@@ -38,7 +38,15 @@ class ProfilePage extends StatelessWidget {
             ),
             // InfoListile(icon: AppIcon.historyIcon, title: 'Transfer History'),
             InfoListile(icon: AppIcon.feedbackIcon, title: 'Send Feedback'),
-            InfoListile(icon: AppIcon.resetIcon, title: 'Reset Device ID'),
+            InfoListile(
+              icon: AppIcon.resetIcon,
+              title: 'Reset Device ID',
+              onTap: () {
+                context.read<CurrentDeviceBloc>().add(
+                  CurrentDeviceBlocEvent_resetDeviceID(),
+                );
+              },
+            ),
           ],
         ),
       ),

@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CurrentDeviceBloc(
             deviceInfoRepo: getIt<DeviceInfoRepositoryImpl>(),
+            sharedPrefsRepo: getIt<SharedPrefsRepositoryImpl>()
           )..add(CurrentDeviceBlocEvent_load()),
         ),
         // BlocProvider(

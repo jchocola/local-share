@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:local_share/data/model/device_info_model.dart';
 import 'package:local_share/data/repo/device_info_repository_impl.dart';
+import 'package:local_share/data/repo/shared_prefs_repository_impl.dart';
 import 'package:local_share/main.dart';
 
 ///
@@ -16,6 +17,8 @@ abstract class CurrentDeviceBlocEvent extends Equatable {
 }
 
 class CurrentDeviceBlocEvent_load extends CurrentDeviceBlocEvent {}
+
+class CurrentDeviceBlocEvent_resetDeviceID extends CurrentDeviceBlocEvent {}
 
 ///
 /// STATE
@@ -42,8 +45,11 @@ class CurrentDeviceBlocState_error extends CurrentDeviceBlocState {}
 class CurrentDeviceBloc
     extends Bloc<CurrentDeviceBlocEvent, CurrentDeviceBlocState> {
   final DeviceInfoRepositoryImpl deviceInfoRepo;
-  CurrentDeviceBloc({required this.deviceInfoRepo})
-    : super(CurrentDeviceBlocState_init()) {
+  final SharedPrefsRepositoryImpl sharedPrefsRepo;
+  CurrentDeviceBloc({
+    required this.deviceInfoRepo,
+    required this.sharedPrefsRepo,
+  }) : super(CurrentDeviceBlocState_init()) {
     ///
     /// LOAD
     ///
@@ -52,6 +58,14 @@ class CurrentDeviceBloc
 
       logger.i('Ge Current Device ${currentDevice.name}');
       emit(CurrentDeviceBlocState_loaded(deviceInfo: currentDevice));
+    });
+
+    ///
+    /// ON RESET DEVICE ID
+    ///
+    on<CurrentDeviceBlocEvent_resetDeviceID>((event, emit) async {
+      await sharedPrefsRepo.resetDeviceID();
+      add(CurrentDeviceBlocEvent_load());
     });
   }
 }

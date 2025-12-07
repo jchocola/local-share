@@ -60,13 +60,21 @@ class SharedPrefsRepositoryImpl {
     }
   }
 
-  String getDeviceID() {
-    return prefs.getString(DEVICE_ID) ?? Uuid().v4().substring(0, 8);
+  Future<String> getDeviceID() async {
+    final currentID = prefs.getString(DEVICE_ID);
+    if (currentID == null) {
+      final newID = Uuid().v4().substring(0, 8);
+      await prefs.setString(DEVICE_ID, newID);
+      return newID;
+    } else {
+      return currentID;
+    }
   }
 
   Future<void> resetDeviceID() async {
-    final newID =  Uuid().v4().substring(0, 8);
-     await prefs.setString(DEVICE_ID, newID); 
+    final newID = Uuid().v4().substring(0, 8);
+    logger.i('Reset Device ID : ${newID}');
+    await prefs.setString(DEVICE_ID, newID);
   }
 
   ///
