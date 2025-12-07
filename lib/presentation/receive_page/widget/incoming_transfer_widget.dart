@@ -7,7 +7,6 @@ import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget
 import 'package:local_share/presentation/server_page/widget/received_file_card.dart';
 import 'package:local_share/widgets/big_button.dart';
 
-
 class IncomingTransferWidget extends StatelessWidget {
   const IncomingTransferWidget({super.key});
 
@@ -45,6 +44,7 @@ class IncomingTransferWidget extends StatelessWidget {
                     icon: AppIcon.receiveIcon,
                     onTap: () {
                       context.push('/receive_page/transfer_progress');
+                      context.pop();
                     },
                   ),
                 ),
@@ -57,6 +57,7 @@ class IncomingTransferWidget extends StatelessWidget {
   }
 
   Widget incomingFiles(context) {
+    final theme = Theme.of(context);
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.4,
       child: Column(
@@ -64,12 +65,18 @@ class IncomingTransferWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('4 Files'),
-              Text('133 MB')
+              Text('4 Files', style: theme.textTheme.bodyMedium),
+              Text('133 MB', style: theme.textTheme.titleMedium),
             ],
           ),
-          ReceivedFileCard(file: ReceivedFile(name: 'Hello', path: 'ds', size: 132, receivedAt: DateTime.now()))
-
+          ReceivedFileCard(
+            file: ReceivedFile(
+              name: 'Hello',
+              path: 'ds',
+              size: 132,
+              receivedAt: DateTime.now(),
+            ),
+          ),
         ],
       ),
     );
