@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/core/utils/show_toastification.dart';
+import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/files_to_send_widget.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/note.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/profile_info_widget.dart';
@@ -52,6 +56,7 @@ class ConfirmTransferPage extends StatelessWidget {
                   title: 'Cancel',
                   color: theme.scaffoldBackgroundColor,
                   textColor: theme.colorScheme.onSecondary,
+                  onTap: () => context.pop(),
                 ),
               ),
               Expanded(
@@ -61,6 +66,11 @@ class ConfirmTransferPage extends StatelessWidget {
                   color: theme.colorScheme.primary,
                   withIcon: true,
                   icon: AppIcon.sendIcon,
+                  onTap: () {
+                    if (context.read<PickedFilesBloc>().files.isEmpty) {
+                      showWarningToatification(context , title: 'No file picked');
+                    }
+                  },
                 ),
               ),
             ],

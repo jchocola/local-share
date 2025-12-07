@@ -37,7 +37,8 @@ void showWarningToatification(BuildContext context , {String title = 'Title' , S
     context: context,
     type: ToastificationType.warning,
     title: Text(title),
-    description: Text(desc)
+    description: Text(desc),
+     autoCloseDuration: Duration(seconds: 3),
   );
 }
 
