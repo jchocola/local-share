@@ -40,6 +40,11 @@ class ProfileInfoWidget extends StatelessWidget {
                           'Device ID: ${deviceInfoModel?.deviceId}',
                           style: theme.textTheme.bodySmall,
                         ),
+
+                         Text(
+                          'IP: ${deviceInfoModel?.IP}',
+                          style: theme.textTheme.bodySmall,
+                        ),
                        // Text('Online', style: theme.textTheme.bodySmall),
                         // BlocBuilder<ReceivePageBloc, ReceivePageBlocState>(
                         //   builder: (context, receivePageState) {
