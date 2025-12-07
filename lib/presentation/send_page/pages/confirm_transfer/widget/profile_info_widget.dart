@@ -24,7 +24,7 @@ class ProfileInfoWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: CustomAvatar(),
+                    child: CustomAvatar(name: state.deviceInfo.name,),
                    // child: CircleAvatar(radius: size.width * 0.07),
                   ),
                   Expanded(

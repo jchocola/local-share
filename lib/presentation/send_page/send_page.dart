@@ -4,13 +4,14 @@ import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:gap/gap.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/presentation/blocs/current_device_bloc.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/profile_page/profile_page.dart';
 import 'package:local_share/presentation/send_page/widget/context_menu.dart';
 import 'package:local_share/presentation/send_page/widget/founded_devices_list.dart';
 import 'package:local_share/presentation/send_page/widget/invisible_widget.dart';
 import 'package:local_share/presentation/send_page/widget/picked_files.dart';
-import 'package:local_share/presentation/send_page/widget/searching_animation.dart';
+import 'package:local_share/presentation/send_page/widget/searching_animation_with_founded_list.dart';
 import 'package:local_share/presentation/send_page/widget/searching_for_devices.dart';
 import 'package:local_share/presentation/send_page/widget/send_via_server.dart';
 import 'package:local_share/widgets/appbar.dart';
@@ -44,11 +45,22 @@ class SendPage extends StatelessWidget {
         // ),
         leading: Padding(
           padding: EdgeInsetsGeometry.only(left: AppConstant.appPadding),
-          child: GestureDetector(
-            onTap: () {
-              showDialog(context: context, builder: (context) => ProfilePage());
+          child: BlocBuilder<CurrentDeviceBloc, CurrentDeviceBlocState>(
+            builder: (context, state) {
+              if (state is CurrentDeviceBlocState_loaded) {
+                return CustomAvatar(
+                  name: state.deviceInfo.name,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => ProfilePage(),
+                    );
+                  },
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
             },
-            child: CustomAvatar(),
           ),
         ),
         title: 'Local Share',
@@ -85,7 +97,7 @@ class SendPage extends StatelessWidget {
           Gap(AppConstant.appPadding * 3),
 
           //FoundedDevicesList(),
-          SearchingAnimation(),
+          SearchingAnimationWithFoundedDevices(),
           Spacer(),
           PickedFiles(),
         ],
