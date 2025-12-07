@@ -62,7 +62,7 @@ class WaitingConnectionWidget extends StatelessWidget {
         ),
 
         BigButton(
-          color: theme.colorScheme.onSecondary,
+          color: theme.colorScheme.onSecondary.withOpacity(0.3),
           icon: AppIcon.closeEyeIcon,
           withIcon: true,
           onTap: () {

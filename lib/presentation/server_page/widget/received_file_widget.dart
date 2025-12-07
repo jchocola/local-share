@@ -101,7 +101,7 @@ class ReceivedFilesList extends StatelessWidget {
               .getReceivedFiles();
 
           if (receivedFiles.isEmpty) {
-            return Center(child: Text('No received files'));
+            return Text('No received files');
           }
 
           return ListView.builder(

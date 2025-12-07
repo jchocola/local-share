@@ -1,16 +1,28 @@
-# local_share
+# LocalShare (like AirDrop,NearbyShare,)
 
-A new Flutter project.
+Mobile application for transfering files between :
+    - Android 2 Android ✅
+    - Android 2 IOS ✅
+    - Android 2 any OS ✅
 
-## Getting Started
+## Tech Stack
+    - Flutter 3.35.5
+    - Dart 3.9.2
+    - Bloc (State Management)
+    - GetIt (DI)
+    - bonsoir (mDNS)
+    - Pure Dart Server 
+    - Wiredash (feedback)
+  
+## Transfer Logic
+    1. Android to Android (via socket + mDNS)
+    Device (A) - sender, nDNS scanner
+    Device (B) - receiver, mDNS , server
+    Note: Only A -> B
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+    2. Android to other OS (via HTTP)
+    Device (A) - server /  sender + receiver
+    Device (B) - sender + receiver
+    Note: A <-> B
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
