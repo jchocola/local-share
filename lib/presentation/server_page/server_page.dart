@@ -1,7 +1,9 @@
+import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/error/app_error.dart';
+import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/core/utils/show_toastification.dart';
 import 'package:local_share/presentation/blocs/server_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/note.dart';
@@ -13,6 +15,7 @@ import 'package:local_share/presentation/server_page/widget/server_info_card.dar
 import 'package:local_share/presentation/server_page/widget/share_receive_switcher.dart';
 import 'package:local_share/presentation/server_page/widget/wait_open_server_widget.dart';
 import 'package:local_share/widgets/note_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ServerPage extends StatelessWidget {
   const ServerPage({super.key});
@@ -20,7 +23,41 @@ class ServerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('ServerPage')),
+      appBar: AppBar(
+        title: Text('Transfer via Server'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              ///
+              /// go to barcode reader
+              ///
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => AiBarcodeScanner(
+                    onDetect: (BarcodeCapture capture) async {
+                      // Handle the scanned barcode
+                      debugPrint(
+                        "Barcode detected: ${capture.barcodes.first.rawValue}",
+                      );
+                      // showSuccessToatification(context, title: capture.barcodes.first.rawValue.toString());
+
+                      try {
+                        await launchUrl(
+                          Uri.parse(capture.barcodes.first.rawValue.toString()),
+                        );
+                      } catch (e) {
+                            showErrorToatification(context, title: capture.barcodes.first.rawValue.toString()); 
+                      }
+                      //  Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              );
+            },
+            icon: Icon(AppIcon.qrCodeIcon),
+          ),
+        ],
+      ),
       body: buildBody(context),
     );
   }
@@ -94,8 +131,18 @@ class ServerPage extends StatelessWidget {
                   child: Column(
                     spacing: AppConstant.appPadding / 2,
                     children: [
-                      Center(child: QrWidget(data: state.switcherValue == AppConstant.SEND_KEY ? sendUrl : receiveUrl,)),
-                      HostTextCopy(data:   state.switcherValue == AppConstant.SEND_KEY ? sendUrl : receiveUrl,),
+                      Center(
+                        child: QrWidget(
+                          data: state.switcherValue == AppConstant.SEND_KEY
+                              ? sendUrl
+                              : receiveUrl,
+                        ),
+                      ),
+                      HostTextCopy(
+                        data: state.switcherValue == AppConstant.SEND_KEY
+                            ? sendUrl
+                            : receiveUrl,
+                      ),
                       ShareReceiveSwitcher(),
                       ServerInfoCard(),
                     ],
