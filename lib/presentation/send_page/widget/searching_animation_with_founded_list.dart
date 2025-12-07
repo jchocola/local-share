@@ -1,7 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:local_share/core/utils/show_toastification.dart';
+import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
 import 'package:local_share/widgets/custom_avatar.dart';
 import 'package:lottie/lottie.dart';
 
@@ -33,10 +36,9 @@ class _SearchingAnimationWithFoundedDevicesState
     super.initState();
     // Инициализируем случайные позиции
     for (int i = 0; i < foundedDevice.length; i++) {
-      _avatarPositions.add(Offset(
-        _random.nextDouble() * 200,
-        _random.nextDouble() * 200,
-      ));
+      _avatarPositions.add(
+        Offset(_random.nextDouble() * 200, _random.nextDouble() * 200),
+      );
     }
   }
 
@@ -69,32 +71,50 @@ class _SearchingAnimationWithFoundedDevicesState
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Stack(
-      children: [
-        /// searching animation
-        Lottie.asset(
-          'assets/Searching_Animation.json',
-          width: size.width * 0.7,
-          height: size.width * 0.7,
-        ),
+    return BlocConsumer<SendPageBloc, SendPageBlocState>(
+      listener: (context, state) {
+        if (state is SendPageBlocState_BonsoirDiscoveryStartedEvent) {
+          showSuccessToatification(context, title: 'Bonsoir Discovery Started');
+        }
 
-        for (int i = 0; i < foundedDevice.length; i++)
-          Positioned(
-            left: _avatarPositions[i].dx,
-            top: _avatarPositions[i].dy,
-            child: DraggableAvatar(
-              name: foundedDevice[i],
-              index: i,
-              onPanStart: _onPanStart,
-              onPanUpdate: _onPanUpdate,
-              onPanEnd: _onPanEnd,
-              onTap: () {
-                context.push('/send_page/confirm_transfer');
-              },
-              isDragging: _selectedAvatarIndex == i,
-            ),
-          ),
-      ],
+        if (state is SendPageBlocState_BonsoirDiscoveryServiceFoundEvent) {
+          showSuccessToatification(context, title: 'Bonsoir Discovery Started'); 
+        }
+      },
+
+      builder: (context, state) {
+        if (state is SendPageBlocState_discovering) {
+          return Stack(
+            children: [
+              /// searching animation
+              Lottie.asset(
+                'assets/Searching_Animation.json',
+                width: size.width * 0.7,
+                height: size.width * 0.7,
+              ),
+
+              for (int i = 0; i < foundedDevice.length; i++)
+                Positioned(
+                  left: _avatarPositions[i].dx,
+                  top: _avatarPositions[i].dy,
+                  child: DraggableAvatar(
+                    name: foundedDevice[i],
+                    index: i,
+                    onPanStart: _onPanStart,
+                    onPanUpdate: _onPanUpdate,
+                    onPanEnd: _onPanEnd,
+                    onTap: () {
+                      context.push('/send_page/confirm_transfer');
+                    },
+                    isDragging: _selectedAvatarIndex == i,
+                  ),
+                ),
+            ],
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 }
@@ -136,14 +156,11 @@ class DraggableAvatar extends StatelessWidget {
                     BoxShadow(
                       color: Colors.black.withOpacity(0.3),
                       blurRadius: 10,
-                     
                     ),
                   ]
                 : [],
           ),
-          child: CustomAvatar(
-            name: name,
-          ),
+          child: CustomAvatar(name: name),
         ),
       ),
     );

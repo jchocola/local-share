@@ -17,34 +17,34 @@ class BonsoirDiscoverRepositoryImpl {
 
     logger.i('Bonsoir discovery started');
 
-    discovery.eventStream!.listen((event) {
-      switch (event) {
-        case BonsoirDiscoveryStartedEvent():
-          logger.e(
-            'Service Started : port ${event.service?.port} , name ${event.service?.name}',
-          );
-          break;
-        case BonsoirDiscoveryServiceFoundEvent():
-          final BonsoirService bonsoirService = event.service;
-          logger.e('Service found : ${event.service.toJson()}');
-          event.service!.resolve(
-            discovery.serviceResolver,
-          ); // Should be called when the user wants to connect to this service.
-          break;
-        case BonsoirDiscoveryServiceResolvedEvent():
-          logger.e('Service resolved : ${event.service.toJson()}');
-          break;
-        case BonsoirDiscoveryServiceUpdatedEvent():
-          logger.e('Service updated : ${event.service.toJson()}');
-          break;
-        case BonsoirDiscoveryServiceLostEvent():
-          logger.e('Service lost : ${event.service.toJson()}');
-          break;
-        default:
-          logger.e('Another event occurred : $event.');
-          break;
-      }
-    });
+    // discovery.eventStream!.listen((event) {
+    //   switch (event) {
+    //     case BonsoirDiscoveryStartedEvent():
+    //       logger.e(
+    //         'Service Started : port ${event.service?.port} , name ${event.service?.name}',
+    //       );
+    //       break;
+    //     case BonsoirDiscoveryServiceFoundEvent():
+    //       final BonsoirService bonsoirService = event.service;
+    //       logger.e('Service found : ${event.service.toJson()}');
+    //       event.service!.resolve(
+    //         discovery.serviceResolver,
+    //       ); // Should be called when the user wants to connect to this service.
+    //       break;
+    //     case BonsoirDiscoveryServiceResolvedEvent():
+    //       logger.e('Service resolved : ${event.service.toJson()}');
+    //       break;
+    //     case BonsoirDiscoveryServiceUpdatedEvent():
+    //       logger.e('Service updated : ${event.service.toJson()}');
+    //       break;
+    //     case BonsoirDiscoveryServiceLostEvent():
+    //       logger.e('Service lost : ${event.service.toJson()}');
+    //       break;
+    //     default:
+    //       logger.e('Another event occurred : $event.');
+    //       break;
+    //   }
+    // });
   }
 
   Future<void> stopDiscovery() async {
