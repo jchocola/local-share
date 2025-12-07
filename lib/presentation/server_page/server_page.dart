@@ -6,6 +6,7 @@ import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/core/utils/show_toastification.dart';
 import 'package:local_share/presentation/blocs/server_bloc.dart';
+import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/note.dart';
 import 'package:local_share/presentation/send_page/pages/send_via_qr_page/send_via_qr_page.dart';
 import 'package:local_share/presentation/send_page/pages/send_via_qr_page/widget/host_text_copy.dart';
@@ -46,7 +47,10 @@ class ServerPage extends StatelessWidget {
                           Uri.parse(capture.barcodes.first.rawValue.toString()),
                         );
                       } catch (e) {
-                            showErrorToatification(context, title: capture.barcodes.first.rawValue.toString()); 
+                        showErrorToatification(
+                          context,
+                          title: capture.barcodes.first.rawValue.toString(),
+                        );
                       }
                       //  Navigator.of(context).pop();
                     },
@@ -111,6 +115,16 @@ class ServerPage extends StatelessWidget {
           NoteWidget(
             title:
                 'Используя этот метод, вы можете обменивать с любыми устройствами с разным ОС',
+          ),
+
+          BlocBuilder<PickedFilesBloc, PickedFilesBlocState>(
+            builder: (context, state) {
+              if (state is PickedFilesBlocStateLoaded) {
+                return NoteWidget(title: '(${state.files.length}) files ready to serve in server');
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
           ),
         ],
       ),

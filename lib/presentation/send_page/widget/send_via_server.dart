@@ -5,9 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
+import 'package:local_share/presentation/server_page/server_page.dart';
 
-class SendViaQr extends StatelessWidget {
-  const SendViaQr({super.key});
+class SendViaServer extends StatelessWidget {
+  const SendViaServer({super.key});
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -17,13 +18,14 @@ class SendViaQr extends StatelessWidget {
           if (state.files.isNotEmpty) {
             return GestureDetector(
               onTap: () {
-                context.push('/send_page/send_via_qr');
+                // go to server page
+                context.go('/server');
               },
               child: Row(
                 spacing: AppConstant.appPadding,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(AppIcon.qrCodeIcon, color: theme.colorScheme.primary),
+                  Icon(AppIcon.serverIcon, color: theme.colorScheme.primary),
 
                   // AnimatedTextKit(
                   //   isRepeatingAnimation: true,
@@ -31,7 +33,7 @@ class SendViaQr extends StatelessWidget {
                   // WavyAnimatedText('Searching for devices...',textStyle: theme.textTheme.bodySmall , ),
                   // ])
                   Text(
-                    'Not founds receiver? Try send via QR-code',
+                    'Not founds receiver? Try send via server',
                     style: theme.textTheme.bodySmall,
                   ),
                 ],

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/presentation/blocs/server_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart'; // Add this import
+import 'package:local_share/presentation/server_page/server_page.dart';
 import 'package:local_share/widgets/big_button.dart';
 import 'package:lottie/lottie.dart';
 
@@ -28,7 +29,7 @@ class WaitOpenServerWidget extends StatelessWidget {
           onTap: () {
             // Get picked files from the bloc
             final pickedFiles = context.read<PickedFilesBloc>().files;
-            
+
             // Pass the files when opening the server
             context.read<ServerBloc>().add(
               ServerBlocEvent_openServer(files: pickedFiles),
