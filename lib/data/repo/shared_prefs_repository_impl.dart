@@ -1,6 +1,8 @@
 import 'package:local_share/main.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
+import 'package:uuid/v4.dart';
 
 class SharedPrefsRepositoryImpl {
   late SharedPreferences prefs;
@@ -12,6 +14,7 @@ class SharedPrefsRepositoryImpl {
   static const String AUTO_ACCEPT_SMALL_FILE = 'AUTO_ACCEPT_SMALL_FILE';
   static const String TRANSFER_NOTIFICATION = 'TRANSFER_NOTIFICATION';
   static const String DOWNLOAD_LOCATION = 'DOWNLOAD_LOCATION';
+  static const String DEVICE_ID = 'DEVICE_ID';
 
   Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -55,6 +58,15 @@ class SharedPrefsRepositoryImpl {
     } else {
       return location;
     }
+  }
+
+  String getDeviceID() {
+    return prefs.getString(DEVICE_ID) ?? Uuid().v4().substring(0, 8);
+  }
+
+  Future<void> resetDeviceID() async {
+    final newID =  Uuid().v4().substring(0, 8);
+     await prefs.setString(DEVICE_ID, newID); 
   }
 
   ///

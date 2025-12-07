@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/presentation/blocs/current_device_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/profile_info_widget.dart';
 import 'package:local_share/widgets/info_listile.dart';
 
@@ -16,17 +18,25 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ProfileInfoWidget(),
+            BlocBuilder<CurrentDeviceBloc, CurrentDeviceBlocState>(
+              builder: (context, state) {
+                if (state is CurrentDeviceBlocState_loaded) {
+                  return ProfileInfoWidget(deviceInfoModel: state.deviceInfo);
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
+            ),
             Divider(),
             InfoListile(
               icon: AppIcon.settingIcon,
               title: 'Settings',
               onTap: () {
-                  context.push('/receive_page/setting');
-                  
+                context.push('/receive_page/setting');
+                context.pop();
               },
             ),
-            InfoListile(icon: AppIcon.historyIcon, title: 'Transfer History'),
+            // InfoListile(icon: AppIcon.historyIcon, title: 'Transfer History'),
             InfoListile(icon: AppIcon.feedbackIcon, title: 'Send Feedback'),
             InfoListile(icon: AppIcon.resetIcon, title: 'Reset Device ID'),
           ],
