@@ -6,6 +6,7 @@ import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/presentation/receive_page/pages/transfer_progress_page/widget/transfer_complete_card.dart';
 import 'package:local_share/presentation/receive_page/widget/incoming_transfer_widget.dart';
+import 'package:local_share/presentation/receive_page/widget/waiting_annimation_widget.dart';
 import 'package:local_share/presentation/send_page/widget/searching_animation_with_founded_list.dart';
 import 'package:local_share/widgets/big_button.dart';
 
@@ -33,12 +34,13 @@ class WaitingConnectionWidget extends StatelessWidget {
           child: Stack(
             alignment: AlignmentGeometry.center,
             children: [
-              SearchingAnimationWithFoundedDevices(),
-              Icon(
-                AppIcon.receiveIcon,
-                size: AppConstant.bigIcon,
-                color: theme.colorScheme.primary,
-              ),
+              WaitingAnimationWidget(),
+              //SearchingAnimationWithFoundedDevices(),
+              // Icon(
+              //   AppIcon.receiveIcon,
+              //   size: AppConstant.bigIcon,
+              //   color: theme.colorScheme.primary,
+              // ),
             ],
           ),
         ),
