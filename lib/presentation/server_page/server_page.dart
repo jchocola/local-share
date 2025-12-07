@@ -143,7 +143,7 @@ class ServerPage extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
-                    spacing: AppConstant.appPadding / 2,
+                    spacing: AppConstant.appPadding ,
                     children: [
                       Center(
                         child: QrWidget(

@@ -111,6 +111,7 @@ class EmbbededServerRepoImpl {
     server = await HttpServer.bind(localIP, port);
     logger.i('Server bound to ${server?.address}:${server?.port}');
 
+      // set urls
     _sendUrl = 'http://${localIP}:$port/send';
     _receiveUrl = 'http://${localIP}:$port/receive';
 

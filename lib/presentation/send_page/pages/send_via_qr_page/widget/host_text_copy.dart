@@ -18,7 +18,7 @@ class HostTextCopy extends StatelessWidget {
         spacing: AppConstant.appPadding,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(data, style: theme.textTheme.titleMedium),
+          Text(data, style: theme.textTheme.titleSmall),
           IconButton(
             onPressed: () {
               Clipboard.setData(ClipboardData(text: data));
