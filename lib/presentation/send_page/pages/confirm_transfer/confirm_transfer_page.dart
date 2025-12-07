@@ -4,6 +4,7 @@ import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/files_to_send_widget.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/note.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/profile_info_widget.dart';
+import 'package:local_share/presentation/send_page/widget/picked_files.dart';
 import 'package:local_share/widgets/appbar.dart';
 import 'package:local_share/widgets/big_button.dart';
 
@@ -34,7 +35,8 @@ class ConfirmTransferPage extends StatelessWidget {
                 spacing: AppConstant.appPadding,
                 children: [
                   ProfileInfoWidget(),
-                  FilesToSendWidget(),
+                  PickedFiles(),
+                  //FilesToSendWidget(),
                   NoteWidget2(),
                 ],
               ),

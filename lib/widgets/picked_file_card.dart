@@ -82,7 +82,7 @@ class _PickedFileCardState extends State<PickedFileCard>
                   SizedBox(
                     width: widget.withFixedWidth
                         ? size.width * 0.4
-                        : double.infinity,
+                        : double.maxFinite,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,

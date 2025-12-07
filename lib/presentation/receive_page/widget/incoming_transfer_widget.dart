@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
-import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/files_to_send_widget.dart';
+import 'package:local_share/data/repo/embbeded_server.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/profile_info_widget.dart';
+import 'package:local_share/presentation/server_page/widget/received_file_card.dart';
 import 'package:local_share/widgets/big_button.dart';
-import 'package:local_share/widgets/picked_file_card.dart';
+
 
 class IncomingTransferWidget extends StatelessWidget {
   const IncomingTransferWidget({super.key});
@@ -21,8 +22,8 @@ class IncomingTransferWidget extends StatelessWidget {
           children: [
             Text('Incoming Transfer', style: theme.textTheme.titleLarge),
             ProfileInfoWidget(),
-
-            FilesToSendWidget(),
+            incomingFiles(context),
+            //FilesToSendWidget(),
             Divider(),
             Row(
               spacing: AppConstant.appPadding,
@@ -51,6 +52,25 @@ class IncomingTransferWidget extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget incomingFiles(context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.4,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('4 Files'),
+              Text('133 MB')
+            ],
+          ),
+          ReceivedFileCard(file: ReceivedFile(name: 'Hello', path: 'ds', size: 132, receivedAt: DateTime.now()))
+
+        ],
       ),
     );
   }
