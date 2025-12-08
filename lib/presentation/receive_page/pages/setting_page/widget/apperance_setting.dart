@@ -14,11 +14,64 @@ class AppearanceSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    void onLanguageTapped() {
+      showModalBottomSheet(
+        context: context,
+        showDragHandle: true,
+        builder: (context) {
+          return BlocBuilder<SettingBloc, SettingBlocState>(
+            builder: (context, state) {
+              if (state is SettingBlocState_loaded) {
+                return Padding(
+                  padding: const EdgeInsets.all(AppConstant.appPadding),
+                  child: Column(
+                    children: List.generate(
+                      S.delegate.supportedLocales.length,
+                      (index) {
+                        final Locale locale =
+                            S.delegate.supportedLocales[index];
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              AppConstant.appBorder,
+                            ),
+                            color: state.langCode == locale.languageCode
+                                ? theme.colorScheme.primary
+                                : Colors.transparent,
+                          ),
+                          child: ListTile(
+                            title: Text(locale.languageCode),
+                            onTap: () {
+                              context.read<SettingBloc>().add(
+                                SettingBlocEvent_changeLangCode(
+                                  langCode: locale.languageCode,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
+          );
+        },
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: AppConstant.appPadding,
       children: [
-        Text(S.of(context).appereanceSettings, style: theme.textTheme.titleMedium),
+        Text(
+          S.of(context).appereanceSettings,
+          style: theme.textTheme.titleMedium,
+        ),
 
         BlocBuilder<SettingBloc, SettingBlocState>(
           builder: (context, state) {
@@ -31,24 +84,42 @@ class AppearanceSetting extends StatelessWidget {
                       title: S.of(context).language,
                       subtitle: 'English',
                       // trailingWidget: Text('Light'),
+                      onTap: onLanguageTapped,
                     ),
                     Divider(),
                     SettingTitle(
-                      icon: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light ? AppIcon.lightThemeIcon:  AppIcon.darkThemeIcon,
+                      icon:
+                          AdaptiveTheme.of(context).mode ==
+                              AdaptiveThemeMode.light
+                          ? AppIcon.lightThemeIcon
+                          : AppIcon.darkThemeIcon,
                       title: S.of(context).applicationTheme,
                       subtitle: S.of(context).chooseBetweenLightDark,
-                      trailingWidget: Text(AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light ? S.of(context).light : S.of(context).dark),
-                      onTap: () => AdaptiveTheme.of(context).setThemeMode( AdaptiveTheme.of(context).mode  == AdaptiveThemeMode.light ? AdaptiveThemeMode.dark : AdaptiveThemeMode.light)
+                      trailingWidget: Text(
+                        AdaptiveTheme.of(context).mode ==
+                                AdaptiveThemeMode.light
+                            ? S.of(context).light
+                            : S.of(context).dark,
+                      ),
+                      onTap: () => AdaptiveTheme.of(context).setThemeMode(
+                        AdaptiveTheme.of(context).mode ==
+                                AdaptiveThemeMode.light
+                            ? AdaptiveThemeMode.dark
+                            : AdaptiveThemeMode.light,
+                      ),
                     ),
                     Divider(),
                     SettingTitle(
                       icon: AppIcon.notificationOffIcon,
                       title: S.of(context).transferNotifications,
-                      subtitle:
-                          S.of(context).receiveAlertsForIncomingRequestsAndCompletions,
+                      subtitle: S
+                          .of(context)
+                          .receiveAlertsForIncomingRequestsAndCompletions,
                       trailingWidget: CustomSwitcher(
                         value: state.transferNotification,
-                        onChanged: (_) => context.read<SettingBloc>().add(SettingBlocEvent_toogleTransferNotification()),
+                        onChanged: (_) => context.read<SettingBloc>().add(
+                          SettingBlocEvent_toogleTransferNotification(),
+                        ),
                       ),
                     ),
                     // Divider(),

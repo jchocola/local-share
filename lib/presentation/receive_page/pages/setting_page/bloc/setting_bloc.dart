@@ -37,6 +37,14 @@ class SettingBlocEvent_changeChunkSize extends SettingBlocEvent {
   List<Object?> get props => [chunkSize];
 }
 
+class SettingBlocEvent_changeLangCode extends SettingBlocEvent {
+  final String langCode;
+  SettingBlocEvent_changeLangCode({required this.langCode});
+
+  @override
+  List<Object?> get props => [langCode];
+}
+
 ///
 /// STATE
 ///
@@ -53,12 +61,14 @@ class SettingBlocState_loaded extends SettingBlocState {
   final bool transferNotification;
   final String downloadLocation;
   final int chunkSize;
+  final String langCode;
   SettingBlocState_loaded({
     required this.overwriteExistingFile,
     required this.autoAcceptSmallFile,
     required this.transferNotification,
     required this.downloadLocation,
     required this.chunkSize,
+    required this.langCode,
   });
 
   @override
@@ -68,6 +78,7 @@ class SettingBlocState_loaded extends SettingBlocState {
     transferNotification,
     downloadLocation,
     chunkSize,
+    langCode,
   ];
 }
 
@@ -87,6 +98,7 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
       final transferNot = sharedRepo.getTransferNotification();
       final downloadLocation = await sharedRepo.getDownloadLocation();
       final chunkSize = sharedRepo.getChunkSize();
+      final langCode = sharedRepo.getLangCode();
 
       logger.i(
         'Setting bloc loaded : overwrite $overwrite, autoAccept $autoAccept , transferNot $transferNot , dowloadLocation $downloadLocation, chunkSize $chunkSize',
@@ -99,6 +111,7 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
           transferNotification: transferNot,
           downloadLocation: downloadLocation,
           chunkSize: chunkSize,
+          langCode: langCode
         ),
       );
     });
@@ -148,7 +161,20 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
       await sharedRepo.changeChunkSize(chunkSize: event.chunkSize);
       add(SettingBlocEvent_load());
     });
+
+       ///
+    /// CHANGE LANG CODE
+    ///
+    on<SettingBlocEvent_changeLangCode>((event, emit) async {
+      await sharedRepo.changeLangCode(langCode: event.langCode);
+      add(SettingBlocEvent_load());
+    });
+  
+
   }
+
+
+  
 
   // Method to get download location
   Future<String> getDownloadLocation() async {

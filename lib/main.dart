@@ -82,7 +82,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
 
-        BlocProvider(create: (context)=> SendPageBloc()..add(SendPageBlocEvent_startBonsoirDiscover()))
+        BlocProvider(
+          create: (context) =>
+              SendPageBloc()..add(SendPageBlocEvent_startBonsoirDiscover()),
+        ),
       ],
       child: Wiredash(
         projectId: dotenv.env['WIREDASH_PROJECT_ID'] ?? '',
@@ -92,20 +95,28 @@ class MyApp extends StatelessWidget {
           dark: darkTheme,
           initial: AdaptiveThemeMode.light,
           builder: (theme, darkTheme) => ToastificationWrapper(
-            child: MaterialApp.router(
-              localizationsDelegates: [
-                S.delegate,  
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: S.delegate.supportedLocales,
-              locale: Locale('ru'),
-              debugShowCheckedModeBanner: false,
-              title: 'Local Share',
-              theme: theme,
-              darkTheme: darkTheme,
-              routerConfig: router,
+            child: BlocBuilder<SettingBloc, SettingBlocState>(
+              builder: (context, state) {
+                if (state is SettingBlocState_loaded) {
+                 return MaterialApp.router(
+                    localizationsDelegates: [
+                      S.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: S.delegate.supportedLocales,
+                    locale: Locale(state.langCode),
+                    debugShowCheckedModeBanner: false,
+                    title: 'Local Share',
+                    theme: theme,
+                    darkTheme: darkTheme,
+                    routerConfig: router,
+                  );
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
             ),
           ),
         ),
