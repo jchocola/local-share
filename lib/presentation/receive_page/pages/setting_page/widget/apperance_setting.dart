@@ -1,8 +1,10 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/core/utils/language_code_converter.dart';
 import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/setting_bloc.dart';
 import 'package:local_share/widgets/custom_switcher.dart';
@@ -41,13 +43,18 @@ class AppearanceSetting extends StatelessWidget {
                                 : Colors.transparent,
                           ),
                           child: ListTile(
-                            title: Text(locale.languageCode),
+                            title: Text(
+                              LanguageCodeConverter(
+                                langCode: locale.languageCode,
+                              ),
+                            ),
                             onTap: () {
                               context.read<SettingBloc>().add(
                                 SettingBlocEvent_changeLangCode(
                                   langCode: locale.languageCode,
                                 ),
                               );
+                              context.pop();
                             },
                           ),
                         );
@@ -82,7 +89,7 @@ class AppearanceSetting extends StatelessWidget {
                     SettingTitle(
                       icon: AppIcon.languageIcon,
                       title: S.of(context).language,
-                      subtitle: 'English',
+                      subtitle: LanguageCodeConverter(langCode: state.langCode),
                       // trailingWidget: Text('Light'),
                       onTap: onLanguageTapped,
                     ),
