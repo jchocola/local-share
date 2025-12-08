@@ -6,6 +6,10 @@ class AppConstant {
   static const double smallIcon = 14;
   static const progressLinearHeight = 14.0;
 
+  static const MIN_CHUNK_SIZE = 32;
+  static const MAX_CHUNK_SIZE = 256;
+  static const CHUNK_INTERVAL = 32.0;
+
   static const String SEND_KEY = 'SEND';
   static const String RECEIVE_KEY = 'RECEIVE';
 

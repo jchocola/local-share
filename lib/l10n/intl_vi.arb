@@ -57,5 +57,7 @@
   "transferSpeedDependsOnNetworkQualityAndSettedChunkSize": "Tốc độ truyền tải phụ thuộc vào chất lượng mạng và kích thước khối đã thiết lập.",
   "transferInfo": "Thông tin chuyển",
   "cancel": "Hủy",
-  "sendFiles": "Gửi tệp"
+  "sendFiles": "Gửi tệp",
+  "chunksizeMb": "{chunkSize} MB",
+  "theMoreTheFasterTheLessTheBetter": "The more, the faster. The less, the better!"
 }

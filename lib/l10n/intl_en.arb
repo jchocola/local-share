@@ -57,5 +57,7 @@
   "transferSpeedDependsOnNetworkQualityAndSettedChunkSize": "Transfer speed depends on network quality and setted chunk size",
   "transferInfo": "Transfer Info",
   "cancel": "Cancel",
-  "sendFiles": "Send Files"
+  "sendFiles": "Send Files",
+  "chunksizeMb": "{chunkSize} MB",
+  "theMoreTheFasterTheLessTheBetter": "The more, the faster. The less, the better!"
 }

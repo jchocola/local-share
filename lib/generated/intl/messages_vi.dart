@@ -20,12 +20,14 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'vi';
 
-  static String m0(files) => "${files} Tệp tin";
+  static String m0(chunkSize) => "${chunkSize} MB";
 
-  static String m1(files) =>
+  static String m1(files) => "${files} Tệp tin";
+
+  static String m2(files) =>
       "(${files}) tệp tin đã sẵn sàng để phục vụ trên server.";
 
-  static String m2(receivedFilesCount) =>
+  static String m3(receivedFilesCount) =>
       "Đã nhận (${receivedFilesCount}) tệp tin";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -48,13 +50,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Chọn giữa sáng, tối",
     ),
     "chunkSize": MessageLookupByLibrary.simpleMessage("Kích thước khối"),
+    "chunksizeMb": m0,
     "confirmTransfer": MessageLookupByLibrary.simpleMessage("Xác nhận chuyển"),
     "dark": MessageLookupByLibrary.simpleMessage("Tối"),
     "downloadLocation": MessageLookupByLibrary.simpleMessage(
       "Vị trí tải xuống",
     ),
-    "filesFiles": m0,
-    "filesFilesReadyToServeInServer": m1,
+    "filesFiles": m1,
+    "filesFilesReadyToServeInServer": m2,
     "filesWillBeTransferredOverLocalNetwork":
         MessageLookupByLibrary.simpleMessage(
           "Các tệp tin sẽ được chuyển qua mạng nội bộ.",
@@ -98,7 +101,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Nhận thông báo về các yêu cầu đến và các tác vụ đã hoàn thành.",
         ),
-    "receivedFilesReceivedfilescount": m2,
+    "receivedFilesReceivedfilescount": m3,
     "resetDeviceId": MessageLookupByLibrary.simpleMessage("Đổi Device ID"),
     "searchingForDevices": MessageLookupByLibrary.simpleMessage(
       "Tìm thiết bị để gửi...",
@@ -117,6 +120,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "stop": MessageLookupByLibrary.simpleMessage("Ngừng"),
     "termsOfService": MessageLookupByLibrary.simpleMessage(
       "Điều khoản dịch vụ",
+    ),
+    "theMoreTheFasterTheLessTheBetter": MessageLookupByLibrary.simpleMessage(
+      "The more, the faster. The less, the better!",
     ),
     "theSizeOfAPieceOfDataDuringTransferring":
         MessageLookupByLibrary.simpleMessage(

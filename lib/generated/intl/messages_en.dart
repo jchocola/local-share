@@ -20,11 +20,13 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(files) => "${files} Files";
+  static String m0(chunkSize) => "${chunkSize} MB";
 
-  static String m1(files) => "(${files}) files ready to serve in server.";
+  static String m1(files) => "${files} Files";
 
-  static String m2(receivedFilesCount) =>
+  static String m2(files) => "(${files}) files ready to serve in server.";
+
+  static String m3(receivedFilesCount) =>
       "Received files (${receivedFilesCount})";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -49,13 +51,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Choose between light, dark",
     ),
     "chunkSize": MessageLookupByLibrary.simpleMessage("Chunk Size"),
+    "chunksizeMb": m0,
     "confirmTransfer": MessageLookupByLibrary.simpleMessage("Confirm Transfer"),
     "dark": MessageLookupByLibrary.simpleMessage("Dark"),
     "downloadLocation": MessageLookupByLibrary.simpleMessage(
       "Download Location",
     ),
-    "filesFiles": m0,
-    "filesFilesReadyToServeInServer": m1,
+    "filesFiles": m1,
+    "filesFilesReadyToServeInServer": m2,
     "filesWillBeTransferredOverLocalNetwork":
         MessageLookupByLibrary.simpleMessage(
           "Files will be transferred over local network",
@@ -99,7 +102,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Receive alerts for incoming requests and completions.",
         ),
-    "receivedFilesReceivedfilescount": m2,
+    "receivedFilesReceivedfilescount": m3,
     "resetDeviceId": MessageLookupByLibrary.simpleMessage("Reset Device ID"),
     "searchingForDevices": MessageLookupByLibrary.simpleMessage(
       "Searching for devices...",
@@ -117,6 +120,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "show": MessageLookupByLibrary.simpleMessage("Show"),
     "stop": MessageLookupByLibrary.simpleMessage("Stop"),
     "termsOfService": MessageLookupByLibrary.simpleMessage("Terms of Service"),
+    "theMoreTheFasterTheLessTheBetter": MessageLookupByLibrary.simpleMessage(
+      "The more, the faster. The less, the better!",
+    ),
     "theSizeOfAPieceOfDataDuringTransferring":
         MessageLookupByLibrary.simpleMessage(
           "The size of a piece of data during transferring.",

@@ -29,6 +29,14 @@ class SettingBlocEvent_termsOfServiceTapped extends SettingBlocEvent {}
 
 class SettingBlocEvent_privacyPolicyTapped extends SettingBlocEvent {}
 
+class SettingBlocEvent_changeChunkSize extends SettingBlocEvent {
+  final int chunkSize;
+  SettingBlocEvent_changeChunkSize({required this.chunkSize});
+
+  @override
+  List<Object?> get props => [chunkSize];
+}
+
 ///
 /// STATE
 ///
@@ -44,20 +52,23 @@ class SettingBlocState_loaded extends SettingBlocState {
   final bool autoAcceptSmallFile;
   final bool transferNotification;
   final String downloadLocation;
+  final int chunkSize;
   SettingBlocState_loaded({
     required this.overwriteExistingFile,
     required this.autoAcceptSmallFile,
     required this.transferNotification,
     required this.downloadLocation,
+    required this.chunkSize,
   });
 
   @override
   List<Object?> get props => [
-        overwriteExistingFile,
-        autoAcceptSmallFile,
-        transferNotification,
-        downloadLocation,
-      ];
+    overwriteExistingFile,
+    autoAcceptSmallFile,
+    transferNotification,
+    downloadLocation,
+    chunkSize,
+  ];
 }
 
 ///
@@ -70,14 +81,15 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
     ///
     /// ON LOAD
     ///
-    on<SettingBlocEvent_load>((event, emit) async{
+    on<SettingBlocEvent_load>((event, emit) async {
       final overwrite = sharedRepo.getOverwriteExistingFile();
       final autoAccept = sharedRepo.getAutoAcceptSmallFile();
       final transferNot = sharedRepo.getTransferNotification();
       final downloadLocation = await sharedRepo.getDownloadLocation();
+      final chunkSize = sharedRepo.getChunkSize();
 
       logger.i(
-        'Setting bloc loaded : overwrite $overwrite, autoAccept $autoAccept , transferNot $transferNot , dowloadLocation $downloadLocation',
+        'Setting bloc loaded : overwrite $overwrite, autoAccept $autoAccept , transferNot $transferNot , dowloadLocation $downloadLocation, chunkSize $chunkSize',
       );
 
       emit(
@@ -85,7 +97,8 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
           overwriteExistingFile: overwrite,
           autoAcceptSmallFile: autoAccept,
           transferNotification: transferNot,
-          downloadLocation: downloadLocation
+          downloadLocation: downloadLocation,
+          chunkSize: chunkSize,
         ),
       );
     });
@@ -127,8 +140,16 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
     on<SettingBlocEvent_privacyPolicyTapped>((event, emit) async {
       await launchUrl(Uri.parse(AppConstant.privacyPolicyUrl));
     });
+
+    ///
+    /// CHANGE CHUNK SIZE
+    ///
+    on<SettingBlocEvent_changeChunkSize>((event, emit) async {
+      await sharedRepo.changeChunkSize(chunkSize: event.chunkSize);
+      add(SettingBlocEvent_load());
+    });
   }
-  
+
   // Method to get download location
   Future<String> getDownloadLocation() async {
     if (state is SettingBlocState_loaded) {

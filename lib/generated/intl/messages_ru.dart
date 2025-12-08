@@ -20,11 +20,13 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
-  static String m0(files) => "${files} Файлов";
+  static String m0(chunkSize) => "${chunkSize} MB";
 
-  static String m1(files) => "(${files}) файлов готово к раздаче на сервере.";
+  static String m1(files) => "${files} Файлов";
 
-  static String m2(receivedFilesCount) =>
+  static String m2(files) => "(${files}) файлов готово к раздаче на сервере.";
+
+  static String m3(receivedFilesCount) =>
       "Полученные файлы (${receivedFilesCount})";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -47,13 +49,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Выберите между светлой, темной",
     ),
     "chunkSize": MessageLookupByLibrary.simpleMessage("Размер блока"),
+    "chunksizeMb": m0,
     "confirmTransfer": MessageLookupByLibrary.simpleMessage(
       "Подтвердить передачу",
     ),
     "dark": MessageLookupByLibrary.simpleMessage("Темная"),
     "downloadLocation": MessageLookupByLibrary.simpleMessage("Папка загрузки"),
-    "filesFiles": m0,
-    "filesFilesReadyToServeInServer": m1,
+    "filesFiles": m1,
+    "filesFilesReadyToServeInServer": m2,
     "filesWillBeTransferredOverLocalNetwork":
         MessageLookupByLibrary.simpleMessage(
           "Файлы будут переданы по локальной сети",
@@ -99,7 +102,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Получать оповещения о входящих запросах и завершении передач.",
         ),
-    "receivedFilesReceivedfilescount": m2,
+    "receivedFilesReceivedfilescount": m3,
     "resetDeviceId": MessageLookupByLibrary.simpleMessage(
       "Сбросить ID устройства",
     ),
@@ -113,13 +116,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectPhoto": MessageLookupByLibrary.simpleMessage("Выбрать фото"),
     "send": MessageLookupByLibrary.simpleMessage("Отправить"),
     "sendFeedback": MessageLookupByLibrary.simpleMessage("Отправить отзыв"),
-    "sendFiles": MessageLookupByLibrary.simpleMessage("Отправить файлы"),
+    "sendFiles": MessageLookupByLibrary.simpleMessage("Отправить"),
     "server": MessageLookupByLibrary.simpleMessage("Сервер"),
     "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
     "show": MessageLookupByLibrary.simpleMessage("Показать"),
     "stop": MessageLookupByLibrary.simpleMessage("Остановить"),
     "termsOfService": MessageLookupByLibrary.simpleMessage(
       "Условия использования",
+    ),
+    "theMoreTheFasterTheLessTheBetter": MessageLookupByLibrary.simpleMessage(
+      "Чем больше- тем быстрее!\nЧем меньше- тем надежнее!",
     ),
     "theSizeOfAPieceOfDataDuringTransferring":
         MessageLookupByLibrary.simpleMessage(

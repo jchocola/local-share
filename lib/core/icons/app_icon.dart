@@ -61,4 +61,8 @@ class AppIcon {
   static const onOffIcon = LucideIcons.power;
 
   static const chunkIcon = LucideIcons.package;
+
+  static const slowIcon = LucideIcons.rabbit;
+  static const fastIcon = LucideIcons.zap;
+  static const veryFastIcon = LucideIcons.rocket;
 }

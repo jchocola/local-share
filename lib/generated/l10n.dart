@@ -553,6 +553,26 @@ class S {
   String get sendFiles {
     return Intl.message('Send Files', name: 'sendFiles', desc: '', args: []);
   }
+
+  /// `{chunkSize} MB`
+  String chunksizeMb(Object chunkSize) {
+    return Intl.message(
+      '$chunkSize MB',
+      name: 'chunksizeMb',
+      desc: '',
+      args: [chunkSize],
+    );
+  }
+
+  /// `The more, the faster. The less, the better!`
+  String get theMoreTheFasterTheLessTheBetter {
+    return Intl.message(
+      'The more, the faster. The less, the better!',
+      name: 'theMoreTheFasterTheLessTheBetter',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

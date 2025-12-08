@@ -57,5 +57,7 @@
   "transferSpeedDependsOnNetworkQualityAndSettedChunkSize": "Скорость передачи зависит от качества сети и установленного размера блока",
   "transferInfo": "Информация о передаче",
   "cancel": "Отмена",
-  "sendFiles": "Отправить файлы"
+  "sendFiles": "Отправить",
+  "chunksizeMb": "{chunkSize} MB",
+  "theMoreTheFasterTheLessTheBetter": "Чем больше- тем быстрее!\nЧем меньше- тем надежнее!"
 }

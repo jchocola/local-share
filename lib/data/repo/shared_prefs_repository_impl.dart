@@ -15,6 +15,7 @@ class SharedPrefsRepositoryImpl {
   static const String TRANSFER_NOTIFICATION = 'TRANSFER_NOTIFICATION';
   static const String DOWNLOAD_LOCATION = 'DOWNLOAD_LOCATION';
   static const String DEVICE_ID = 'DEVICE_ID';
+  static const String CHUNK_SIZE = 'CHUNK_SIZE';
 
   Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -75,6 +76,19 @@ class SharedPrefsRepositoryImpl {
     final newID = Uuid().v4().substring(0, 8);
     logger.i('Reset Device ID : ${newID}');
     await prefs.setString(DEVICE_ID, newID);
+  }
+
+  ///
+  /// CHUNK SIZE
+  ///
+  int getChunkSize() {
+    return prefs.getInt(CHUNK_SIZE) ?? 64;
+  }
+
+  Future<void> changeChunkSize({required int chunkSize}) async {
+    await prefs.setInt(CHUNK_SIZE, chunkSize);
+
+    logger.i('Changed chunk value');
   }
 
   ///
