@@ -84,7 +84,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Подключение к интернету не требуется",
     ),
     "notFoundsReceiverTrySendViaServer": MessageLookupByLibrary.simpleMessage(
-      "Не нашли получателя? Попробуйте отправить через сервер",
+      "Не нашли получателя?\nПопробуйте отправить через сервер",
     ),
     "openServer": MessageLookupByLibrary.simpleMessage("Открыть сервер"),
     "overwriteExistingFiles": MessageLookupByLibrary.simpleMessage(

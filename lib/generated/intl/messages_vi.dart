@@ -85,7 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Không cần kết nối internet",
     ),
     "notFoundsReceiverTrySendViaServer": MessageLookupByLibrary.simpleMessage(
-      "Không tìm thấy người nhận? Hãy thử gửi qua máy chủ.",
+      "Không tìm thấy người nhận?\nHãy thử gửi qua máy chủ.",
     ),
     "openServer": MessageLookupByLibrary.simpleMessage("Mở Server"),
     "overwriteExistingFiles": MessageLookupByLibrary.simpleMessage(

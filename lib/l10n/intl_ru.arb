@@ -49,7 +49,7 @@
   "aboutApp": "О приложении",
   "termsOfService": "Условия использования",
   "privacyPolicy": "Политика конфиденциальности",
-  "notFoundsReceiverTrySendViaServer": "Не нашли получателя? Попробуйте отправить через сервер",
+  "notFoundsReceiverTrySendViaServer": "Не нашли получателя?\nПопробуйте отправить через сервер",
   "filesFiles": "{files} Файлов",
   "confirmTransfer": "Подтвердить передачу",
   "filesWillBeTransferredOverLocalNetwork": "Файлы будут переданы по локальной сети",

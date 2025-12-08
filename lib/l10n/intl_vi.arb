@@ -49,7 +49,7 @@
   "aboutApp": "Về Ứng dụng",
   "termsOfService": "Điều khoản dịch vụ",
   "privacyPolicy": "Chính sách bảo mật",
-  "notFoundsReceiverTrySendViaServer": "Không tìm thấy người nhận? Hãy thử gửi qua máy chủ.",
+  "notFoundsReceiverTrySendViaServer": "Không tìm thấy người nhận?\nHãy thử gửi qua máy chủ.",
   "filesFiles": "{files} Tệp tin",
   "confirmTransfer": "Xác nhận chuyển",
   "filesWillBeTransferredOverLocalNetwork": "Các tệp tin sẽ được chuyển qua mạng nội bộ.",
