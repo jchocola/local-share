@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/widgets/big_button.dart';
 
@@ -21,16 +22,16 @@ class InvisibleWidget extends StatelessWidget {
           children: [
             Icon(AppIcon.closeEyeIcon, size: AppConstant.bigIcon),
             Text(
-              'You are invisible to other devices',
+              S.of(context).youAreInvisibleToOtherDevices,
               style: theme.textTheme.titleMedium,
             ),
             Text(
-              'Turn on visibility to allow other devices to discover and send files to you',
+              S.of(context).turnOnVisibilityToAllowOtherDevicesToDiscoverAnd,
               style: theme.textTheme.bodyMedium!.copyWith(),
               textAlign: TextAlign.center,
             ),
             BigButton(
-              title: 'Become Visible',
+              title: S.of(context).becomeVisible,
               color: theme.colorScheme.primary,
               textColor: theme.colorScheme.onPrimaryContainer,
               onTap: () => context.read<ReceivePageBloc>().add(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_share/core/constant/app_constant.dart';
+import 'package:local_share/generated/l10n.dart';
 
 class NoteWidget2 extends StatelessWidget {
   const NoteWidget2({super.key});
@@ -16,18 +17,20 @@ class NoteWidget2 extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: AppConstant.appPadding/2,
         children: [
-          Text('Transfer Info', style: theme.textTheme.bodyMedium),
+          Text(S.of(context).transferInfo, style: theme.textTheme.titleMedium),
+          Text(S.of(context).makeSureThatYouAndTheRecipientAreOnThe , style: theme.textTheme.bodySmall,),
           Text(
-            '- Files will be transferred over local network',
+            S.of(context).filesWillBeTransferredOverLocalNetwork,
             style: theme.textTheme.bodySmall,
           ),
           Text(
-            '- No internet connection required',
+            S.of(context).noInternetConnectionRequired,
             style: theme.textTheme.bodySmall,
           ),
           Text(
-            '- Transfer speed depends on network quality',
+            S.of(context).transferSpeedDependsOnNetworkQualityAndSettedChunkSize,
             style: theme.textTheme.bodySmall,
           ),
         ],

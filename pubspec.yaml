@@ -68,6 +68,7 @@ dependencies:
   intl_utils: ^2.8.13
   flutter_localizations:
     sdk: flutter
+  syncfusion_flutter_sliders: ^31.2.16
 
 flutter_intl:
   enabled: true  

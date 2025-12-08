@@ -100,7 +100,7 @@ class MyApp extends StatelessWidget {
                 GlobalCupertinoLocalizations.delegate,
               ],
               supportedLocales: S.delegate.supportedLocales,
-              locale: Locale('vi'),
+              locale: Locale('ru'),
               debugShowCheckedModeBanner: false,
               title: 'Local Share',
               theme: theme,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/blocs/server_bloc.dart';
 import 'package:local_share/widgets/big_button.dart';
 
@@ -22,9 +23,9 @@ class ServerInfoCard extends StatelessWidget {
               child: Column(
                 spacing: AppConstant.appPadding,
                 children: [
-                  Text('Server', style: theme.textTheme.titleLarge),
-                  _customInfo(context, title: 'IP Address', value: localIP!),
-                  _customInfo(context, title: 'Port', value: port.toString()),
+                  Text(S.of(context).server, style: theme.textTheme.titleLarge),
+                  _customInfo(context, title: S.of(context).ipAddress, value: localIP!),
+                  _customInfo(context, title: S.of(context).port, value: port.toString()),
                   BigButton(
                     title: '',
                     icon: AppIcon.onOffIcon,

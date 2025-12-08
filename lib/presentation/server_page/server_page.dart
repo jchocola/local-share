@@ -5,6 +5,7 @@ import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/core/utils/show_toastification.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/blocs/server_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/note.dart';
@@ -25,7 +26,7 @@ class ServerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Transfer via Server'),
+        title: Text(S.of(context).transferViaServer),
         actions: [
           IconButton(
             onPressed: () async {
@@ -110,17 +111,17 @@ class ServerPage extends StatelessWidget {
           WaitOpenServerWidget(),
 
           NoteWidget(
-            title: 'Убедитесь , что вы и получатель находитесь в одной сети',
+            title: S.of(context).makeSureThatYouAndTheRecipientAreOnThe,
           ),
           NoteWidget(
             title:
-                'Используя этот метод, вы можете обменивать с любыми устройствами с разным ОС',
+                S.of(context).usingThisMethodYouCanExchangeDataWithAnyDevices,
           ),
 
           BlocBuilder<PickedFilesBloc, PickedFilesBlocState>(
             builder: (context, state) {
               if (state is PickedFilesBlocStateLoaded) {
-                return NoteWidget(title: '(${state.files.length}) files ready to serve in server');
+                return NoteWidget(title: S.of(context).filesFilesReadyToServeInServer(state.files.length));
               } else {
                 return CircularProgressIndicator();
               }

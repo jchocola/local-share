@@ -59,4 +59,6 @@ class AppIcon {
   static const serverIcon = LucideIcons.server;
 
   static const onOffIcon = LucideIcons.power;
+
+  static const chunkIcon = LucideIcons.package;
 }

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
 import 'package:local_share/presentation/server_page/server_page.dart';
 
@@ -33,7 +34,7 @@ class SendViaServer extends StatelessWidget {
                   // WavyAnimatedText('Searching for devices...',textStyle: theme.textTheme.bodySmall , ),
                   // ])
                   Text(
-                    'Not founds receiver? Try send via server',
+                    S.of(context).notFoundsReceiverTrySendViaServer,
                     style: theme.textTheme.bodySmall,
                   ),
                 ],

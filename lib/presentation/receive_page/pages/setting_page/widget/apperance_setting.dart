@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/setting_bloc.dart';
 import 'package:local_share/widgets/custom_switcher.dart';
 import 'package:local_share/widgets/setting_title.dart';
@@ -17,7 +18,7 @@ class AppearanceSetting extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: AppConstant.appPadding,
       children: [
-        Text('Appereance Settings', style: theme.textTheme.titleMedium),
+        Text(S.of(context).appereanceSettings, style: theme.textTheme.titleMedium),
 
         BlocBuilder<SettingBloc, SettingBlocState>(
           builder: (context, state) {
@@ -27,24 +28,24 @@ class AppearanceSetting extends StatelessWidget {
                   children: [
                     SettingTitle(
                       icon: AppIcon.languageIcon,
-                      title: 'Language',
+                      title: S.of(context).language,
                       subtitle: 'English',
                       // trailingWidget: Text('Light'),
                     ),
                     Divider(),
                     SettingTitle(
                       icon: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light ? AppIcon.lightThemeIcon:  AppIcon.darkThemeIcon,
-                      title: 'Application Theme',
-                      subtitle: 'Choose between light, dark',
-                      trailingWidget: Text(AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light ? 'Light' : 'Dark'),
+                      title: S.of(context).applicationTheme,
+                      subtitle: S.of(context).chooseBetweenLightDark,
+                      trailingWidget: Text(AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light ? S.of(context).light : S.of(context).dark),
                       onTap: () => AdaptiveTheme.of(context).setThemeMode( AdaptiveTheme.of(context).mode  == AdaptiveThemeMode.light ? AdaptiveThemeMode.dark : AdaptiveThemeMode.light)
                     ),
                     Divider(),
                     SettingTitle(
                       icon: AppIcon.notificationOffIcon,
-                      title: 'Transfer Notifications',
+                      title: S.of(context).transferNotifications,
                       subtitle:
-                          'Receive alerts for incoming requests and completions.',
+                          S.of(context).receiveAlertsForIncomingRequestsAndCompletions,
                       trailingWidget: CustomSwitcher(
                         value: state.transferNotification,
                         onChanged: (_) => context.read<SettingBloc>().add(SettingBlocEvent_toogleTransferNotification()),

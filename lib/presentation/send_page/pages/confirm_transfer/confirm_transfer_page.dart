@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/core/utils/show_toastification.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/files_to_send_widget.dart';
 import 'package:local_share/presentation/send_page/pages/confirm_transfer/widget/note.dart';
@@ -18,7 +19,7 @@ class ConfirmTransferPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(title: 'Confirm Transfer'),
+      appBar: Appbar(title: S.of(context).confirmTransfer),
       body: buildBody(context),
     );
   }
@@ -53,7 +54,7 @@ class ConfirmTransferPage extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: BigButton(
-                  title: 'Cancel',
+                  title: S.of(context).cancel,
                   color: theme.scaffoldBackgroundColor,
                   textColor: theme.colorScheme.onSecondary,
                   onTap: () => context.pop(),
@@ -62,7 +63,7 @@ class ConfirmTransferPage extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: BigButton(
-                  title: 'Send Files',
+                  title: S.of(context).sendFiles,
                   color: theme.colorScheme.primary,
                   withIcon: true,
                   icon: AppIcon.sendIcon,

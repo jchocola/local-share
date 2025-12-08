@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/main.dart';
 import 'package:local_share/presentation/blocs/server_bloc.dart';
 import 'package:local_share/presentation/server_page/widget/received_file_card.dart';
@@ -33,7 +34,7 @@ class ReceivedFileWidget extends StatelessWidget {
                     .watch<ServerBloc>()
                     .serverRepo
                     .getReceivedFilesCount();
-                return Text('Received files ($receivedFilesCount)');
+                return Text(S.of(context).receivedFilesReceivedfilescount(receivedFilesCount));
 
                 // return StreamBuilder<int>(
                 //   stream: context
@@ -57,7 +58,7 @@ class ReceivedFileWidget extends StatelessWidget {
               // Show received files
               _showReceivedFiles(context);
             },
-            child: Text('Show'),
+            child: Text(S.of(context).show),
           ),
         ],
       ),

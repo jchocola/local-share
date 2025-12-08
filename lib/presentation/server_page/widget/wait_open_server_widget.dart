@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/blocs/server_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart'; // Add this import
 import 'package:local_share/presentation/server_page/server_page.dart';
@@ -24,7 +25,7 @@ class WaitOpenServerWidget extends StatelessWidget {
         ),
 
         BigButton(
-          title: 'Open Server',
+          title: S.of(context).openServer,
           color: theme.colorScheme.primary,
           onTap: () {
             // Get picked files from the bloc

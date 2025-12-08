@@ -4,6 +4,7 @@ import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/core/utils/count_file_size.dart';
 import 'package:local_share/core/utils/format_file_size.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
 import 'package:local_share/widgets/picked_file_card.dart';
 
@@ -26,10 +27,7 @@ class PickedFiles extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    '${state.files.length} Files',
-                    style: theme.textTheme.bodyMedium,
-                  ),
+                  Text(S.of(context).filesFiles(state.files.length), style: theme.textTheme.bodyMedium),
                   Text(
                     formatFileSize(countFilesSize(files: state.files)),
                     style: theme.textTheme.titleMedium,
@@ -45,7 +43,10 @@ class PickedFiles extends StatelessWidget {
                         PickedFilesBlocEvent_clearFile(),
                       );
                     },
-                    icon: Icon(AppIcon.deleteIcon ,color: theme.colorScheme.primary,),
+                    icon: Icon(
+                      AppIcon.deleteIcon,
+                      color: theme.colorScheme.primary,
+                    ),
                   ),
                   Expanded(
                     child: SingleChildScrollView(

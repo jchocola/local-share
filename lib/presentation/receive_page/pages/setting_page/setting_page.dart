@@ -4,6 +4,7 @@ import 'package:local_share/data/repo/bonsoir_broadcast_repository_impl.dart';
 import 'package:local_share/data/repo/bonsoir_discover_repository_impl.dart';
 import 'package:local_share/data/repo/device_info_repository_impl.dart';
 import 'package:local_share/data/repo/embbeded_server.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/widget/apperance_setting.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/widget/legal_information.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/widget/transfer_setting.dart';
@@ -15,7 +16,7 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(title: 'Settings'),
+      appBar: Appbar(title: S.of(context).settings),
       body: buiBody(context),
     );
   }
