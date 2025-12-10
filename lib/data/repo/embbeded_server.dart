@@ -12,11 +12,6 @@ import 'package:uuid/uuid.dart';
 import 'package:mime/mime.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/setting_bloc.dart';
 
-///
-/// USE THIS SERVER WHEN SEND/RECEIVE FILE VIA SERVER ,
-/// BETWEEN OTHERS OS
-///
-
 // Model for received files
 class ReceivedFile {
   final String name;
