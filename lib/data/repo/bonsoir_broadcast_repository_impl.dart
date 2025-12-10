@@ -29,14 +29,14 @@ class BonsoirBroadcastRepositoryImpl {
   ///
   late BonsoirBroadcast _broadcast;
 
-  Future<void> broadcastInitialize() async {
+  Future<void> broadcastInitialize({int port = 3030}) async {
     final localIP = await _networkRepositoryImpl.getLocalIPAddress();
     final deviceInfo = await _deviceInfoRepositoryImpl.getAndroidInfo();
 
     _service = BonsoirService(
       name: 'LocalShare Service',
       type: '_localshare-service._tcp',
-      port: 3030,
+      port: port,
       host: localIP,
       attributes: deviceInfo.toMap(),
     );

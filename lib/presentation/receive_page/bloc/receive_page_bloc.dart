@@ -2,7 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/data/repo/bonsoir_broadcast_repository_impl.dart';
+import 'package:local_share/data/repo/embedded_socket.dart';
 import 'package:local_share/main.dart';
 
 ///
@@ -40,16 +43,21 @@ class ReceivePageBlocState_loaded extends ReceivePageBlocState {
   }
 }
 
-class ReceivePageBlocState_error extends ReceivePageBlocState {}
+class ReceivePageBlocState_error extends ReceivePageBlocState {
+  final APP_ERROR_SUCCESS error;
+  ReceivePageBlocState_error({required this.error});
+}
 
 ///
 /// BLOC
 ///
 class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
   final BonsoirBroadcastRepositoryImpl bonsoirBroadcastRepositoryImpl;
-
-  ReceivePageBloc({required this.bonsoirBroadcastRepositoryImpl})
-    : super(ReceivePageBlocState_loaded(visible: false)) {
+  final EmbeddedSocketServerImpl socketServerRepoImpl;
+  ReceivePageBloc({
+    required this.bonsoirBroadcastRepositoryImpl,
+    required this.socketServerRepoImpl,
+  }) : super(ReceivePageBlocState_loaded(visible: false)) {
     ///
     /// CHANGE VISIBILITY
     ///
@@ -58,17 +66,31 @@ class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
 
       logger.i('Changed visiblity');
 
-      if (currentState is ReceivePageBlocState_loaded) {
-        // open or close bonsoir broadcast
-        if (!currentState.visible == true) {
-          // open broatcast
-          await bonsoirBroadcastRepositoryImpl.broadcastInitialize();
-          await bonsoirBroadcastRepositoryImpl.broadcastStart();
-        } else {
-          await bonsoirBroadcastRepositoryImpl.broadcastStop();
-        }
+      try {
+        if (currentState is ReceivePageBlocState_loaded) {
+          // open or close bonsoir broadcast
+          if (!currentState.visible == true) {
+            final port = 3030;
 
-        emit(currentState.copyWith(visible: !currentState.visible));
+            // open socket server
+            await socketServerRepoImpl.startServer(port: port);
+
+            // open bonsoir broadcast
+            await bonsoirBroadcastRepositoryImpl.broadcastInitialize(
+              port: port,
+            );
+            await bonsoirBroadcastRepositoryImpl.broadcastStart();
+
+            //
+          } else {
+            await bonsoirBroadcastRepositoryImpl.broadcastStop();
+          }
+
+          emit(currentState.copyWith(visible: !currentState.visible));
+        }
+      } catch (e) {
+        emit(ReceivePageBlocState_error(error: e as APP_ERROR_SUCCESS));
+        emit(ReceivePageBlocState_loaded(visible: false));
       }
     });
   }

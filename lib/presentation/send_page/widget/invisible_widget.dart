@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
+import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/core/utils/show_toastification.dart';
 import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/widgets/big_button.dart';
@@ -30,12 +32,20 @@ class InvisibleWidget extends StatelessWidget {
               style: theme.textTheme.bodyMedium!.copyWith(),
               textAlign: TextAlign.center,
             ),
-            BigButton(
-              title: S.of(context).becomeVisible,
-              color: theme.colorScheme.primary,
-              textColor: theme.colorScheme.onPrimaryContainer,
-              onTap: () => context.read<ReceivePageBloc>().add(
-                RecievePageBlocEvent_ChangeVisiblity(),
+            BlocListener<ReceivePageBloc, ReceivePageBlocState>(
+              listener: (context, state) {
+                if (state is ReceivePageBlocState_error) {
+                  showErrorToatification(context , title: AppErrorConverter(error: state.error));
+                }
+              },
+
+              child: BigButton(
+                title: S.of(context).becomeVisible,
+                color: theme.colorScheme.primary,
+                textColor: theme.colorScheme.onPrimaryContainer,
+                onTap: () => context.read<ReceivePageBloc>().add(
+                  RecievePageBlocEvent_ChangeVisiblity(),
+                ),
               ),
             ),
           ],

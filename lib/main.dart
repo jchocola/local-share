@@ -10,6 +10,7 @@ import 'package:local_share/core/theme/light_theme.dart';
 import 'package:local_share/data/repo/bonsoir_broadcast_repository_impl.dart';
 import 'package:local_share/data/repo/device_info_repository_impl.dart';
 import 'package:local_share/data/repo/embbeded_server.dart';
+import 'package:local_share/data/repo/embedded_socket.dart';
 import 'package:local_share/data/repo/shared_prefs_repository_impl.dart';
 import 'package:local_share/di/DI.dart';
 import 'package:local_share/generated/l10n.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
           create: (context) => ReceivePageBloc(
             bonsoirBroadcastRepositoryImpl:
                 getIt<BonsoirBroadcastRepositoryImpl>(),
+             socketServerRepoImpl: getIt<EmbeddedSocketServerImpl>()   
           ),
         ),
         BlocProvider(create: (context) => PickedFilesBloc()),
