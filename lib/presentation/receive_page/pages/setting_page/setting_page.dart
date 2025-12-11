@@ -4,6 +4,7 @@ import 'package:local_share/data/repo/bonsoir_broadcast_repository_impl.dart';
 import 'package:local_share/data/repo/bonsoir_discover_repository_impl.dart';
 import 'package:local_share/data/repo/device_info_repository_impl.dart';
 import 'package:local_share/data/repo/embbeded_server.dart';
+import 'package:local_share/data/repo/local_notification_repo_impl.dart';
 import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/widget/apperance_setting.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/widget/legal_information.dart';
@@ -34,6 +35,7 @@ class SettingPage extends StatelessWidget {
             TransferSetting(),
             AppearanceSetting(),
             LegalInformation(),
+
             // ElevatedButton(
             //   onPressed: () async {
             //     await BonsoirBroadcastRepositoryImpl.instance
@@ -83,6 +85,12 @@ class SettingPage extends StatelessWidget {
             //   },
             //   child: Text('Get Device Info'),
             // ),
+            ElevatedButton(
+              onPressed: () async {
+                await LocalNotificationRepoImpl.instance .showSimpleNotification();
+              },
+              child: Text('Show Notification'),
+            ),
           ],
         ),
       ),

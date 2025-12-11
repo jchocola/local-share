@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   bonsoir_windows
   file_selector_windows
   pdfx
+  permission_handler_windows
   url_launcher_windows
 )
 

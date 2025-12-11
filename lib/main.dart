@@ -12,6 +12,7 @@ import 'package:local_share/data/repo/bonsoir_broadcast_repository_impl.dart';
 import 'package:local_share/data/repo/device_info_repository_impl.dart';
 import 'package:local_share/data/repo/embbeded_server.dart';
 import 'package:local_share/data/repo/embedded_socket.dart';
+import 'package:local_share/data/repo/local_notification_repo_impl.dart';
 import 'package:local_share/data/repo/shared_prefs_repository_impl.dart';
 import 'package:local_share/di/DI.dart';
 import 'package:local_share/generated/l10n.dart';
@@ -43,6 +44,8 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
   ]);
 
+  await LocalNotificationRepoImpl.instance.init();
+
   runApp(const MyApp());
 }
 
@@ -57,7 +60,7 @@ class MyApp extends StatelessWidget {
           create: (context) => ReceivePageBloc(
             bonsoirBroadcastRepositoryImpl:
                 getIt<BonsoirBroadcastRepositoryImpl>(),
-             socketServerRepoImpl: getIt<EmbeddedSocketServerImpl>()   
+            socketServerRepoImpl: getIt<EmbeddedSocketServerImpl>(),
           ),
         ),
         BlocProvider(create: (context) => PickedFilesBloc()),
@@ -98,15 +101,15 @@ class MyApp extends StatelessWidget {
           child: BlocBuilder<SettingBloc, SettingBlocState>(
             builder: (context, state) {
               if (state is SettingBlocState_loaded) {
-               return Wiredash(
-                 projectId: dotenv.env['WIREDASH_PROJECT_ID'] ?? '',
+                return Wiredash(
+                  projectId: dotenv.env['WIREDASH_PROJECT_ID'] ?? '',
                   secret: dotenv.env['WIREDASH_SECRET'] ?? '',
 
                   options: WiredashOptionsData(
                     localizationDelegate: CustomWiredashTranslationsDelegate(),
                     locale: Locale(state.langCode),
                   ),
-                 child: MaterialApp.router(
+                  child: MaterialApp.router(
                     localizationsDelegates: [
                       S.delegate,
                       GlobalMaterialLocalizations.delegate,
@@ -121,7 +124,7 @@ class MyApp extends StatelessWidget {
                     darkTheme: darkTheme,
                     routerConfig: router,
                   ),
-               );
+                );
               } else {
                 return CircularProgressIndicator();
               }
