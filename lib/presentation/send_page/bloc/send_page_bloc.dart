@@ -23,8 +23,9 @@ class SendPageBlocEvent_connectToDevice extends SendPageBlocEvent {
 
 class SendPageBlocEvent_sendFiles extends SendPageBlocEvent {
   final List<File> files;
+  final bool useAck; // Whether to use ACK for reliability
   
-  SendPageBlocEvent_sendFiles({required this.files});
+  SendPageBlocEvent_sendFiles({required this.files, this.useAck = false});
 }
 
 class SendPageBlocEvent_restartDiscovery extends SendPageBlocEvent {}
@@ -64,11 +65,13 @@ class SendPageBlocState_sending extends SendPageBlocState {
   final int totalFiles;
   final int sentFiles;
   final double progress;
+  final String? currentFileName;
   
   SendPageBlocState_sending({
     required this.totalFiles,
     required this.sentFiles,
     required this.progress,
+    this.currentFileName,
   });
 }
 
@@ -155,14 +158,19 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
               totalFiles: totalFiles,
               sentFiles: sentFiles,
               progress: sentFiles / totalFiles,
+              currentFileName: file.uri.pathSegments.last,
             ),
           );
           
           // Create file sender
           final fileSender = FileSender(serverClient!.socket, file: file);
           
-          // Send file
-          await fileSender.sendSingleFileWithoutAck();
+          // Send file with or without ACK based on preference
+          if (event.useAck) {
+            await fileSender.sendSingleFileWithAck();
+          } else {
+            await fileSender.sendSingleFileWithoutAck();
+          }
           
           sentFiles++;
         }
@@ -173,6 +181,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
             totalFiles: totalFiles,
             sentFiles: sentFiles,
             progress: 1.0,
+            currentFileName: null,
           ),
         );
         
@@ -203,7 +212,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
             logger.e(
               'Service Started : port ${event.service?.port} , name ${event.service?.name}',
             );
-            add(SendPageBlocEvent_startBonsoirDiscover());
+            // Don't add the event again to avoid infinite loop
             break;
           case BonsoirDiscoveryServiceFoundEvent():
             final BonsoirService bonsoirService = event.service;

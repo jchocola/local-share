@@ -229,12 +229,13 @@ class FileReceiver {
       // Если это последний чанк
       if (isLast) {
         await _fileSink!.flush();
-        print('✅ Последний чанк получен');
+        logger.i('✅ Последний чанк получен');
       }
     } catch (e) {
       _handleError('Ошибка обработки чанка: $e');
       _sendAck('chunk_error', {
         'transferId': _transferId,
+        'chunkIndex': payload['chunkIndex'],
         'error': e.toString(),
       });
     }
@@ -260,7 +261,7 @@ class FileReceiver {
 
       // Выводим прогресс каждые 5%
       if (_receivedBytes % (_expectedFileSize! ~/ 20) == 0) {
-        print(
+        logger.i(
           '📥 Прогресс: ${(progress * 100).toStringAsFixed(1)}% '
           '(${formatFileSize(_receivedBytes)} / ${formatFileSize(_expectedFileSize!)})',
         );
@@ -352,7 +353,7 @@ class FileReceiver {
     final transferId = resumeData['transferId'];
     final byteOffset = resumeData['byteOffset'] ?? 0;
 
-    print('🔄 Возобновление передачи $transferId с байта $byteOffset');
+    logger.i('🔄 Возобновление передачи $transferId с байта $byteOffset');
 
     // Можно реализовать докачку файла
     _sendAck('resume_ack', {
@@ -379,7 +380,7 @@ class FileReceiver {
         socket.add(jsonEncode(message));
       }
     } catch (e) {
-      print('Ошибка отправки подтверждения: $e');
+      logger.e('Ошибка отправки подтверждения: $e');
     }
   }
 
@@ -398,7 +399,7 @@ class FileReceiver {
   void _resetInactivityTimer() {
     _inactivityTimer?.cancel();
     _inactivityTimer = Timer(Duration(seconds: 30), () {
-      print('⏰ Таймаут неактивности');
+      logger.w('⏰ Таймаут неактивности');
       _handleError('Таймаут неактивности');
       _cleanup();
     });
@@ -419,11 +420,11 @@ class FileReceiver {
     _totalChunks = 0;
   }
 
-    void _handleDisconnect() {
-    print('🔌 Соединение закрыто');
+  void _handleDisconnect() {
+    logger.w('🔌 Соединение закрыто');
     
     if (_fileSink != null) {
-      print('⚠️  Соединение разорвано во время приема файла');
+      logger.w('⚠️  Соединение разорвано во время приема файла');
       onError?.call('Соединение разорвано');
     }
     
@@ -431,13 +432,12 @@ class FileReceiver {
   }
 
   void _handleError(dynamic error) {
-    print('❌ Ошибка приемника: $error');
+    logger.e('❌ Ошибка приемника: $error');
     onError?.call(error.toString());
     _cleanup();
   }
 
-
-    Future<void> _cleanup() async {
+  Future<void> _cleanup() async {
     _inactivityTimer?.cancel();
     
     try {
@@ -451,16 +451,15 @@ class FileReceiver {
         _receivedBytes < _expectedFileSize! &&
         await _currentFile!.exists()) {
       await _currentFile!.delete();
-      print('🗑️  Неполный файл удален');
+      logger.i('🗑️  Неполный файл удален');
     }
     
     _resetState();
   }
 
-
   // Публичные методы для управления
 
-    Future<void> cancelReceiving() async {
+  Future<void> cancelReceiving() async {
     await _cleanup();
     _sendAck('receiver_cancel', {
       'reason': 'Отменено получателем',
@@ -476,7 +475,7 @@ class FileReceiver {
     });
   }
 
-   Future<void> resumeReceiving() async {
+  Future<void> resumeReceiving() async {
     if (_currentFile != null && _transferId != null) {
       _sendAck('receiver_resume', {
         'transferId': _transferId,
@@ -485,7 +484,7 @@ class FileReceiver {
     }
   }
 
-   Map<String, dynamic>? getCurrentTransferInfo() {
+  Map<String, dynamic>? getCurrentTransferInfo() {
     if (_transferId == null) return null;
     
     return {

@@ -50,8 +50,6 @@ class FileSender {
     int chunkIndex = 0;
     int bytesSent = 0;
 
-    // final raf = file.openSync();
-
     try {
       // 3. Читаем и отправляем чанки
       await for (final chunk in rafStream) {
@@ -60,16 +58,21 @@ class FileSender {
         }
 
         // Разбиваем на чанки нужного размера
-        for (int i = 0; i < fileLength; i += chunkSize) {
-          final end = i + chunkSize < fileLength ? i + chunkIndex : fileLength;
-
-          final chunkData = chunk.sublist(i, end);
+        int position = 0;
+        while (position < chunk.length) {
+          final end = (position + chunkSize < chunk.length) 
+              ? position + chunkSize 
+              : chunk.length;
+          
+          final chunkData = chunk.sublist(position, end);
+          final isLastChunk = (chunkIndex == totalChunks - 1);
+          
           // Отправляем чанк
           socket?.add(
             jsonEncode({
               'type': 'file_chunk',
               'chunkIndex': chunkIndex,
-              'totalChunks': totalChunks,
+              'isLast': isLastChunk,
               'data': base64Encode(chunkData),
             }),
           );
@@ -83,6 +86,8 @@ class FileSender {
 
           // Небольшая пауза для избежания перегрузки
           await Future.delayed(Duration(milliseconds: 10));
+          
+          position += chunkSize;
         }
       }
 
@@ -102,10 +107,9 @@ class FileSender {
 
     chunkSize = settedChunkSize * 1024;
 
-    final fileLength = await file.length();
-    final totalChunks = (fileLength / chunkSize).ceil();
-
     final fileName = file.uri.pathSegments.last; // file name
+    final fileLength = await file.length(); // file size
+    totalChunks = (fileLength / chunkSize).ceil(); // total chunk
 
     // Socket send init
     // 1. Отправляем метаданные
@@ -116,6 +120,7 @@ class FileSender {
           'fileName': fileName,
           'size': fileLength,
           'totalChunks': totalChunks,
+          'transferId': DateTime.now().millisecondsSinceEpoch.toString(),
         },
       }),
     );
@@ -124,60 +129,80 @@ class FileSender {
     final rafStream = file.openRead();
     int chunkIndex = 0;
 
-    await for (final chunk in rafStream) {
-      if (isCanceled == true) {
-        throw Exception('Передача отменена');
-      }
+    try {
+      await for (final chunk in rafStream) {
+        if (isCanceled == true) {
+          throw Exception('Передача отменена');
+        }
 
-      // Разбиваем на чанки нужного размера
+        // Разбиваем на чанки нужного размера
+        int position = 0;
+        while (position < chunk.length) {
+          final end = (position + chunkSize < chunk.length) 
+              ? position + chunkSize 
+              : chunk.length;
+          
+          final chunkData = chunk.sublist(position, end);
+          final isLastChunk = (chunkIndex == totalChunks - 1);
+          
+          bool chunkSent = false;
+          int retryCount = 0;
 
-      for (int i = 0; i < fileLength; i += chunkSize) {
-        bool chunkSent = false;
-        int retryCount = 0;
-        final end = i + chunkSize < fileLength ? i + chunkIndex : fileLength;
-        final chunkData = chunk.sublist(i, end);
+          while (!chunkSent && retryCount < 3) {
+            // Сбрасываем completer для нового ожидания
+            final currentAck = Completer<bool>();
 
-        while (!chunkSent && retryCount < 3) {
-          // Сбрасываем completer для нового ожидания
-          final currentAck = Completer<bool>();
+            // Временная подписка на ACK для этого чанка
+            StreamSubscription? tempSub;
+            tempSub = socket?.listen((message) {
+              try {
+                final data = jsonDecode(message);
 
-          // Временная подписка на ACK для этого чанка
-          final tempSub = socket?.listen((mesage) {
+                if (data['type'] == 'chunk_ack' && data['chunkIndex'] == chunkIndex) {
+                  currentAck.complete(true);
+                }
+              } catch (_) {}
+            });
+
+            // Отправляем чанк
+            socket?.add(
+              jsonEncode({
+                'type': 'file_chunk',
+                'chunkIndex': chunkIndex,
+                'isLast': isLastChunk,
+                'data': base64Encode(chunkData),
+              }),
+            );
+
+            // waiting ACK
             try {
-              final data = jsonDecode(mesage);
+              await currentAck.future.timeout(Duration(seconds: 5));
+              chunkSent = true;
+              logger.i('Chunk $chunkIndex sent successfully');
+            } catch (_) {
+              retryCount++;
+              logger.w('Retry $retryCount for chunk $chunkIndex');
+            }
 
-              if (data['type'] == 'chunk_ack' && data['chunkIndex'] == i) {
-                currentAck.complete(true);
-              }
-            } catch (_) {}
-          });
-
-          // Отправляем чанк
-          socket?.add(
-            jsonEncode({
-              'type': 'file_chunk',
-              'chunkIndex': i,
-              'data': base64Encode(chunkData),
-            }),
-          );
-
-          // waiting ACK
-          try {
-            await currentAck.future.timeout((Duration(seconds: 2)));
-            chunkSent = true;
-            logger.i('Chunk $i sended');
-          } catch (_) {
-            retryCount++;
+            // cancel tempSub
+            await tempSub?.cancel();
           }
 
-          // cancel tempSub
-          await tempSub?.cancel();
-        }
-
-        if (!chunkSent) {
-          throw '';
+          if (!chunkSent) {
+            throw Exception('Failed to send chunk $chunkIndex after 3 retries');
+          }
+          
+          chunkIndex++;
+          position += chunkSize;
         }
       }
+      
+      // Send file end
+      socket!.add(jsonEncode({'type': 'file_end'}));
+    } catch (e) {
+      // Уведомляем об ошибке
+      socket?.add(jsonEncode({'type': 'file_error', 'error': e.toString()}));
+      rethrow;
     }
   }
 }

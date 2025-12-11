@@ -34,55 +34,55 @@ class SettingPage extends StatelessWidget {
             TransferSetting(),
             AppearanceSetting(),
             LegalInformation(),
-            ElevatedButton(
-              onPressed: () async {
-                await BonsoirBroadcastRepositoryImpl.instance
-                    .broadcastInitialize();
-                await BonsoirBroadcastRepositoryImpl.instance.broadcastStart();
-              },
-              child: Text('start Broadcast'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await BonsoirBroadcastRepositoryImpl.instance.broadcastStop();
-              },
-              child: Text('end Broadcast'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     await BonsoirBroadcastRepositoryImpl.instance
+            //         .broadcastInitialize();
+            //     await BonsoirBroadcastRepositoryImpl.instance.broadcastStart();
+            //   },
+            //   child: Text('start Broadcast'),
+            // ),
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     await BonsoirBroadcastRepositoryImpl.instance.broadcastStop();
+            //   },
+            //   child: Text('end Broadcast'),
+            // ),
 
-            ElevatedButton(
-              onPressed: () async {
-                await BonsoirDiscoverRepositoryImpl.instance
-                    .discoveryInitialize();
-                await BonsoirDiscoverRepositoryImpl.instance.startDiscovery();
-              },
-              child: Text('start Discover'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await BonsoirDiscoverRepositoryImpl.instance.stopDiscovery();
-              },
-              child: Text('end Discover'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     await BonsoirDiscoverRepositoryImpl.instance
+            //         .discoveryInitialize();
+            //     await BonsoirDiscoverRepositoryImpl.instance.startDiscovery();
+            //   },
+            //   child: Text('start Discover'),
+            // ),
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     await BonsoirDiscoverRepositoryImpl.instance.stopDiscovery();
+            //   },
+            //   child: Text('end Discover'),
+            // ),
 
-            ElevatedButton(
-              onPressed: () async {
-                await EmbbededServerRepoImpl.instance.start();
-              },
-              child: Text('Start server'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await EmbbededServerRepoImpl.instance.close();
-              },
-              child: Text('Close server'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     await EmbbededServerRepoImpl.instance.start();
+            //   },
+            //   child: Text('Start server'),
+            // ),
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     await EmbbededServerRepoImpl.instance.close();
+            //   },
+            //   child: Text('Close server'),
+            // ),
 
-            ElevatedButton(
-              onPressed: () async {
-                await DeviceInfoRepositoryImpl().getAndroidInfo();
-              },
-              child: Text('Get Device Info'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     await DeviceInfoRepositoryImpl().getAndroidInfo();
+            //   },
+            //   child: Text('Get Device Info'),
+            // ),
           ],
         ),
       ),

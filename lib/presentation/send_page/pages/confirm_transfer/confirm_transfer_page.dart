@@ -97,9 +97,9 @@ class ConfirmTransferPage extends StatelessWidget {
                           // Convert picked files to File objects
                           final files = pickedFilesBloc.files.map((fileModel) => File(fileModel.path)).toList();
                           
-                          // Send files
+                          // Send files with ACK for reliability
                           context.read<SendPageBloc>().add(
-                            SendPageBlocEvent_sendFiles(files: files)
+                            SendPageBlocEvent_sendFiles(files: files, useAck: true)
                           );
                         }
                       },
@@ -114,6 +114,8 @@ class ConfirmTransferPage extends StatelessWidget {
                   padding: EdgeInsets.all(AppConstant.appPadding),
                   child: Column(
                     children: [
+                      if (state.currentFileName != null)
+                        Text('Sending: ${state.currentFileName}'),
                       LinearProgressIndicator(value: state.progress),
                       SizedBox(height: 10),
                       Text('${state.sentFiles}/${state.totalFiles} files sent'),
