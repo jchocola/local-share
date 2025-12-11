@@ -69,6 +69,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   syncfusion_flutter_sliders: ^31.2.16
+  crypto: ^3.0.7
 
 flutter_intl:
   enabled: true  

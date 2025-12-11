@@ -33,6 +33,7 @@ class FileSender {
           'fileName': fileName,
           'size': fileLength,
           'totalChunks': totalChunks,
+          'transferId': DateTime.now().millisecondsSinceEpoch.toString()
         },
       }),
     );
