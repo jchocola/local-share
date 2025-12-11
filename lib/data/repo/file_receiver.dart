@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:crypto/crypto.dart';
 import 'package:local_share/core/utils/format_file_size.dart';
@@ -34,7 +33,7 @@ class FileReceiver {
   // Таймер для автоматического закрытия
   Timer? _inactivityTimer;
 
-  // Буфер для сборки файла (если нужно собирать из чанков)
+  // Буфер для сборки файла (если нужно собрать из чанков)
   final Map<int, List<int>> _chunkBuffer = {};
 
   // CONSTRCUTOR
@@ -459,10 +458,9 @@ class FileReceiver {
   }
 
 
+  // Публичные методы для управления
 
-    // Публичные методы для управления
-
-      Future<void> cancelReceiving() async {
+    Future<void> cancelReceiving() async {
     await _cleanup();
     _sendAck('receiver_cancel', {
       'reason': 'Отменено получателем',
