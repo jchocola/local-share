@@ -2,13 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:local_share/data/repo/shared_prefs_repository_impl.dart';
 import 'package:local_share/main.dart';
 
 class FileSender {
+  final SharedPrefsRepositoryImpl prefs = SharedPrefsRepositoryImpl.instance;
+
   final WebSocket? socket;
   final File file; // only for 1 file
 
-  final int chunkSize = 64 * 1024; // // 64KB
+  int chunkSize = 1; // // 1KB
 
   bool isCanceled = false;
   int totalChunks = 0;
@@ -16,6 +19,10 @@ class FileSender {
   FileSender(this.socket, {required this.file});
 
   Future<void> sendSingleFileWithoutAck() async {
+    final settedChunkSize =  prefs.getChunkSize();
+
+    chunkSize = settedChunkSize * 1024;
+
     if (socket == null) {
       return;
     }
@@ -33,7 +40,7 @@ class FileSender {
           'fileName': fileName,
           'size': fileLength,
           'totalChunks': totalChunks,
-          'transferId': DateTime.now().millisecondsSinceEpoch.toString()
+          'transferId': DateTime.now().millisecondsSinceEpoch.toString(),
         },
       }),
     );
@@ -91,6 +98,10 @@ class FileSender {
   /// SEND SINGLE WITH ACK
   ///
   Future<void> sendSingleFileWithAck() async {
+    final settedChunkSize =  prefs.getChunkSize();
+
+    chunkSize = settedChunkSize * 1024;
+
     final fileLength = await file.length();
     final totalChunks = (fileLength / chunkSize).ceil();
 
