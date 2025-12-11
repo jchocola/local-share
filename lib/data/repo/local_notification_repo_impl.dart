@@ -36,8 +36,6 @@ class LocalNotificationRepoImpl {
   }
 
   Future<void> showSimpleNotification({String title = 'Title' ,String body = 'Body'}) async {
-   await _permissionRepo.checkNotificationPermission();
-
     final NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
     );

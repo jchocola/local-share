@@ -2,9 +2,12 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
+import 'package:local_share/data/repo/local_notification_repo_impl.dart';
+import 'package:local_share/data/repo/permission_repo_impl.dart';
 
 import 'package:local_share/data/repo/shared_prefs_repository_impl.dart';
 import 'package:local_share/main.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 ///
@@ -111,7 +114,7 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
           transferNotification: transferNot,
           downloadLocation: downloadLocation,
           chunkSize: chunkSize,
-          langCode: langCode
+          langCode: langCode,
         ),
       );
     });
@@ -136,8 +139,19 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
     /// toogle transfer notificaotion
     ///
     on<SettingBlocEvent_toogleTransferNotification>((event, emit) async {
-      await sharedRepo.toogleTransferNotification();
-      add(SettingBlocEvent_load());
+      final currentValue = sharedRepo.getTransferNotification();
+      if (currentValue == false) {
+        await PermissionRepoImpl.instance.checkNotificationPermission();
+
+        var status = await Permission.notification.status;
+        if (status.isGranted) {
+          await sharedRepo.toogleTransferNotification();
+          add(SettingBlocEvent_load());
+        }
+      } else {
+        await sharedRepo.toogleTransferNotification();
+          add(SettingBlocEvent_load()); 
+      }
     });
 
     ///
@@ -162,19 +176,14 @@ class SettingBloc extends Bloc<SettingBlocEvent, SettingBlocState> {
       add(SettingBlocEvent_load());
     });
 
-       ///
+    ///
     /// CHANGE LANG CODE
     ///
     on<SettingBlocEvent_changeLangCode>((event, emit) async {
       await sharedRepo.changeLangCode(langCode: event.langCode);
       add(SettingBlocEvent_load());
     });
-  
-
   }
-
-
-  
 
   // Method to get download location
   Future<String> getDownloadLocation() async {

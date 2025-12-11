@@ -1,6 +1,7 @@
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionRepoImpl {
+  
   Future<void> checkNotificationPermission() async {
     var status = await Permission.notification.status;
 
