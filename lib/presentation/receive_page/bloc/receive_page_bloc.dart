@@ -73,7 +73,7 @@ class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
     on<RecievePageBlocEvent_ChangeVisiblity>((event, emit) async {
       final currentState = state;
 
-      logger.i('Changed visiblity');
+      logger.i('Changed visibility');
 
       try {
         if (currentState is ReceivePageBlocState_loaded) {
@@ -125,14 +125,17 @@ class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
               port: port,
             );
             await bonsoirBroadcastRepositoryImpl.broadcastStart();
+            
+            logger.i('Broadcast service started successfully');
           } else {
             await bonsoirBroadcastRepositoryImpl.broadcastStop();
+            logger.i('Broadcast service stopped');
           }
 
           emit(currentState.copyWith(visible: !currentState.visible));
         }
-      } catch (e) {
-        logger.e('Error in ReceivePageBloc: $e');
+      } catch (e, stackTrace) {
+        logger.e('Error in ReceivePageBloc: $e\nStack trace: $stackTrace');
         emit(ReceivePageBlocState_error(error: e as APP_ERROR_SUCCESS));
         emit(ReceivePageBlocState_loaded(visible: false));
       }

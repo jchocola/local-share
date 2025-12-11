@@ -6,6 +6,7 @@ import 'package:local_share/main.dart';
 import 'package:local_share/data/repo/server_client.dart';
 import 'package:local_share/data/repo/file_sender.dart';
 import 'dart:io';
+import 'dart:async';
 
 ///
 /// EVENT
@@ -26,6 +27,8 @@ class SendPageBlocEvent_sendFiles extends SendPageBlocEvent {
   SendPageBlocEvent_sendFiles({required this.files});
 }
 
+class SendPageBlocEvent_restartDiscovery extends SendPageBlocEvent {}
+
 ///
 /// STATE
 ///
@@ -40,7 +43,9 @@ class SendPageBlocState_BonsoirDiscoveryStartedEvent extends SendPageBlocState {
 class SendPageBlocState_BonsoirDiscoveryServiceFoundEvent extends SendPageBlocState {
   final BonsoirService bonsoirService;
 
-  SendPageBlocState_BonsoirDiscoveryServiceFoundEvent({required this.bonsoirService});
+  SendPageBlocState_BonsoirDiscoveryServiceFoundEvent({
+    required this.bonsoirService,
+  });
 }
 
 class SendPageBlocState_connecting extends SendPageBlocState {
@@ -83,52 +88,25 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
       getIt<BonsoirDiscoverRepositoryImpl>();
       
   ServerClient? serverClient;
+  StreamSubscription? _discoverySubscription;
 
   SendPageBloc() : super(SendPageBlocState_init()) {
     ///
     /// ON START BONSOIR DISCOVER
     ///
     on<SendPageBlocEvent_startBonsoirDiscover>((event, emit) async {
-      await bonsoirDiscoverRepositoryImpl.discoveryInitialize();
-      await bonsoirDiscoverRepositoryImpl.startDiscovery();
-
-      emit(SendPageBlocState_discovering());
-
-      ///
-      /// LISTEN EVENT
-      ///
-      bonsoirDiscoverRepositoryImpl.discovery.eventStream!.listen((event) async{
-        switch (event) {
-          case BonsoirDiscoveryStartedEvent():
-            logger.e(
-              'Service Started : port ${event.service?.port} , name ${event.service?.name}',
-            );
-            emit(SendPageBlocState_BonsoirDiscoveryStartedEvent());
-            emit(SendPageBlocState_discovering());
-            break;
-          case BonsoirDiscoveryServiceFoundEvent():
-            final BonsoirService bonsoirService = event.service;
-            logger.e('Service found : ${event.service.toJson()}');
-            await event.service!.resolve(
-              bonsoirDiscoverRepositoryImpl.discovery.serviceResolver,
-            ); // Should be called when the user wants to connect to this service.
-            emit(SendPageBlocState_BonsoirDiscoveryServiceFoundEvent(bonsoirService: bonsoirService));
-            emit(SendPageBlocState_discovering());
-            break;
-          case BonsoirDiscoveryServiceResolvedEvent():
-            logger.e('Service resolved : ${event.service.toJson()}');
-            break;
-          case BonsoirDiscoveryServiceUpdatedEvent():
-            logger.e('Service updated : ${event.service.toJson()}');
-            break;
-          case BonsoirDiscoveryServiceLostEvent():
-            logger.e('Service lost : ${event.service.toJson()}');
-            break;
-          default:
-            logger.e('Another event occurred : $event.');
-            break;
-        }
-      });
+      await _startDiscovery(emit);
+    });
+    
+    ///
+    /// ON RESTART DISCOVERY
+    ///
+    on<SendPageBlocEvent_restartDiscovery>((event, emit) async {
+      // Cancel existing subscription if any
+      await _discoverySubscription?.cancel();
+      
+      // Restart discovery
+      await _startDiscovery(emit);
     });
     
     ///
@@ -150,7 +128,9 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         emit(SendPageBlocState_connected(service: event.service));
       } catch (e) {
         logger.e('Error connecting to device: $e');
-        emit(SendPageBlocState_error(message: 'Failed to connect to device: $e'));
+        emit(
+          SendPageBlocState_error(message: 'Failed to connect to device: $e'),
+        );
         emit(SendPageBlocState_discovering());
       }
     });
@@ -170,11 +150,13 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         
         for (final file in event.files) {
           // Update progress state
-          emit(SendPageBlocState_sending(
-            totalFiles: totalFiles,
-            sentFiles: sentFiles,
-            progress: sentFiles / totalFiles,
-          ));
+          emit(
+            SendPageBlocState_sending(
+              totalFiles: totalFiles,
+              sentFiles: sentFiles,
+              progress: sentFiles / totalFiles,
+            ),
+          );
           
           // Create file sender
           final fileSender = FileSender(serverClient!.socket, file: file);
@@ -186,11 +168,13 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         }
         
         // Update final state
-        emit(SendPageBlocState_sending(
-          totalFiles: totalFiles,
-          sentFiles: sentFiles,
-          progress: 1.0,
-        ));
+        emit(
+          SendPageBlocState_sending(
+            totalFiles: totalFiles,
+            sentFiles: sentFiles,
+            progress: 1.0,
+          ),
+        );
         
         emit(SendPageBlocState_sent());
       } catch (e) {
@@ -198,5 +182,65 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         emit(SendPageBlocState_error(message: 'Failed to send files: $e'));
       }
     });
+  }
+  
+  Future<void> _startDiscovery(Emitter<SendPageBlocState> emit) async {
+    try {
+      await bonsoirDiscoverRepositoryImpl.discoveryInitialize();
+      await bonsoirDiscoverRepositoryImpl.startDiscovery();
+
+      emit(SendPageBlocState_discovering());
+
+      ///
+      /// LISTEN EVENT
+      ///
+      _discoverySubscription?.cancel();
+      _discoverySubscription = bonsoirDiscoverRepositoryImpl.discovery.eventStream!.listen((
+        event,
+      ) async {
+        switch (event) {
+          case BonsoirDiscoveryStartedEvent():
+            logger.e(
+              'Service Started : port ${event.service?.port} , name ${event.service?.name}',
+            );
+            add(SendPageBlocEvent_startBonsoirDiscover());
+            break;
+          case BonsoirDiscoveryServiceFoundEvent():
+            final BonsoirService bonsoirService = event.service;
+            logger.e('Service found : ${event.service.toJson()}');
+            await event.service!.resolve(
+              bonsoirDiscoverRepositoryImpl.discovery.serviceResolver,
+            ); // Should be called when the user wants to connect to this service.
+            emit(
+              SendPageBlocState_BonsoirDiscoveryServiceFoundEvent(
+                bonsoirService: bonsoirService,
+              ),
+            );
+            emit(SendPageBlocState_discovering());
+            break;
+          case BonsoirDiscoveryServiceResolvedEvent():
+            logger.e('Service resolved : ${event.service.toJson()}');
+            break;
+          case BonsoirDiscoveryServiceUpdatedEvent():
+            logger.e('Service updated : ${event.service.toJson()}');
+            break;
+          case BonsoirDiscoveryServiceLostEvent():
+            logger.e('Service lost : ${event.service.toJson()}');
+            break;
+          default:
+            logger.e('Another event occurred : $event.');
+            break;
+        }
+      });
+    } catch (e) {
+      logger.e('Error starting discovery: $e');
+      emit(SendPageBlocState_error(message: 'Failed to start discovery: $e'));
+    }
+  }
+  
+  @override
+  Future<void> close() {
+    _discoverySubscription?.cancel();
+    return super.close();
   }
 }

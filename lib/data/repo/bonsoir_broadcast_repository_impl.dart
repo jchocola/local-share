@@ -35,7 +35,7 @@ class BonsoirBroadcastRepositoryImpl {
 
     _service = BonsoirService(
       name: 'LocalShare Service',
-      type: '_localshare-service._tcp',
+      type: '_localshare._tcp',
       port: port,
       host: localIP,
       attributes: deviceInfo.toMap(),

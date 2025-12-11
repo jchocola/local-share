@@ -2,7 +2,7 @@ import 'package:bonsoir/bonsoir.dart';
 import 'package:local_share/main.dart';
 
 class BonsoirDiscoverRepositoryImpl {
-  static final String _type = '_localshare-service._tcp';
+  static final String _type = '_localshare._tcp';
 
   late BonsoirDiscovery discovery;
 
