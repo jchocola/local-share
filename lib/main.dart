@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:local_share/core/extension/wiredash_custom_language.dart';
 import 'package:local_share/core/router/router.dart';
 import 'package:local_share/core/theme/dark_theme.dart';
 import 'package:local_share/core/theme/light_theme.dart';
@@ -89,18 +90,23 @@ class MyApp extends StatelessWidget {
               SendPageBloc()..add(SendPageBlocEvent_startBonsoirDiscover()),
         ),
       ],
-      child: Wiredash(
-        projectId: dotenv.env['WIREDASH_PROJECT_ID'] ?? '',
-        secret: dotenv.env['WIREDASH_SECRET'] ?? '',
-        child: AdaptiveTheme(
-          light: lightTheme,
-          dark: darkTheme,
-          initial: AdaptiveThemeMode.light,
-          builder: (theme, darkTheme) => ToastificationWrapper(
-            child: BlocBuilder<SettingBloc, SettingBlocState>(
-              builder: (context, state) {
-                if (state is SettingBlocState_loaded) {
-                 return MaterialApp.router(
+      child: AdaptiveTheme(
+        light: lightTheme,
+        dark: darkTheme,
+        initial: AdaptiveThemeMode.light,
+        builder: (theme, darkTheme) => ToastificationWrapper(
+          child: BlocBuilder<SettingBloc, SettingBlocState>(
+            builder: (context, state) {
+              if (state is SettingBlocState_loaded) {
+               return Wiredash(
+                 projectId: dotenv.env['WIREDASH_PROJECT_ID'] ?? '',
+                  secret: dotenv.env['WIREDASH_SECRET'] ?? '',
+
+                  options: WiredashOptionsData(
+                    localizationDelegate: CustomWiredashTranslationsDelegate(),
+                    locale: Locale(state.langCode),
+                  ),
+                 child: MaterialApp.router(
                     localizationsDelegates: [
                       S.delegate,
                       GlobalMaterialLocalizations.delegate,
@@ -114,12 +120,12 @@ class MyApp extends StatelessWidget {
                     theme: theme,
                     darkTheme: darkTheme,
                     routerConfig: router,
-                  );
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
+                  ),
+               );
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
           ),
         ),
       ),
