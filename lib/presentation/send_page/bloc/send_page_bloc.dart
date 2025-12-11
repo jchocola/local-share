@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/data/repo/bonsoir_discover_repository_impl.dart';
 import 'package:local_share/di/DI.dart';
 import 'package:local_share/main.dart';
+import 'package:local_share/data/repo/server_client.dart';
+import 'package:local_share/data/repo/file_sender.dart';
+import 'dart:io';
 
 ///
 /// EVENT
@@ -10,6 +13,18 @@ import 'package:local_share/main.dart';
 abstract class SendPageBlocEvent {}
 
 class SendPageBlocEvent_startBonsoirDiscover extends SendPageBlocEvent {}
+
+class SendPageBlocEvent_connectToDevice extends SendPageBlocEvent {
+  final BonsoirService service;
+  
+  SendPageBlocEvent_connectToDevice({required this.service});
+}
+
+class SendPageBlocEvent_sendFiles extends SendPageBlocEvent {
+  final List<File> files;
+  
+  SendPageBlocEvent_sendFiles({required this.files});
+}
 
 ///
 /// STATE
@@ -20,14 +35,44 @@ class SendPageBlocState_init extends SendPageBlocState {}
 
 class SendPageBlocState_discovering extends SendPageBlocState {}
 
-class SendPageBlocState_BonsoirDiscoveryStartedEvent
-    extends SendPageBlocState {}
+class SendPageBlocState_BonsoirDiscoveryStartedEvent extends SendPageBlocState {}
 
-class SendPageBlocState_BonsoirDiscoveryServiceFoundEvent
-    extends SendPageBlocState {
+class SendPageBlocState_BonsoirDiscoveryServiceFoundEvent extends SendPageBlocState {
   final BonsoirService bonsoirService;
 
   SendPageBlocState_BonsoirDiscoveryServiceFoundEvent({required this.bonsoirService});
+}
+
+class SendPageBlocState_connecting extends SendPageBlocState {
+  final BonsoirService service;
+  
+  SendPageBlocState_connecting({required this.service});
+}
+
+class SendPageBlocState_connected extends SendPageBlocState {
+  final BonsoirService service;
+  
+  SendPageBlocState_connected({required this.service});
+}
+
+class SendPageBlocState_sending extends SendPageBlocState {
+  final int totalFiles;
+  final int sentFiles;
+  final double progress;
+  
+  SendPageBlocState_sending({
+    required this.totalFiles,
+    required this.sentFiles,
+    required this.progress,
+  });
+}
+
+class SendPageBlocState_sent extends SendPageBlocState {}
+
+class SendPageBlocState_error extends SendPageBlocState {
+  final String message;
+  
+  SendPageBlocState_error({required this.message});
 }
 
 ///
@@ -36,6 +81,8 @@ class SendPageBlocState_BonsoirDiscoveryServiceFoundEvent
 class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
   final BonsoirDiscoverRepositoryImpl bonsoirDiscoverRepositoryImpl =
       getIt<BonsoirDiscoverRepositoryImpl>();
+      
+  ServerClient? serverClient;
 
   SendPageBloc() : super(SendPageBlocState_init()) {
     ///
@@ -48,7 +95,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
       emit(SendPageBlocState_discovering());
 
       ///
-      ///LISTEN EVENT
+      /// LISTEN EVENT
       ///
       bonsoirDiscoverRepositoryImpl.discovery.eventStream!.listen((event) async{
         switch (event) {
@@ -82,8 +129,74 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
             break;
         }
       });
-
+    });
+    
+    ///
+    /// ON CONNECT TO DEVICE
+    ///
+    on<SendPageBlocEvent_connectToDevice>((event, emit) async {
+      try {
+        emit(SendPageBlocState_connecting(service: event.service));
+        
+        // Initialize server client
+        serverClient = ServerClient();
+        
+        // Connect to the device
+        await serverClient!.connect(
+          host: event.service.host!,
+          port: event.service.port!,
+        );
+        
+        emit(SendPageBlocState_connected(service: event.service));
+      } catch (e) {
+        logger.e('Error connecting to device: $e');
+        emit(SendPageBlocState_error(message: 'Failed to connect to device: $e'));
+        emit(SendPageBlocState_discovering());
+      }
+    });
+    
+    ///
+    /// ON SEND FILES
+    ///
+    on<SendPageBlocEvent_sendFiles>((event, emit) async {
+      if (serverClient?.socket == null) {
+        emit(SendPageBlocState_error(message: 'Not connected to any device'));
+        return;
+      }
       
+      try {
+        final totalFiles = event.files.length;
+        int sentFiles = 0;
+        
+        for (final file in event.files) {
+          // Update progress state
+          emit(SendPageBlocState_sending(
+            totalFiles: totalFiles,
+            sentFiles: sentFiles,
+            progress: sentFiles / totalFiles,
+          ));
+          
+          // Create file sender
+          final fileSender = FileSender(serverClient!.socket, file: file);
+          
+          // Send file
+          await fileSender.sendSingleFileWithoutAck();
+          
+          sentFiles++;
+        }
+        
+        // Update final state
+        emit(SendPageBlocState_sending(
+          totalFiles: totalFiles,
+          sentFiles: sentFiles,
+          progress: 1.0,
+        ));
+        
+        emit(SendPageBlocState_sent());
+      } catch (e) {
+        logger.e('Error sending files: $e');
+        emit(SendPageBlocState_error(message: 'Failed to send files: $e'));
+      }
     });
   }
 }

@@ -31,10 +31,17 @@ class EmbeddedSocketServerImpl {
   // WebSocket clients
   final Map<String, WebSocket> _clients = {};
 
+  Map<String, WebSocket> get clients => _clients;
+
+  // callback for ui
+  void Function(WebSocket socket)? onConnected;
+
+  EmbeddedSocketServerImpl({this.onConnected});
+
   ///
   /// START SERVER
   ///
-  Future<void> startServer({int port = 4820}) async {
+  Future<void> startServer({int port = 4820 ,}) async {
     logger.i('Start websocket server : $port');
 
     // set port
@@ -85,9 +92,11 @@ class EmbeddedSocketServerImpl {
 
       _clients[clientID] = ws;
 
+      onConnected?.call(ws);
+
       logger.i('Client connected $clientID');
 
-      ws.listen((message) async {});
+      //  ws.listen((message) async {});
     }
   }
 }

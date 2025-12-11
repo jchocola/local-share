@@ -6,7 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/data/repo/bonsoir_broadcast_repository_impl.dart';
 import 'package:local_share/data/repo/embedded_socket.dart';
+import 'package:local_share/data/repo/file_receiver.dart';
 import 'package:local_share/main.dart';
+import 'package:local_share/presentation/server_page/widget/received_file_card.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 ///
 /// EVENT
@@ -54,9 +58,14 @@ class ReceivePageBlocState_error extends ReceivePageBlocState {
 class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
   final BonsoirBroadcastRepositoryImpl bonsoirBroadcastRepositoryImpl;
   final EmbeddedSocketServerImpl socketServerRepoImpl;
+
+  FileReceiver? fileReceiverRepoImpl;
+  String? outPath;
+
   ReceivePageBloc({
     required this.bonsoirBroadcastRepositoryImpl,
     required this.socketServerRepoImpl,
+
   }) : super(ReceivePageBlocState_loaded(visible: false)) {
     ///
     /// CHANGE VISIBILITY
@@ -72,6 +81,42 @@ class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
           if (!currentState.visible == true) {
             final port = 3030;
 
+            // Get download directory
+            final directory = await getApplicationDocumentsDirectory();
+            outPath = '${directory.path}/Downloads';
+            
+            // Create download directory if it doesn't exist
+            final downloadDir = Directory(outPath!);
+            if (!await downloadDir.exists()) {
+              await downloadDir.create(recursive: true);
+            }
+
+            // Set up socket connection handler
+            void handleSocketConnection(WebSocket socket) {
+              logger.i('WebSocket client connected');
+              
+              // Initialize file receiver when client connects
+              fileReceiverRepoImpl = FileReceiver(
+                socket,
+                outPath: outPath,
+                onProgress: (progress) {
+                  logger.i('File transfer progress: ${progress * 100}%');
+                },
+                onFileComplete: (file) {
+                  logger.i('File transfer completed: ${file.path}');
+                },
+                onError: (error) {
+                  logger.e('File transfer error: $error');
+                },
+                onFileStart: (metadata) {
+                  logger.i('File transfer started: $metadata');
+                },
+              );
+            }
+
+            // Set the connection handler on the existing socket server instance
+            socketServerRepoImpl.onConnected = handleSocketConnection;
+
             // open socket server
             await socketServerRepoImpl.startServer(port: port);
 
@@ -80,8 +125,6 @@ class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
               port: port,
             );
             await bonsoirBroadcastRepositoryImpl.broadcastStart();
-
-            //
           } else {
             await bonsoirBroadcastRepositoryImpl.broadcastStop();
           }
@@ -89,6 +132,7 @@ class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
           emit(currentState.copyWith(visible: !currentState.visible));
         }
       } catch (e) {
+        logger.e('Error in ReceivePageBloc: $e');
         emit(ReceivePageBlocState_error(error: e as APP_ERROR_SUCCESS));
         emit(ReceivePageBlocState_loaded(visible: false));
       }
