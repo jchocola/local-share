@@ -217,6 +217,13 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
           case BonsoirDiscoveryServiceFoundEvent():
             final BonsoirService bonsoirService = event.service;
             logger.e('Service found : ${event.service.toJson()}');
+            
+            // Filter out self-discovery
+            if (bonsoirDiscoverRepositoryImpl.isSelfDiscovery(bonsoirService)) {
+              logger.i('Ignoring self-discovery of service: ${bonsoirService.name}');
+              break;
+            }
+            
             await event.service!.resolve(
               bonsoirDiscoverRepositoryImpl.discovery.serviceResolver,
             ); // Should be called when the user wants to connect to this service.
