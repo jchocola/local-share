@@ -115,20 +115,20 @@ class TransferSetting extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Divider(),
-                    SettingTitle(
-                      icon: AppIcon.fileCheck,
-                      title: S.of(context).autoAcceptSmallFiles,
-                      subtitle: S
-                          .of(context)
-                          .automaticallyAcceptTransfersUnder10mbFromKnownDevices,
-                      trailingWidget: CustomSwitcher(
-                        value: state.autoAcceptSmallFile,
-                        onChanged: (_) => context.read<SettingBloc>().add(
-                          SettingBlocEvent_toogleAutoAcceptSmallFile(),
-                        ),
-                      ),
-                    ),
+                    // Divider(),
+                    // SettingTitle(
+                    //   icon: AppIcon.fileCheck,
+                    //   title: S.of(context).autoAcceptSmallFiles,
+                    //   subtitle: S
+                    //       .of(context)
+                    //       .automaticallyAcceptTransfersUnder10mbFromKnownDevices,
+                    //   trailingWidget: CustomSwitcher(
+                    //     value: state.autoAcceptSmallFile,
+                    //     onChanged: (_) => context.read<SettingBloc>().add(
+                    //       SettingBlocEvent_toogleAutoAcceptSmallFile(),
+                    //     ),
+                    //   ),
+                    // ),
 
                     Divider(),
                     SettingTitle(

@@ -47,6 +47,11 @@ class AppearanceSetting extends StatelessWidget {
                               LanguageCodeConverter(
                                 langCode: locale.languageCode,
                               ),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                               color:  state.langCode == locale.languageCode
+                                ? theme.scaffoldBackgroundColor
+                                : null
+                              ),
                             ),
                             onTap: () {
                               context.read<SettingBloc>().add(

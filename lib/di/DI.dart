@@ -4,6 +4,7 @@ import 'package:local_share/data/repo/bonsoir_discover_repository_impl.dart';
 import 'package:local_share/data/repo/device_info_repository_impl.dart';
 import 'package:local_share/data/repo/embbeded_server.dart';
 import 'package:local_share/data/repo/embedded_socket.dart';
+import 'package:local_share/data/repo/local_notification_repo_impl.dart';
 import 'package:local_share/data/repo/network_repository_impl.dart';
 import 'package:local_share/data/repo/shared_prefs_repository_impl.dart';
 import 'package:local_share/main.dart';
@@ -33,6 +34,10 @@ Future<void> DI() async {
   );
 
   getIt.registerSingleton<EmbeddedSocketServerImpl>(EmbeddedSocketServerImpl());
+
+  getIt.registerSingleton<LocalNotificationRepoImpl>(
+    LocalNotificationRepoImpl.instance,
+  );
 
   logger.i('DI inited');
 }

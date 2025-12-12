@@ -58,6 +58,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => ReceivePageBloc(
+            localNotificationRepoImpl: getIt<LocalNotificationRepoImpl>(),
             bonsoirBroadcastRepositoryImpl:
                 getIt<BonsoirBroadcastRepositoryImpl>(),
             socketServerRepoImpl: getIt<EmbeddedSocketServerImpl>(),
