@@ -20,18 +20,27 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
-  static String m0(chunkSize) => "${chunkSize} MB";
+  static String m0(buildDate) => "Дата сборки: ${buildDate}";
 
-  static String m1(files) => "${files} Файлов";
+  static String m1(chunkSize) => "${chunkSize} MB";
 
-  static String m2(files) => "(${files}) файлов готово к раздаче на сервере.";
+  static String m2(developerName) => "Разработчик: ${developerName}";
 
-  static String m3(receivedFilesCount) =>
+  static String m3(files) => "${files} Файлов";
+
+  static String m4(files) => "(${files}) файлов готово к раздаче на сервере.";
+
+  static String m5(receivedFilesCount) =>
       "Полученные файлы (${receivedFilesCount})";
+
+  static String m6(appVersion) => "Версия: ${appVersion}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "aboutApp": MessageLookupByLibrary.simpleMessage("О приложении"),
+    "appDescription": MessageLookupByLibrary.simpleMessage(
+      "Передача, обмен файлами",
+    ),
     "appereanceSettings": MessageLookupByLibrary.simpleMessage(
       "Настройки внешнего вида",
     ),
@@ -44,19 +53,21 @@ class MessageLookup extends MessageLookupByLibrary {
           "Автоматически принимать передачи до 10 МБ с известных устройств.",
         ),
     "becomeVisible": MessageLookupByLibrary.simpleMessage("Стать видимым"),
+    "buildDateBuilddate": m0,
     "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
     "chooseBetweenLightDark": MessageLookupByLibrary.simpleMessage(
       "Выберите между светлой, темной",
     ),
     "chunkSize": MessageLookupByLibrary.simpleMessage("Размер блока"),
-    "chunksizeMb": m0,
+    "chunksizeMb": m1,
     "confirmTransfer": MessageLookupByLibrary.simpleMessage(
       "Подтвердить передачу",
     ),
     "dark": MessageLookupByLibrary.simpleMessage("Темная"),
+    "developerDevelopername": m2,
     "downloadLocation": MessageLookupByLibrary.simpleMessage("Папка загрузки"),
-    "filesFiles": m1,
-    "filesFilesReadyToServeInServer": m2,
+    "filesFiles": m3,
+    "filesFilesReadyToServeInServer": m4,
     "filesWillBeTransferredOverLocalNetwork":
         MessageLookupByLibrary.simpleMessage(
           "Файлы будут переданы по локальной сети",
@@ -76,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "listeningForRequests": MessageLookupByLibrary.simpleMessage(
       "Ожидание запросов",
     ),
+    "localshare": MessageLookupByLibrary.simpleMessage("LocalShare"),
     "makeSureThatYouAndTheRecipientAreOnThe":
         MessageLookupByLibrary.simpleMessage(
           "Убедитесь, что вы и получатель находитесь в одной сети!",
@@ -102,7 +114,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Получать оповещения о входящих запросах и завершении передач.",
         ),
-    "receivedFilesReceivedfilescount": m3,
+    "receivedFilesReceivedfilescount": m5,
     "resetDeviceId": MessageLookupByLibrary.simpleMessage(
       "Сбросить ID устройства",
     ),
@@ -155,6 +167,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Используя этот метод, вы можете обмениваться данными с любыми устройствами под разными ОС.",
         ),
+    "versionAppversion": m6,
     "waitingForIncomingConnections": MessageLookupByLibrary.simpleMessage(
       "Ожидание входящих соединений...",
     ),

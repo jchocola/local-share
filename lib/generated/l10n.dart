@@ -573,6 +573,51 @@ class S {
       args: [],
     );
   }
+
+  /// `LocalShare`
+  String get localshare {
+    return Intl.message('LocalShare', name: 'localshare', desc: '', args: []);
+  }
+
+  /// `App Description`
+  String get appDescription {
+    return Intl.message(
+      'App Description',
+      name: 'appDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Version: {appVersion}`
+  String versionAppversion(Object appVersion) {
+    return Intl.message(
+      'Version: $appVersion',
+      name: 'versionAppversion',
+      desc: '',
+      args: [appVersion],
+    );
+  }
+
+  /// `Build date: {buildDate}`
+  String buildDateBuilddate(Object buildDate) {
+    return Intl.message(
+      'Build date: $buildDate',
+      name: 'buildDateBuilddate',
+      desc: '',
+      args: [buildDate],
+    );
+  }
+
+  /// `Developer: {developerName}`
+  String developerDevelopername(Object developerName) {
+    return Intl.message(
+      'Developer: $developerName',
+      name: 'developerDevelopername',
+      desc: '',
+      args: [developerName],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

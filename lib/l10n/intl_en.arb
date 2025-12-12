@@ -59,5 +59,10 @@
   "cancel": "Cancel",
   "sendFiles": "Send Files",
   "chunksizeMb": "{chunkSize} MB",
-  "theMoreTheFasterTheLessTheBetter": "The more, the faster. The less, the better!"
+  "theMoreTheFasterTheLessTheBetter": "The more, the faster. The less, the better!",
+  "localshare": "LocalShare",
+  "appDescription": "App Description",
+  "versionAppversion": "Version: {appVersion}",
+  "buildDateBuilddate": "Build date: {buildDate}",
+  "developerDevelopername": "Developer: {developerName}"
 }

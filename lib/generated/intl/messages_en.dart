@@ -20,18 +20,25 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(chunkSize) => "${chunkSize} MB";
+  static String m0(buildDate) => "Build date: ${buildDate}";
 
-  static String m1(files) => "${files} Files";
+  static String m1(chunkSize) => "${chunkSize} MB";
 
-  static String m2(files) => "(${files}) files ready to serve in server.";
+  static String m2(developerName) => "Developer: ${developerName}";
 
-  static String m3(receivedFilesCount) =>
+  static String m3(files) => "${files} Files";
+
+  static String m4(files) => "(${files}) files ready to serve in server.";
+
+  static String m5(receivedFilesCount) =>
       "Received files (${receivedFilesCount})";
+
+  static String m6(appVersion) => "Version: ${appVersion}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "aboutApp": MessageLookupByLibrary.simpleMessage("About App"),
+    "appDescription": MessageLookupByLibrary.simpleMessage("App Description"),
     "appereanceSettings": MessageLookupByLibrary.simpleMessage(
       "Appereance Settings",
     ),
@@ -46,19 +53,21 @@ class MessageLookup extends MessageLookupByLibrary {
           "Automatically accept transfers under 10MB from known devices.",
         ),
     "becomeVisible": MessageLookupByLibrary.simpleMessage("Become Visible"),
+    "buildDateBuilddate": m0,
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "chooseBetweenLightDark": MessageLookupByLibrary.simpleMessage(
       "Choose between light, dark",
     ),
     "chunkSize": MessageLookupByLibrary.simpleMessage("Chunk Size"),
-    "chunksizeMb": m0,
+    "chunksizeMb": m1,
     "confirmTransfer": MessageLookupByLibrary.simpleMessage("Confirm Transfer"),
     "dark": MessageLookupByLibrary.simpleMessage("Dark"),
+    "developerDevelopername": m2,
     "downloadLocation": MessageLookupByLibrary.simpleMessage(
       "Download Location",
     ),
-    "filesFiles": m1,
-    "filesFilesReadyToServeInServer": m2,
+    "filesFiles": m3,
+    "filesFilesReadyToServeInServer": m4,
     "filesWillBeTransferredOverLocalNetwork":
         MessageLookupByLibrary.simpleMessage(
           "Files will be transferred over local network",
@@ -78,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "listeningForRequests": MessageLookupByLibrary.simpleMessage(
       "Listening for requests",
     ),
+    "localshare": MessageLookupByLibrary.simpleMessage("LocalShare"),
     "makeSureThatYouAndTheRecipientAreOnThe":
         MessageLookupByLibrary.simpleMessage(
           "Make sure that you and the recipient are on the same network!",
@@ -102,7 +112,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Receive alerts for incoming requests and completions.",
         ),
-    "receivedFilesReceivedfilescount": m3,
+    "receivedFilesReceivedfilescount": m5,
     "resetDeviceId": MessageLookupByLibrary.simpleMessage("Reset Device ID"),
     "searchingForDevices": MessageLookupByLibrary.simpleMessage(
       "Searching for devices...",
@@ -149,6 +159,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Using this method, you can exchange data with any devices running different OS.",
         ),
+    "versionAppversion": m6,
     "waitingForIncomingConnections": MessageLookupByLibrary.simpleMessage(
       "Waiting for incoming connections...",
     ),

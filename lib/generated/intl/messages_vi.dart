@@ -20,19 +20,28 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'vi';
 
-  static String m0(chunkSize) => "${chunkSize} MB";
+  static String m0(buildDate) => "Ngày build: ${buildDate}";
 
-  static String m1(files) => "${files} Tệp tin";
+  static String m1(chunkSize) => "${chunkSize} MB";
 
-  static String m2(files) =>
+  static String m2(developerName) => "Nhà phát triển: ${developerName}";
+
+  static String m3(files) => "${files} Tệp tin";
+
+  static String m4(files) =>
       "(${files}) tệp tin đã sẵn sàng để phục vụ trên server.";
 
-  static String m3(receivedFilesCount) =>
+  static String m5(receivedFilesCount) =>
       "Đã nhận (${receivedFilesCount}) tệp tin";
+
+  static String m6(appVersion) => "Phiên bản: ${appVersion}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "aboutApp": MessageLookupByLibrary.simpleMessage("Về Ứng dụng"),
+    "appDescription": MessageLookupByLibrary.simpleMessage(
+      "Gửi - Nhận file nội bộ",
+    ),
     "appereanceSettings": MessageLookupByLibrary.simpleMessage(
       "Cài đặt giao diện",
     ),
@@ -45,19 +54,21 @@ class MessageLookup extends MessageLookupByLibrary {
           "Tự động chấp nhận các giao dịch chuyển khoản dưới 10MB từ các thiết bị đã biết.",
         ),
     "becomeVisible": MessageLookupByLibrary.simpleMessage("Mở cổng tín hiệu"),
+    "buildDateBuilddate": m0,
     "cancel": MessageLookupByLibrary.simpleMessage("Hủy"),
     "chooseBetweenLightDark": MessageLookupByLibrary.simpleMessage(
       "Chọn giữa sáng, tối",
     ),
     "chunkSize": MessageLookupByLibrary.simpleMessage("Kích thước khối"),
-    "chunksizeMb": m0,
+    "chunksizeMb": m1,
     "confirmTransfer": MessageLookupByLibrary.simpleMessage("Xác nhận chuyển"),
     "dark": MessageLookupByLibrary.simpleMessage("Tối"),
+    "developerDevelopername": m2,
     "downloadLocation": MessageLookupByLibrary.simpleMessage(
       "Vị trí tải xuống",
     ),
-    "filesFiles": m1,
-    "filesFilesReadyToServeInServer": m2,
+    "filesFiles": m3,
+    "filesFilesReadyToServeInServer": m4,
     "filesWillBeTransferredOverLocalNetwork":
         MessageLookupByLibrary.simpleMessage(
           "Các tệp tin sẽ được chuyển qua mạng nội bộ.",
@@ -77,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "listeningForRequests": MessageLookupByLibrary.simpleMessage(
       "Lắng nghe các yêu cầu",
     ),
+    "localshare": MessageLookupByLibrary.simpleMessage("LocalShare"),
     "makeSureThatYouAndTheRecipientAreOnThe":
         MessageLookupByLibrary.simpleMessage(
           "Hãy đảm bảo rằng bạn và người nhận đang ở trên cùng một mạng!",
@@ -101,7 +113,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Nhận thông báo về các yêu cầu đến và các tác vụ đã hoàn thành.",
         ),
-    "receivedFilesReceivedfilescount": m3,
+    "receivedFilesReceivedfilescount": m5,
     "resetDeviceId": MessageLookupByLibrary.simpleMessage("Đổi Device ID"),
     "searchingForDevices": MessageLookupByLibrary.simpleMessage(
       "Tìm thiết bị để gửi...",
@@ -116,13 +128,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "sendFiles": MessageLookupByLibrary.simpleMessage("Gửi tệp"),
     "server": MessageLookupByLibrary.simpleMessage("Server"),
     "settings": MessageLookupByLibrary.simpleMessage("Cài đặt"),
-    "show": MessageLookupByLibrary.simpleMessage("Show"),
+    "show": MessageLookupByLibrary.simpleMessage("Thêm"),
     "stop": MessageLookupByLibrary.simpleMessage("Ngừng"),
     "termsOfService": MessageLookupByLibrary.simpleMessage(
       "Điều khoản dịch vụ",
     ),
     "theMoreTheFasterTheLessTheBetter": MessageLookupByLibrary.simpleMessage(
-      "The more, the faster. The less, the better!",
+      "Càng lớn, càng nhanh. Càng bé, càng ổn định!",
     ),
     "theSizeOfAPieceOfDataDuringTransferring":
         MessageLookupByLibrary.simpleMessage(
@@ -146,6 +158,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Sử dụng phương pháp này, bạn có thể trao đổi dữ liệu với bất kỳ thiết bị nào chạy trên các hệ điều hành khác nhau.",
         ),
+    "versionAppversion": m6,
     "waitingForIncomingConnections": MessageLookupByLibrary.simpleMessage(
       "Đang chờ kết nối đến...",
     ),
