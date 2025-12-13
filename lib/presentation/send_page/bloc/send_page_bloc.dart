@@ -87,176 +87,44 @@ class SendPageBlocState_error extends SendPageBlocState {
 /// BLOC
 ///
 class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
-  final BonsoirDiscoverRepositoryImpl bonsoirDiscoverRepositoryImpl =
-      getIt<BonsoirDiscoverRepositoryImpl>();
-      
-  ServerClient? serverClient;
-  StreamSubscription? _discoverySubscription;
+
 
   SendPageBloc() : super(SendPageBlocState_init()) {
     ///
     /// ON START BONSOIR DISCOVER
     ///
     on<SendPageBlocEvent_startBonsoirDiscover>((event, emit) async {
-      await _startDiscovery(emit);
+     
     });
     
     ///
     /// ON RESTART DISCOVERY
     ///
     on<SendPageBlocEvent_restartDiscovery>((event, emit) async {
-      // Cancel existing subscription if any
-      await _discoverySubscription?.cancel();
-      
-      // Restart discovery
-      await _startDiscovery(emit);
+    
     });
     
     ///
     /// ON CONNECT TO DEVICE
     ///
     on<SendPageBlocEvent_connectToDevice>((event, emit) async {
-      try {
-        emit(SendPageBlocState_connecting(service: event.service));
-        
-        // Initialize server client
-        serverClient = ServerClient();
-        
-        // Connect to the device
-        await serverClient!.connect(
-          host: event.service.host!,
-          port: event.service.port!,
-        );
-        
-        emit(SendPageBlocState_connected(service: event.service));
-      } catch (e) {
-        logger.e('Error connecting to device: $e');
-        emit(
-          SendPageBlocState_error(message: 'Failed to connect to device: $e'),
-        );
-        emit(SendPageBlocState_discovering());
-      }
+      
+      
     });
     
     ///
     /// ON SEND FILES
     ///
     on<SendPageBlocEvent_sendFiles>((event, emit) async {
-      if (serverClient?.socket == null) {
-        emit(SendPageBlocState_error(message: 'Not connected to any device'));
-        return;
-      }
-      
-      try {
-        final totalFiles = event.files.length;
-        int sentFiles = 0;
-        
-        for (final file in event.files) {
-          // Update progress state
-          emit(
-            SendPageBlocState_sending(
-              totalFiles: totalFiles,
-              sentFiles: sentFiles,
-              progress: sentFiles / totalFiles,
-              currentFileName: file.uri.pathSegments.last,
-            ),
-          );
-          
-          // Create file sender
-          final fileSender = FileSender(serverClient!.socket, file: file);
-          
-          // Send file with or without ACK based on preference
-          if (event.useAck) {
-            await fileSender.sendSingleFileWithAck();
-          } else {
-            await fileSender.sendSingleFileWithoutAck();
-          }
-          
-          sentFiles++;
-        }
-        
-        // Update final state
-        emit(
-          SendPageBlocState_sending(
-            totalFiles: totalFiles,
-            sentFiles: sentFiles,
-            progress: 1.0,
-            currentFileName: null,
-          ),
-        );
-        
-        emit(SendPageBlocState_sent());
-      } catch (e) {
-        logger.e('Error sending files: $e');
-        emit(SendPageBlocState_error(message: 'Failed to send files: $e'));
-      }
+    
+     
     });
   }
   
-  Future<void> _startDiscovery(Emitter<SendPageBlocState> emit) async {
-    try {
-      await bonsoirDiscoverRepositoryImpl.discoveryInitialize();
-      await bonsoirDiscoverRepositoryImpl.startDiscovery();
 
-      emit(SendPageBlocState_discovering());
-
-      ///
-      /// LISTEN EVENT
-      ///
-      _discoverySubscription?.cancel();
-      _discoverySubscription = bonsoirDiscoverRepositoryImpl.discovery.eventStream!.listen((
-        event,
-      ) async {
-        switch (event) {
-          case BonsoirDiscoveryStartedEvent():
-            logger.e(
-              'Service Started : port ${event.service?.port} , name ${event.service?.name}',
-            );
-            // Don't add the event again to avoid infinite loop
-            break;
-          case BonsoirDiscoveryServiceFoundEvent():
-            final BonsoirService bonsoirService = event.service;
-            logger.e('Service found : ${event.service.toJson()}');
-            
-            // Filter out self-discovery
-            if (bonsoirDiscoverRepositoryImpl.isSelfDiscovery(bonsoirService)) {
-              logger.i('Ignoring self-discovery of service: ${bonsoirService.name}');
-              break;
-            }
-            
-            await event.service!.resolve(
-              bonsoirDiscoverRepositoryImpl.discovery.serviceResolver,
-            ); // Should be called when the user wants to connect to this service.
-            emit(
-              SendPageBlocState_BonsoirDiscoveryServiceFoundEvent(
-                bonsoirService: bonsoirService,
-              ),
-            );
-            emit(SendPageBlocState_discovering());
-            break;
-          case BonsoirDiscoveryServiceResolvedEvent():
-            logger.e('Service resolved : ${event.service.toJson()}');
-            break;
-          case BonsoirDiscoveryServiceUpdatedEvent():
-            logger.e('Service updated : ${event.service.toJson()}');
-            break;
-          case BonsoirDiscoveryServiceLostEvent():
-            logger.e('Service lost : ${event.service.toJson()}');
-            break;
-          default:
-            logger.e('Another event occurred : $event.');
-            break;
-        }
-      });
-    } catch (e) {
-      logger.e('Error starting discovery: $e');
-      emit(SendPageBlocState_error(message: 'Failed to start discovery: $e'));
-    }
-  }
-  
   @override
   Future<void> close() {
-    _discoverySubscription?.cancel();
+  
     return super.close();
   }
 }

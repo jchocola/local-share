@@ -54,11 +54,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ReceivePageBloc(
-            bonsoirBroadcastRepositoryImpl:
-                getIt<BonsoirBroadcastRepositoryImpl>(),
-             socketServerRepoImpl: getIt<EmbeddedSocketServerImpl>()   
-          ),
+          create: (context) => ReceivePageBloc(),
         ),
         BlocProvider(create: (context) => PickedFilesBloc()),
         BlocProvider(

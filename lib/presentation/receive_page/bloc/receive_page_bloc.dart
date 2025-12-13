@@ -56,17 +56,10 @@ class ReceivePageBlocState_error extends ReceivePageBlocState {
 /// BLOC
 ///
 class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
-  final BonsoirBroadcastRepositoryImpl bonsoirBroadcastRepositoryImpl;
-  final EmbeddedSocketServerImpl socketServerRepoImpl;
 
-  FileReceiver? fileReceiverRepoImpl;
-  String? outPath;
 
-  ReceivePageBloc({
-    required this.bonsoirBroadcastRepositoryImpl,
-    required this.socketServerRepoImpl,
 
-  }) : super(ReceivePageBlocState_loaded(visible: false)) {
+  ReceivePageBloc() : super(ReceivePageBlocState_loaded(visible: false)) {
     ///
     /// CHANGE VISIBILITY
     ///
@@ -74,71 +67,6 @@ class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
       final currentState = state;
 
       logger.i('Changed visibility');
-
-      try {
-        if (currentState is ReceivePageBlocState_loaded) {
-          // open or close bonsoir broadcast
-          if (!currentState.visible == true) {
-            final port = 3030;
-
-            // Get download directory
-            final directory = await getApplicationDocumentsDirectory();
-            outPath = '${directory.path}/Downloads';
-            
-            // Create download directory if it doesn't exist
-            final downloadDir = Directory(outPath!);
-            if (!await downloadDir.exists()) {
-              await downloadDir.create(recursive: true);
-            }
-
-            // Set up socket connection handler
-            void handleSocketConnection(WebSocket socket) {
-              logger.i('WebSocket client connected');
-              
-              // Initialize file receiver when client connects
-              fileReceiverRepoImpl = FileReceiver(
-                socket,
-                outPath: outPath,
-                onProgress: (progress) {
-                  logger.i('File transfer progress: ${progress * 100}%');
-                },
-                onFileComplete: (file) {
-                  logger.i('File transfer completed: ${file.path}');
-                },
-                onError: (error) {
-                  logger.e('File transfer error: $error');
-                },
-                onFileStart: (metadata) {
-                  logger.i('File transfer started: $metadata');
-                },
-              );
-            }
-
-            // Set the connection handler on the existing socket server instance
-            socketServerRepoImpl.onConnected = handleSocketConnection;
-
-            // open socket server
-            await socketServerRepoImpl.startServer(port: port);
-
-            // open bonsoir broadcast
-            await bonsoirBroadcastRepositoryImpl.broadcastInitialize(
-              port: port,
-            );
-            await bonsoirBroadcastRepositoryImpl.broadcastStart();
-            
-            logger.i('Broadcast service started successfully');
-          } else {
-            await bonsoirBroadcastRepositoryImpl.broadcastStop();
-            logger.i('Broadcast service stopped');
-          }
-
-          emit(currentState.copyWith(visible: !currentState.visible));
-        }
-      } catch (e, stackTrace) {
-        logger.e('Error in ReceivePageBloc: $e\nStack trace: $stackTrace');
-        emit(ReceivePageBlocState_error(error: e as APP_ERROR_SUCCESS));
-        emit(ReceivePageBlocState_loaded(visible: false));
-      }
     });
   }
 }
