@@ -10,6 +10,7 @@ enum APP_ERROR_SUCCESS {
   ///
   OPENED_SERVER,
   CLOSED_SERVER,
+  NEARBY_SERVICE_DISCOVERING,
 }
 
 String AppErrorConverter({required APP_ERROR_SUCCESS error}) {
@@ -23,7 +24,7 @@ String AppErrorConverter({required APP_ERROR_SUCCESS error}) {
       return 'Not Wi-fi connected';
 
      case APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED:
-      return 'Not Wi-fi connected';
+      return 'Nearby service is denied';
 
 
     ///
@@ -33,6 +34,9 @@ String AppErrorConverter({required APP_ERROR_SUCCESS error}) {
       return 'Opened server';
      
      case APP_ERROR_SUCCESS.CLOSED_SERVER:
-      return 'Closed server';  
+      return 'Closed server'; 
+
+    case APP_ERROR_SUCCESS.NEARBY_SERVICE_DISCOVERING:
+      return 'Nearby Service discovering';     
   }
 }

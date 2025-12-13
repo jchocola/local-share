@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:local_share/data/repo/android_nearby_service.dart';
 import 'package:local_share/data/repo/bonsoir_broadcast_repository_impl.dart';
 import 'package:local_share/data/repo/bonsoir_discover_repository_impl.dart';
 import 'package:local_share/data/repo/device_info_repository_impl.dart';
@@ -33,6 +34,8 @@ Future<void> DI() async {
   );
 
   getIt.registerSingleton<EmbeddedSocketServerImpl>(EmbeddedSocketServerImpl());
+
+  getIt.registerSingleton<AndroidNearbyService>(AndroidNearbyService());
 
   logger.i('DI inited');
 }

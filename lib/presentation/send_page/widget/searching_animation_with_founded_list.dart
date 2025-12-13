@@ -3,8 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/core/utils/show_toastification.dart';
 import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
+import 'package:local_share/presentation/send_page/widget/nearby_service_not_granted.dart';
+import 'package:local_share/presentation/send_page/widget/wifi_not_connected.dart';
 import 'package:local_share/widgets/custom_avatar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:bonsoir/bonsoir.dart';
@@ -86,21 +89,37 @@ class _SearchingAnimationWithFoundedDevicesState
               _updateAvatarPositions();
             });
           }
-          showSuccessToatification(context, title: 'Device Found: ${state.bonsoirService.name}');
+          showSuccessToatification(
+            context,
+            title: 'Device Found: ${state.bonsoirService.name}',
+          );
         }
-        
+
         if (state is SendPageBlocState_connected) {
-          showSuccessToatification(context, title: 'Connected to ${state.service.name}');
+          showSuccessToatification(
+            context,
+            title: 'Connected to ${state.service.name}',
+          );
           // Navigate to file selection/transfer screen
           context.push('/send_page/confirm_transfer');
         }
-        
+
         if (state is SendPageBlocState_error) {
-          showErrorToatification(context, title: state.message);
+          showErrorToatification(
+            context,
+            title: AppErrorConverter(error: state.message),
+          );
+        }
+
+         if (state is SendPageBlocState_discovering) {
+          showSuccessToatification(
+            context,
+            title: AppErrorConverter(error: APP_ERROR_SUCCESS.NEARBY_SERVICE_DISCOVERING),
+          );
         }
       },
       builder: (context, state) {
-        if (state is SendPageBlocState_discovering || 
+        if (state is SendPageBlocState_discovering ||
             state is SendPageBlocState_BonsoirDiscoveryStartedEvent ||
             state is SendPageBlocState_BonsoirDiscoveryServiceFoundEvent) {
           return Stack(
@@ -113,7 +132,11 @@ class _SearchingAnimationWithFoundedDevicesState
               ),
 
               // Display discovered devices
-              for (int i = 0; i < discoveredServices.length && i < _avatarPositions.length; i++)
+              for (
+                int i = 0;
+                i < discoveredServices.length && i < _avatarPositions.length;
+                i++
+              )
                 Positioned(
                   left: _avatarPositions[i].dx,
                   top: _avatarPositions[i].dy,
@@ -126,7 +149,9 @@ class _SearchingAnimationWithFoundedDevicesState
                     onTap: () {
                       // Connect to the selected device
                       context.read<SendPageBloc>().add(
-                        SendPageBlocEvent_connectToDevice(service: discoveredServices[i])
+                        SendPageBlocEvent_connectToDevice(
+                          service: discoveredServices[i],
+                        ),
                       );
                     },
                     isDragging: _selectedAvatarIndex == i,
@@ -164,6 +189,20 @@ class _SearchingAnimationWithFoundedDevicesState
             ),
           );
         } else if (state is SendPageBlocState_error) {
+          if (state.message ==
+              APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED) {
+            return Center(
+              child: NearbyServiceNotGranted(),
+            );
+          }
+
+           if (state.message ==
+              APP_ERROR_SUCCESS.NOT_CONNECTED_WIFI) {
+            return Center(
+              child: WifiNotConnected(),
+            );
+          }
+
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -174,7 +213,9 @@ class _SearchingAnimationWithFoundedDevicesState
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    context.read<SendPageBloc>().add(SendPageBlocEvent_startBonsoirDiscover());
+                    context.read<SendPageBloc>().add(
+                      SendPageBlocEvent_startNearbyServiceDiscover(),
+                    );
                   },
                   child: Text('Retry Discovery'),
                 ),

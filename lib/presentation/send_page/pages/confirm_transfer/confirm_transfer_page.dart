@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/core/constant/app_constant.dart';
+import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/core/utils/show_toastification.dart';
 import 'package:local_share/generated/l10n.dart';
@@ -44,7 +45,7 @@ class ConfirmTransferPage extends StatelessWidget {
         
         if (state is SendPageBlocState_error) {
           // Show error
-          showErrorToatification(context, title: 'Error sending files', desc: state.message);
+          showErrorToatification(context, title: 'Error sending files', desc: AppErrorConverter(error: state.message));
         }
       },
       builder: (context, state) {

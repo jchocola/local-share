@@ -8,6 +8,7 @@ import 'package:local_share/core/extension/wiredash_custom_language.dart';
 import 'package:local_share/core/router/router.dart';
 import 'package:local_share/core/theme/dark_theme.dart';
 import 'package:local_share/core/theme/light_theme.dart';
+import 'package:local_share/data/repo/android_nearby_service.dart';
 import 'package:local_share/data/repo/bonsoir_broadcast_repository_impl.dart';
 import 'package:local_share/data/repo/device_info_repository_impl.dart';
 import 'package:local_share/data/repo/embbeded_server.dart';
@@ -53,9 +54,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => ReceivePageBloc(),
-        ),
+        BlocProvider(create: (context) => ReceivePageBloc()),
         BlocProvider(create: (context) => PickedFilesBloc()),
         BlocProvider(
           create: (context) =>
@@ -83,7 +82,8 @@ class MyApp extends StatelessWidget {
 
         BlocProvider(
           create: (context) =>
-              SendPageBloc()..add(SendPageBlocEvent_startBonsoirDiscover()),
+              SendPageBloc(nearbyService: getIt<AndroidNearbyService>())
+                ..add(SendPageBlocEvent_startNearbyServiceDiscover()),
         ),
       ],
       child: AdaptiveTheme(
@@ -94,15 +94,15 @@ class MyApp extends StatelessWidget {
           child: BlocBuilder<SettingBloc, SettingBlocState>(
             builder: (context, state) {
               if (state is SettingBlocState_loaded) {
-               return Wiredash(
-                 projectId: dotenv.env['WIREDASH_PROJECT_ID'] ?? '',
+                return Wiredash(
+                  projectId: dotenv.env['WIREDASH_PROJECT_ID'] ?? '',
                   secret: dotenv.env['WIREDASH_SECRET'] ?? '',
 
                   options: WiredashOptionsData(
                     localizationDelegate: CustomWiredashTranslationsDelegate(),
                     locale: Locale(state.langCode),
                   ),
-                 child: MaterialApp.router(
+                  child: MaterialApp.router(
                     localizationsDelegates: [
                       S.delegate,
                       GlobalMaterialLocalizations.delegate,
@@ -117,7 +117,7 @@ class MyApp extends StatelessWidget {
                     darkTheme: darkTheme,
                     routerConfig: router,
                   ),
-               );
+                );
               } else {
                 return CircularProgressIndicator();
               }

@@ -1,5 +1,7 @@
 import 'package:bonsoir/bonsoir.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_share/core/error/app_error.dart';
+import 'package:local_share/data/repo/android_nearby_service.dart';
 import 'package:local_share/data/repo/bonsoir_discover_repository_impl.dart';
 import 'package:local_share/di/DI.dart';
 import 'package:local_share/main.dart';
@@ -13,18 +15,23 @@ import 'dart:async';
 ///
 abstract class SendPageBlocEvent {}
 
-class SendPageBlocEvent_startBonsoirDiscover extends SendPageBlocEvent {}
+class SendPageBlocEvent_startNearbyServiceDiscover extends SendPageBlocEvent {}
+
+class SendPageBlocEvent_openAppSettingForAllowPermisson
+    extends SendPageBlocEvent {}
+class SendPageBlocEvent_openNetworkSettingForAllowPermisson
+    extends SendPageBlocEvent {}
 
 class SendPageBlocEvent_connectToDevice extends SendPageBlocEvent {
   final BonsoirService service;
-  
+
   SendPageBlocEvent_connectToDevice({required this.service});
 }
 
 class SendPageBlocEvent_sendFiles extends SendPageBlocEvent {
   final List<File> files;
   final bool useAck; // Whether to use ACK for reliability
-  
+
   SendPageBlocEvent_sendFiles({required this.files, this.useAck = false});
 }
 
@@ -39,9 +46,11 @@ class SendPageBlocState_init extends SendPageBlocState {}
 
 class SendPageBlocState_discovering extends SendPageBlocState {}
 
-class SendPageBlocState_BonsoirDiscoveryStartedEvent extends SendPageBlocState {}
+class SendPageBlocState_BonsoirDiscoveryStartedEvent
+    extends SendPageBlocState {}
 
-class SendPageBlocState_BonsoirDiscoveryServiceFoundEvent extends SendPageBlocState {
+class SendPageBlocState_BonsoirDiscoveryServiceFoundEvent
+    extends SendPageBlocState {
   final BonsoirService bonsoirService;
 
   SendPageBlocState_BonsoirDiscoveryServiceFoundEvent({
@@ -51,13 +60,13 @@ class SendPageBlocState_BonsoirDiscoveryServiceFoundEvent extends SendPageBlocSt
 
 class SendPageBlocState_connecting extends SendPageBlocState {
   final BonsoirService service;
-  
+
   SendPageBlocState_connecting({required this.service});
 }
 
 class SendPageBlocState_connected extends SendPageBlocState {
   final BonsoirService service;
-  
+
   SendPageBlocState_connected({required this.service});
 }
 
@@ -66,7 +75,7 @@ class SendPageBlocState_sending extends SendPageBlocState {
   final int sentFiles;
   final double progress;
   final String? currentFileName;
-  
+
   SendPageBlocState_sending({
     required this.totalFiles,
     required this.sentFiles,
@@ -78,8 +87,8 @@ class SendPageBlocState_sending extends SendPageBlocState {
 class SendPageBlocState_sent extends SendPageBlocState {}
 
 class SendPageBlocState_error extends SendPageBlocState {
-  final String message;
-  
+  final APP_ERROR_SUCCESS message;
+
   SendPageBlocState_error({required this.message});
 }
 
@@ -87,44 +96,63 @@ class SendPageBlocState_error extends SendPageBlocState {
 /// BLOC
 ///
 class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
+  final AndroidNearbyService nearbyService;
 
-
-  SendPageBloc() : super(SendPageBlocState_init()) {
+  SendPageBloc({required this.nearbyService})
+    : super(SendPageBlocState_init()) {
     ///
-    /// ON START BONSOIR DISCOVER
+    /// ON START NEARBY DISCOVER
     ///
-    on<SendPageBlocEvent_startBonsoirDiscover>((event, emit) async {
-     
+    on<SendPageBlocEvent_startNearbyServiceDiscover>((event, emit) async {
+      try {
+        await nearbyService.init();
+        await nearbyService.startDiscover();
+        emit(SendPageBlocState_discovering());
+      } catch (e) {
+        emit(SendPageBlocState_error(message: e as APP_ERROR_SUCCESS));
+      }
     });
-    
+
+    ///
+    /// OPEN APP SETTING FOR ALLOW PERMISSION
+    ///
+    on<SendPageBlocEvent_openAppSettingForAllowPermisson>((event, emit) async {
+      try {
+        await nearbyService.openAppSetting();
+      } catch (e) {
+        emit(SendPageBlocState_error(message: e as APP_ERROR_SUCCESS));
+      }
+    });
+
+       ///
+    /// OPEN NETWORK SETTING FOR ALLOW PERMISSION
+    ///
+    on<SendPageBlocEvent_openNetworkSettingForAllowPermisson>((event, emit) async {
+      try {
+        await nearbyService.openNetworkSetting();
+      } catch (e) {
+        emit(SendPageBlocState_error(message: e as APP_ERROR_SUCCESS));
+      }
+    });
+
     ///
     /// ON RESTART DISCOVERY
     ///
-    on<SendPageBlocEvent_restartDiscovery>((event, emit) async {
-    
-    });
-    
+    on<SendPageBlocEvent_restartDiscovery>((event, emit) async {});
+
     ///
     /// ON CONNECT TO DEVICE
     ///
-    on<SendPageBlocEvent_connectToDevice>((event, emit) async {
-      
-      
-    });
-    
+    on<SendPageBlocEvent_connectToDevice>((event, emit) async {});
+
     ///
     /// ON SEND FILES
     ///
-    on<SendPageBlocEvent_sendFiles>((event, emit) async {
-    
-     
-    });
+    on<SendPageBlocEvent_sendFiles>((event, emit) async {});
   }
-  
 
   @override
   Future<void> close() {
-  
     return super.close();
   }
 }
