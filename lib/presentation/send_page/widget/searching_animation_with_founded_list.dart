@@ -11,6 +11,7 @@ import 'package:local_share/presentation/send_page/widget/wifi_not_connected.dar
 import 'package:local_share/widgets/custom_avatar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:bonsoir/bonsoir.dart';
+import 'package:nearby_service/nearby_service.dart';
 
 class SearchingAnimationWithFoundedDevices extends StatefulWidget {
   const SearchingAnimationWithFoundedDevices({super.key});
@@ -22,7 +23,7 @@ class SearchingAnimationWithFoundedDevices extends StatefulWidget {
 
 class _SearchingAnimationWithFoundedDevicesState
     extends State<SearchingAnimationWithFoundedDevices> {
-   final List<BonsoirService> discoveredServices = [];
+  List<NearbyDevice> discoveredDevices = [];
   final Random _random = Random();
   final List<Offset> _avatarPositions = [];
   int? _selectedAvatarIndex;
@@ -38,7 +39,7 @@ class _SearchingAnimationWithFoundedDevicesState
   void _updateAvatarPositions() {
     setState(() {
       _avatarPositions.clear();
-      for (int i = 0; i < discoveredServices.length; i++) {
+      for (int i = 0; i < discoveredDevices.length; i++) {
         _avatarPositions.add(
           Offset(_random.nextDouble() * 200, _random.nextDouble() * 200),
         );
@@ -81,17 +82,21 @@ class _SearchingAnimationWithFoundedDevicesState
           showSuccessToatification(context, title: 'Bonsoir Discovery Started');
         }
 
-        if (state is SendPageBlocState_BonsoirDiscoveryServiceFoundEvent) {
+        if (state is SendPageBlocState_NearbyDiscoveryServiceFoundPeers) {
+          setState(() {
+            discoveredDevices = state.peers;
+          });
+
           // Add the discovered service to our list
-          if (!discoveredServices.contains(state.bonsoirService)) {
-            setState(() {
-              discoveredServices.add(state.bonsoirService);
-              _updateAvatarPositions();
-            });
-          }
+          // if (!discoveredDevices.contains(state.bonsoirService)) {
+          //   setState(() {
+          //     discoveredDevices.add(state.bonsoirService);
+          //     _updateAvatarPositions();
+          //   });
+          // }
           showSuccessToatification(
             context,
-            title: 'Device Found: ${state.bonsoirService.name}',
+            title: 'Devices Found: ${state.peers.length}',
           );
         }
 
@@ -111,17 +116,19 @@ class _SearchingAnimationWithFoundedDevicesState
           );
         }
 
-         if (state is SendPageBlocState_discovering) {
+        if (state is SendPageBlocState_discovering) {
           showSuccessToatification(
             context,
-            title: AppErrorConverter(error: APP_ERROR_SUCCESS.NEARBY_SERVICE_DISCOVERING),
+            title: AppErrorConverter(
+              error: APP_ERROR_SUCCESS.NEARBY_SERVICE_DISCOVERING,
+            ),
           );
         }
       },
       builder: (context, state) {
         if (state is SendPageBlocState_discovering ||
             state is SendPageBlocState_BonsoirDiscoveryStartedEvent ||
-            state is SendPageBlocState_BonsoirDiscoveryServiceFoundEvent) {
+            state is SendPageBlocState_NearbyDiscoveryServiceFoundPeers) {
           return Stack(
             children: [
               /// searching animation
@@ -134,25 +141,25 @@ class _SearchingAnimationWithFoundedDevicesState
               // Display discovered devices
               for (
                 int i = 0;
-                i < discoveredServices.length && i < _avatarPositions.length;
+                i < discoveredDevices.length && i < _avatarPositions.length;
                 i++
               )
                 Positioned(
                   left: _avatarPositions[i].dx,
                   top: _avatarPositions[i].dy,
                   child: DraggableAvatar(
-                    name: discoveredServices[i].name ?? 'Unknown Device',
+                    name: discoveredDevices[i].info.displayName ?? 'Unknown Device',
                     index: i,
                     onPanStart: _onPanStart,
                     onPanUpdate: _onPanUpdate,
                     onPanEnd: _onPanEnd,
                     onTap: () {
                       // Connect to the selected device
-                      context.read<SendPageBloc>().add(
-                        SendPageBlocEvent_connectToDevice(
-                          service: discoveredServices[i],
-                        ),
-                      );
+                      // context.read<SendPageBloc>().add(
+                      //   SendPageBlocEvent_connectToDevice(
+                      //     service: discoveredDevices[i],
+                      //   ),
+                      // );
                     },
                     isDragging: _selectedAvatarIndex == i,
                   ),
@@ -191,16 +198,11 @@ class _SearchingAnimationWithFoundedDevicesState
         } else if (state is SendPageBlocState_error) {
           if (state.message ==
               APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED) {
-            return Center(
-              child: NearbyServiceNotGranted(),
-            );
+            return Center(child: NearbyServiceNotGranted());
           }
 
-           if (state.message ==
-              APP_ERROR_SUCCESS.NOT_CONNECTED_WIFI) {
-            return Center(
-              child: WifiNotConnected(),
-            );
+          if (state.message == APP_ERROR_SUCCESS.NOT_CONNECTED_WIFI) {
+            return Center(child: WifiNotConnected());
           }
 
           return Center(

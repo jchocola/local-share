@@ -52,13 +52,11 @@ class SendPageBlocState_discovering extends SendPageBlocState {}
 class SendPageBlocState_BonsoirDiscoveryStartedEvent
     extends SendPageBlocState {}
 
-class SendPageBlocState_BonsoirDiscoveryServiceFoundEvent
+class SendPageBlocState_NearbyDiscoveryServiceFoundPeers
     extends SendPageBlocState {
-  final BonsoirService bonsoirService;
+  final List<NearbyDevice> peers;
 
-  SendPageBlocState_BonsoirDiscoveryServiceFoundEvent({
-    required this.bonsoirService,
-  });
+  SendPageBlocState_NearbyDiscoveryServiceFoundPeers({required this.peers});
 }
 
 class SendPageBlocState_connecting extends SendPageBlocState {
