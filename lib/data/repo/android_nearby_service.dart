@@ -4,10 +4,10 @@ import 'package:nearby_service/nearby_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AndroidNearbyService {
-  final _nearbyService = NearbyService.getInstance().android;
+  final nearbyService = NearbyService.getInstance();
 
   Future<void> init() async {
-    await _nearbyService?.initialize();
+    await nearbyService.initialize();
     logger.i('Android nearby service inited');
 
     final isWifiConnected = await isWifiEnabled();
@@ -24,22 +24,22 @@ class AndroidNearbyService {
   }
 
   Future<bool?> checkPermission() async {
-    final granted = await _nearbyService?.requestPermissions();
+    final granted = await nearbyService.android! .requestPermissions();
     return granted;
   }
 
   Future<bool?> isWifiEnabled() async {
-    final isWifiEnabled = await _nearbyService?.checkWifiService();
+    final isWifiEnabled = await nearbyService.android! .checkWifiService();
     return isWifiEnabled;
   }
 
   Future<void> startDiscover() async {
-    await _nearbyService!.discover();
+    await nearbyService.discover();
     logger.i('Nearby discover started');
   }
 
   Future<void> stopDiscover() async {
-    await _nearbyService!.stopDiscovery();
+    await nearbyService.stopDiscovery();
     logger.i('Nearby discover stopped');
   }
 
@@ -48,10 +48,10 @@ class AndroidNearbyService {
   }
 
   Future<void> openNetworkSetting() async {
-    await _nearbyService!.openServicesSettings();
+    await nearbyService.openServicesSettings();
   }
 
   Future<NearbyDeviceInfo?> getCurrentDeviceInfo() async {
-    return await _nearbyService!.getCurrentDeviceInfo();
+    return await nearbyService.getCurrentDeviceInfo();
   }
 }

@@ -22,7 +22,7 @@ class SearchingAnimationWithFoundedDevices extends StatefulWidget {
 
 class _SearchingAnimationWithFoundedDevicesState
     extends State<SearchingAnimationWithFoundedDevices> {
-  final List<BonsoirService> discoveredServices = [];
+   final List<BonsoirService> discoveredServices = [];
   final Random _random = Random();
   final List<Offset> _avatarPositions = [];
   int? _selectedAvatarIndex;

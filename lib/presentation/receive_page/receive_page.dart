@@ -40,12 +40,10 @@ class ReceivePage extends StatelessWidget {
         children: [
           BlocBuilder<ReceivePageBloc, ReceivePageBlocState>(
             builder: (context, state) {
-              if (state is ReceivePageBlocState_loaded) {
-                if (state.visible) {
+              if (state is ReceivePageBlocState_unvisible) {
+                return InvisibleWidget();
+              } else if (state is ReceivePageBlocState_visible) {
                   return WaitingConnectionWidget();
-                } else {
-                  return InvisibleWidget();
-                }
               } else {
                 return CircularProgressIndicator();
               }

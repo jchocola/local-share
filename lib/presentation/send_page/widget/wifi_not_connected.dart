@@ -28,10 +28,10 @@ class WifiNotConnected extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 context.read<SendPageBloc>().add(
-                  SendPageBlocEvent_openAppSettingForAllowPermisson(),
+                  SendPageBlocEvent_openNetworkSettingForAllowPermisson(),
                 );
               },
-              child: Text('Open service settings'),
+              child: Text('Open WiFi settings'),
             ),
           ],
         ),

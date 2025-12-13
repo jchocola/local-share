@@ -35,17 +35,9 @@ class ReceivePageBlocState_initial extends ReceivePageBlocState {}
 
 class ReceivePageBlocState_loading extends ReceivePageBlocState {}
 
-class ReceivePageBlocState_loaded extends ReceivePageBlocState {
-  final bool visible;
-  ReceivePageBlocState_loaded({required this.visible});
+class ReceivePageBlocState_unvisible extends ReceivePageBlocState {}
 
-  @override
-  List<Object?> get props => [visible];
-
-  ReceivePageBlocState_loaded copyWith({bool? visible}) {
-    return ReceivePageBlocState_loaded(visible: visible ?? this.visible);
-  }
-}
+class ReceivePageBlocState_visible extends ReceivePageBlocState {}
 
 class ReceivePageBlocState_error extends ReceivePageBlocState {
   final APP_ERROR_SUCCESS error;
@@ -56,17 +48,22 @@ class ReceivePageBlocState_error extends ReceivePageBlocState {
 /// BLOC
 ///
 class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
-
-
-
-  ReceivePageBloc() : super(ReceivePageBlocState_loaded(visible: false)) {
+  
+  ReceivePageBloc() : super(ReceivePageBlocState_unvisible()) {
     ///
     /// CHANGE VISIBILITY
     ///
     on<RecievePageBlocEvent_ChangeVisiblity>((event, emit) async {
       final currentState = state;
-
       logger.i('Changed visibility');
+      if (currentState is ReceivePageBlocState_unvisible)  {
+          emit(ReceivePageBlocState_visible());
+      }
+
+
+      if (currentState is ReceivePageBlocState_visible) {
+        emit(ReceivePageBlocState_unvisible());
+      }
     });
   }
 }

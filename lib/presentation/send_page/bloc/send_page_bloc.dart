@@ -10,6 +10,8 @@ import 'package:local_share/data/repo/file_sender.dart';
 import 'dart:io';
 import 'dart:async';
 
+import 'package:nearby_service/nearby_service.dart';
+
 ///
 /// EVENT
 ///
@@ -19,6 +21,7 @@ class SendPageBlocEvent_startNearbyServiceDiscover extends SendPageBlocEvent {}
 
 class SendPageBlocEvent_openAppSettingForAllowPermisson
     extends SendPageBlocEvent {}
+
 class SendPageBlocEvent_openNetworkSettingForAllowPermisson
     extends SendPageBlocEvent {}
 
@@ -97,6 +100,7 @@ class SendPageBlocState_error extends SendPageBlocState {
 ///
 class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
   final AndroidNearbyService nearbyService;
+  List<NearbyDevice> peers = [];
 
   SendPageBloc({required this.nearbyService})
     : super(SendPageBlocState_init()) {
@@ -108,6 +112,12 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         await nearbyService.init();
         await nearbyService.startDiscover();
         emit(SendPageBlocState_discovering());
+
+        //Start listening to peers:
+        nearbyService.nearbyService.getPeersStream().listen((event) {
+          peers = event;
+          logger.d('Peers $peers');
+        });
       } catch (e) {
         emit(SendPageBlocState_error(message: e as APP_ERROR_SUCCESS));
       }
@@ -124,10 +134,13 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
       }
     });
 
-       ///
+    ///
     /// OPEN NETWORK SETTING FOR ALLOW PERMISSION
     ///
-    on<SendPageBlocEvent_openNetworkSettingForAllowPermisson>((event, emit) async {
+    on<SendPageBlocEvent_openNetworkSettingForAllowPermisson>((
+      event,
+      emit,
+    ) async {
       try {
         await nearbyService.openNetworkSetting();
       } catch (e) {
