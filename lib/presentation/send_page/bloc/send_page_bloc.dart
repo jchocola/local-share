@@ -25,6 +25,8 @@ class SendPageBlocEvent_openAppSettingForAllowPermisson
 class SendPageBlocEvent_openNetworkSettingForAllowPermisson
     extends SendPageBlocEvent {}
 
+class SendPageBlocEvent_stopDiscover extends SendPageBlocEvent {}
+
 class SendPageBlocEvent_connectToDevice extends SendPageBlocEvent {
   final BonsoirService service;
 
@@ -93,6 +95,12 @@ class SendPageBlocState_error extends SendPageBlocState {
   SendPageBlocState_error({required this.message});
 }
 
+class SendPageBlocState_success extends SendPageBlocState {
+  final APP_ERROR_SUCCESS message;
+
+  SendPageBlocState_success({required this.message});
+}
+
 ///
 /// BLOC
 ///
@@ -115,6 +123,11 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         nearbyService.nearbyService.getPeersStream().listen((event) {
           peers = event;
           logger.d('Peers $peers');
+          if (peers.isNotEmpty) {
+            emit(
+              SendPageBlocState_NearbyDiscoveryServiceFoundPeers(peers: peers),
+            );
+          }
         });
       } catch (e) {
         emit(SendPageBlocState_error(message: e as APP_ERROR_SUCCESS));
@@ -141,6 +154,18 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
     ) async {
       try {
         await nearbyService.openNetworkSetting();
+      } catch (e) {
+        emit(SendPageBlocState_error(message: e as APP_ERROR_SUCCESS));
+      }
+    });
+
+    ///
+    /// ON STOP NEARBY DISCOVER
+    ///
+    on<SendPageBlocEvent_stopDiscover>((event, emit) async {
+      try {
+        await nearbyService.stopDiscover();
+        emit(SendPageBlocState_init());
       } catch (e) {
         emit(SendPageBlocState_error(message: e as APP_ERROR_SUCCESS));
       }

@@ -11,6 +11,7 @@ enum APP_ERROR_SUCCESS {
   OPENED_SERVER,
   CLOSED_SERVER,
   NEARBY_SERVICE_DISCOVERING,
+  FOUNDED_DEVICE
 }
 
 String AppErrorConverter({required APP_ERROR_SUCCESS error}) {
@@ -37,6 +38,8 @@ String AppErrorConverter({required APP_ERROR_SUCCESS error}) {
       return 'Closed server'; 
 
     case APP_ERROR_SUCCESS.NEARBY_SERVICE_DISCOVERING:
-      return 'Nearby Service discovering';     
+      return 'Nearby Service discovering'; 
+    case APP_ERROR_SUCCESS.FOUNDED_DEVICE:
+      return 'fOUNDED DEVICE';       
   }
 }

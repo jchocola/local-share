@@ -24,12 +24,12 @@ class AndroidNearbyService {
   }
 
   Future<bool?> checkPermission() async {
-    final granted = await nearbyService.android! .requestPermissions();
+    final granted = await nearbyService.android!.requestPermissions();
     return granted;
   }
 
   Future<bool?> isWifiEnabled() async {
-    final isWifiEnabled = await nearbyService.android! .checkWifiService();
+    final isWifiEnabled = await nearbyService.android!.checkWifiService();
     return isWifiEnabled;
   }
 
