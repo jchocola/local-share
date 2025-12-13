@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/core/utils/show_toastification.dart';
 import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
@@ -94,16 +95,16 @@ class _SearchingAnimationWithFoundedDevicesState
           //     _updateAvatarPositions();
           //   });
           // }
-          showSuccessToatification(
-            context,
-            title: 'Devices Found: ${state.peers.length}',
-          );
+          // showSuccessToatification(
+          //   context,
+          //   title: 'Devices Found: ${state.peers.length}',
+          // );
         }
 
         if (state is SendPageBlocState_connected) {
           showSuccessToatification(
             context,
-            title: 'Connected to ${state.service.name}',
+            title: 'Connected to ${state.service.info.displayName}',
           );
           // Navigate to file selection/transfer screen
           context.push('/send_page/confirm_transfer');
@@ -129,42 +130,41 @@ class _SearchingAnimationWithFoundedDevicesState
         if (state is SendPageBlocState_discovering ||
             state is SendPageBlocState_BonsoirDiscoveryStartedEvent ||
             state is SendPageBlocState_NearbyDiscoveryServiceFoundPeers) {
-          return Stack(
-            children: [
-              /// searching animation
-              Lottie.asset(
-                'assets/Searching_Animation.json',
-                width: size.width * 0.7,
-                height: size.width * 0.7,
-              ),
+          return BlocBuilder<SendPageBloc, SendPageBlocState>(
+            builder: (context, state) {
+              if (context.read<SendPageBloc>().peers.isEmpty) {
+                return Lottie.asset(
+                  'assets/Searching_Animation.json',
+                  width: size.width * 0.7,
+                  height: size.width * 0.7,
+                );
+              }
 
-              // Display discovered devices
-              for (
-                int i = 0;
-                i < discoveredDevices.length && i < _avatarPositions.length;
-                i++
-              )
-                Positioned(
-                  left: _avatarPositions[i].dx,
-                  top: _avatarPositions[i].dy,
-                  child: DraggableAvatar(
-                    name: discoveredDevices[i].info.displayName ?? 'Unknown Device',
-                    index: i,
-                    onPanStart: _onPanStart,
-                    onPanUpdate: _onPanUpdate,
-                    onPanEnd: _onPanEnd,
-                    onTap: () {
-                      // Connect to the selected device
-                      // context.read<SendPageBloc>().add(
-                      //   SendPageBlocEvent_connectToDevice(
-                      //     service: discoveredDevices[i],
-                      //   ),
-                      // );
-                    },
-                    isDragging: _selectedAvatarIndex == i,
+              return Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppConstant.appPadding),
+                  child: Column(
+                    children: List.generate(
+                      context.watch<SendPageBloc>().peers.length,
+                      (index) {
+                        final device = context
+                            .read<SendPageBloc>()
+                            .peers[index];
+                        return ListTile(
+                          title: Text(device.info.displayName),
+                          subtitle: Text(device.info.id),
+                          onTap: () {
+                            context.read<SendPageBloc>().add(
+                              SendPageBlocEvent_connectToDevice(device: device),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
-            ],
+              );
+            },
           );
         } else if (state is SendPageBlocState_connecting) {
           return Center(
@@ -184,7 +184,7 @@ class _SearchingAnimationWithFoundedDevicesState
               children: [
                 Icon(Icons.check_circle, color: Colors.green, size: 60),
                 SizedBox(height: 20),
-                Text('Connected to ${state.service.name}'),
+                Text('Connected to ${state.service.info.displayName}'),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
