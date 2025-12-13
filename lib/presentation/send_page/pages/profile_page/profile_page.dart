@@ -23,7 +23,7 @@ class ProfilePage extends StatelessWidget {
             BlocBuilder<CurrentDeviceBloc, CurrentDeviceBlocState>(
               builder: (context, state) {
                 if (state is CurrentDeviceBlocState_loaded) {
-                  return ProfileInfoWidget(deviceInfoModel: state.deviceInfo);
+                  return ProfileInfoWidget(deviceInfoModel: state.deviceInfo , nearbyDeviceInfo: state.nearbyDeviceInfo,);
                 } else {
                   return CircularProgressIndicator();
                 }

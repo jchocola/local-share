@@ -100,7 +100,7 @@ class ConfirmTransferPage extends StatelessWidget {
                           
                           // Send files with ACK for reliability
                           context.read<SendPageBloc>().add(
-                            SendPageBlocEvent_sendFiles(files: files, useAck: true)
+                            SendPageBlocEvent_sendFiles(files: files)
                           );
                         }
                       },

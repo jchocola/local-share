@@ -64,6 +64,7 @@ class MyApp extends StatelessWidget {
 
         BlocProvider(
           create: (context) => CurrentDeviceBloc(
+            nearbyService: getIt<AndroidNearbyService>(),
             deviceInfoRepo: getIt<DeviceInfoRepositoryImpl>(),
             sharedPrefsRepo: getIt<SharedPrefsRepositoryImpl>(),
           )..add(CurrentDeviceBlocEvent_load()),

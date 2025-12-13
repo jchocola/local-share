@@ -50,7 +50,7 @@ class SendPage extends StatelessWidget {
             builder: (context, state) {
               if (state is CurrentDeviceBlocState_loaded) {
                 return CustomAvatar(
-                  name: state.deviceInfo.name,
+                  name: state.nearbyDeviceInfo?.displayName ?? '',
                   onTap: () {
                     showDialog(
                       context: context,
