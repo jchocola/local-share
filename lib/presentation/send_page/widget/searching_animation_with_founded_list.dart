@@ -83,23 +83,23 @@ class _SearchingAnimationWithFoundedDevicesState
           showSuccessToatification(context, title: 'Bonsoir Discovery Started');
         }
 
-        if (state is SendPageBlocState_NearbyDiscoveryServiceFoundPeers) {
-          setState(() {
-            discoveredDevices = state.peers;
-          });
+        // if (state is SendPageBlocState_NearbyDiscoveryServiceFoundPeers) {
+        //   setState(() {
+        //     discoveredDevices = state.peers;
+        //   });
 
-          // Add the discovered service to our list
-          // if (!discoveredDevices.contains(state.bonsoirService)) {
-          //   setState(() {
-          //     discoveredDevices.add(state.bonsoirService);
-          //     _updateAvatarPositions();
-          //   });
-          // }
-          // showSuccessToatification(
-          //   context,
-          //   title: 'Devices Found: ${state.peers.length}',
-          // );
-        }
+        //   // Add the discovered service to our list
+        //   // if (!discoveredDevices.contains(state.bonsoirService)) {
+        //   //   setState(() {
+        //   //     discoveredDevices.add(state.bonsoirService);
+        //   //     _updateAvatarPositions();
+        //   //   });
+        //   // }
+        //   // showSuccessToatification(
+        //   //   context,
+        //   //   title: 'Devices Found: ${state.peers.length}',
+        //   // );
+        // }
 
         if (state is SendPageBlocState_connected) {
           showSuccessToatification(
@@ -128,8 +128,7 @@ class _SearchingAnimationWithFoundedDevicesState
       },
       builder: (context, state) {
         if (state is SendPageBlocState_discovering ||
-            state is SendPageBlocState_BonsoirDiscoveryStartedEvent ||
-            state is SendPageBlocState_NearbyDiscoveryServiceFoundPeers) {
+            state is SendPageBlocState_BonsoirDiscoveryStartedEvent) {
           return BlocBuilder<SendPageBloc, SendPageBlocState>(
             builder: (context, state) {
               if (context.read<SendPageBloc>().peers.isEmpty) {
@@ -140,26 +139,33 @@ class _SearchingAnimationWithFoundedDevicesState
                 );
               }
 
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppConstant.appPadding),
-                  child: Column(
-                    children: List.generate(
-                      context.watch<SendPageBloc>().peers.length,
-                      (index) {
-                        final device = context
-                            .read<SendPageBloc>()
-                            .peers[index];
-                        return ListTile(
-                          title: Text(device.info.displayName),
-                          subtitle: Text(device.info.id),
-                          onTap: () {
-                            context.read<SendPageBloc>().add(
-                              SendPageBlocEvent_connectToDevice(device: device),
-                            );
-                          },
-                        );
-                      },
+              return Center(
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppConstant.appPadding),
+                    child: Column(
+                      children: List.generate(
+                        context.watch<SendPageBloc>().peers.length,
+                        (index) {
+                          final device = context
+                              .read<SendPageBloc>()
+                              .peers[index];
+                          return ListTile(
+                            leading: CustomAvatar(
+                              name: device.info.displayName,
+                            ),
+                            title: Text(device.info.displayName),
+                            subtitle: Text(device.info.id),
+                            onTap: () {
+                              context.read<SendPageBloc>().add(
+                                SendPageBlocEvent_connectToDevice(
+                                  device: device,
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -216,7 +222,7 @@ class _SearchingAnimationWithFoundedDevicesState
                 ElevatedButton(
                   onPressed: () {
                     context.read<SendPageBloc>().add(
-                      SendPageBlocEvent_startNearbyServiceDiscover(),
+                      SendPageBlocEvent_NearbyServiceInit(),
                     );
                   },
                   child: Text('Retry Discovery'),

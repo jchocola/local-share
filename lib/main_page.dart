@@ -19,7 +19,7 @@ class MainPage extends StatelessWidget {
           navigationShell.goBranch(value);
           if (value == 0) {
             context.read<SendPageBloc>().add(
-              SendPageBlocEvent_startNearbyServiceDiscover(),
+              SendPageBlocEvent_NearbyServiceDiscover(),
             );
           }
           if (value != 0) {

@@ -19,7 +19,7 @@ class NearbyServiceNotGranted extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 context.read<SendPageBloc>().add(
-                  SendPageBlocEvent_startNearbyServiceDiscover(),
+                  SendPageBlocEvent_NearbyServiceInit(),
                 );
               },
               child: Text('Retry Again'),

@@ -19,7 +19,9 @@ import 'package:nearby_service/nearby_service.dart';
 ///
 abstract class SendPageBlocEvent {}
 
-class SendPageBlocEvent_startNearbyServiceDiscover extends SendPageBlocEvent {}
+class SendPageBlocEvent_NearbyServiceDiscover extends SendPageBlocEvent {}
+
+class SendPageBlocEvent_NearbyServiceInit extends SendPageBlocEvent {}
 
 class SendPageBlocEvent_openAppSettingForAllowPermisson
     extends SendPageBlocEvent {}
@@ -55,12 +57,12 @@ class SendPageBlocState_discovering extends SendPageBlocState {}
 class SendPageBlocState_BonsoirDiscoveryStartedEvent
     extends SendPageBlocState {}
 
-class SendPageBlocState_NearbyDiscoveryServiceFoundPeers
-    extends SendPageBlocState {
-  final List<NearbyDevice> peers;
+// class SendPageBlocState_NearbyDiscoveryServiceFoundPeers
+//     extends SendPageBlocState {
+//   final List<NearbyDevice> peers;
 
-  SendPageBlocState_NearbyDiscoveryServiceFoundPeers({required this.peers});
-}
+//   SendPageBlocState_NearbyDiscoveryServiceFoundPeers({required this.peers});
+// }
 
 class SendPageBlocState_connecting extends SendPageBlocState {
   final BonsoirService service;
@@ -106,21 +108,44 @@ class SendPageBlocState_success extends SendPageBlocState {
 /// BLOC
 ///
 class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
+  ///
+  /// SERVICES
+  ///
   final AndroidNearbyService nearbyService;
-  List<NearbyDevice> peers = [];
-  StreamSubscription<List<NearbyDevice>>? _peerSubscription;
-  bool _isConnected = false;
-  NearbyDevice? _connectedNearbyDevice;
+
+  ///
+  /// VARIABLES
+  ///
+  List<NearbyDevice> peers = []; // founded peers
+  StreamSubscription<List<NearbyDevice>>?
+  _peerSubscription; // stream nearby devices for tracking founded peers
+  bool _isConnected = false; // connected some one or not
+  NearbyDevice? _connectedNearbyDevice; // info about connected peer
 
   SendPageBloc({required this.nearbyService})
     : super(SendPageBlocState_init()) {
     ///
+    /// ON INIT NEARBY SERVICE
+    ///
+    on<SendPageBlocEvent_NearbyServiceInit>((event, emit) async {
+      try {
+        // init service
+        await nearbyService.init();
+
+        add(SendPageBlocEvent_NearbyServiceDiscover());
+      } catch (e) {
+        logger.e(e.toString());
+      }
+    });
+
+    ///
     /// ON START NEARBY DISCOVER
     ///
-    on<SendPageBlocEvent_startNearbyServiceDiscover>((event, emit) async {
+    on<SendPageBlocEvent_NearbyServiceDiscover>((event, emit) async {
       try {
-        await nearbyService.init();
+        // start dicover
         await nearbyService.startDiscover();
+
         emit(SendPageBlocState_discovering());
 
         // Cancel any existing subscription
@@ -129,11 +154,12 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         // Start listening to peers
         _peerSubscription = nearbyService.nearbyService.getPeersStream().listen(
           (event) {
+            // update peers
             peers = event;
             logger.d('Peers $peers');
-            if (peers.isNotEmpty) {
-              add(SendPageBlocEvent_NearbyPeersUpdated(peers: peers));
-            }
+            // if (peers.isNotEmpty) {
+            //   add(SendPageBlocEvent_NearbyPeersUpdated(peers: peers));
+            // }
           },
         );
       } catch (e) {
@@ -149,11 +175,11 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
     ///
     /// HANDLE PEER UPDATES
     ///
-    on<SendPageBlocEvent_NearbyPeersUpdated>((event, emit) {
-      emit(
-        SendPageBlocState_NearbyDiscoveryServiceFoundPeers(peers: event.peers),
-      );
-    });
+    // on<SendPageBlocEvent_NearbyPeersUpdated>((event, emit) {
+    //   emit(
+    //     SendPageBlocState_NearbyDiscoveryServiceFoundPeers(peers: event.peers),
+    //   );
+    // });
 
     ///
     /// OPEN APP SETTING FOR ALLOW PERMISSION
@@ -195,6 +221,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
       try {
         await _peerSubscription?.cancel();
         await nearbyService.stopDiscover();
+
         peers = [];
         emit(SendPageBlocState_init());
       } catch (e) {
@@ -262,9 +289,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
               ),
 
               filesListener: NearbyServiceFilesListener(
-                onData: (data) async {
-                  
-                },
+                onData: (data) async {},
               ),
             ),
           );
@@ -292,7 +317,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
     /// ON SEND FILES
     ///
     on<SendPageBlocEvent_sendFiles>((event, emit) async {
-      // if not connected or connected device info == null 
+      // if not connected or connected device info == null
       // show error
 
       if (!_isConnected || _connectedNearbyDevice == null) {
@@ -305,7 +330,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
       }
 
       try {
-        final totalFiles = event.files.length; 
+        final totalFiles = event.files.length;
         int sentFiles = 0;
 
         // Get current device info for sender identification
