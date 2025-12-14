@@ -137,39 +137,35 @@ class _SearchingAnimationWithFoundedDevicesState
                   width: size.width * 0.7,
                   height: size.width * 0.7,
                 );
-              }
-
-              return Center(
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppConstant.appPadding),
-                    child: Column(
-                      children: List.generate(
-                        context.watch<SendPageBloc>().peers.length,
-                        (index) {
-                          final device = context
-                              .read<SendPageBloc>()
-                              .peers[index];
-                          return ListTile(
-                            leading: CustomAvatar(
-                              name: device.info.displayName,
-                            ),
-                            title: Text(device.info.displayName),
-                            subtitle: Text(device.info.id),
-                            onTap: () {
-                              context.read<SendPageBloc>().add(
-                                SendPageBlocEvent_connectToDevice(
-                                  device: device,
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
+              } else {
+                  return Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppConstant.appPadding),
+                  child: Column(
+                    children: List.generate(
+                      context.watch<SendPageBloc>().peers.length,
+                      (index) {
+                        final device = context
+                            .read<SendPageBloc>()
+                            .peers[index];
+                        return ListTile(
+                          leading: CustomAvatar(name: device.info.displayName),
+                          title: Text(device.info.displayName),
+                          subtitle: Text(device.info.id),
+                          onTap: () {
+                            context.read<SendPageBloc>().add(
+                              SendPageBlocEvent_connectToDevice(device: device),
+                            );
+                          },
+                        );
+                      },
                     ),
                   ),
                 ),
               );
+              }
+
+              
             },
           );
         } else if (state is SendPageBlocState_connecting) {

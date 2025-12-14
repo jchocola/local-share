@@ -132,6 +132,8 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         // init service
         await nearbyService.init();
 
+
+        // discover
         add(SendPageBlocEvent_NearbyServiceDiscover());
       } catch (e) {
         logger.e(e.toString());

@@ -17,11 +17,15 @@ class MainPage extends StatelessWidget {
         currentIndex: navigationShell.currentIndex,
         onTap: (value) {
           navigationShell.goBranch(value);
+
+          // if user on send page , turn on discover 
           if (value == 0) {
             context.read<SendPageBloc>().add(
               SendPageBlocEvent_NearbyServiceDiscover(),
             );
           }
+
+          // else , turn off discover
           if (value != 0) {
             context.read<SendPageBloc>().add(SendPageBlocEvent_stopDiscover());
           }

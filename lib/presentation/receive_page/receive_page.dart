@@ -6,6 +6,7 @@ import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/presentation/receive_page/widget/waiting_connection_widget.dart';
+import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
 import 'package:local_share/presentation/send_page/widget/invisible_widget.dart';
 import 'package:local_share/widgets/appbar.dart';
 
@@ -38,17 +39,27 @@ class ReceivePage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          BlocBuilder<ReceivePageBloc, ReceivePageBlocState>(
-            builder: (context, state) {
-              if (state is ReceivePageBlocState_unvisible) {
-                return InvisibleWidget();
-              } else if (state is ReceivePageBlocState_visible) {
-                  return WaitingConnectionWidget();
-              } else {
-                return CircularProgressIndicator();
-              }
+          BlocListener<SendPageBloc,SendPageBlocState>(
+                
+            listener: (context, state) {
+              
             },
+
+            child: WaitingConnectionWidget()
+            
           ),
+
+          // BlocBuilder<ReceivePageBloc, ReceivePageBlocState>(
+          //   builder: (context, state) {
+          //     if (state is ReceivePageBlocState_unvisible) {
+          //       return InvisibleWidget();
+          //     } else if (state is ReceivePageBlocState_visible) {
+          //         return WaitingConnectionWidget();
+          //     } else {
+          //       return CircularProgressIndicator();
+          //     }
+          //   },
+          // ),
         ],
       ),
     );
