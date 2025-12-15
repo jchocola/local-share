@@ -1,4 +1,4 @@
-enum APP_ERROR_SUCCESS {
+enum APP_EXCEPTION {
   ///
   /// ERRORS
   ///
@@ -11,35 +11,37 @@ enum APP_ERROR_SUCCESS {
   OPENED_SERVER,
   CLOSED_SERVER,
   NEARBY_SERVICE_DISCOVERING,
-  FOUNDED_DEVICE
+  NEARBY_SERVICE_STOPPED,
+  FOUNDED_DEVICE,
+
 }
 
-String AppErrorConverter({required APP_ERROR_SUCCESS error}) {
+String AppErrorConverter({required APP_EXCEPTION error}) {
   switch (error) {
-
-
     ///
     /// ERRORS
     ///
-    case APP_ERROR_SUCCESS.NOT_CONNECTED_WIFI:
+    case APP_EXCEPTION.NOT_CONNECTED_WIFI:
       return 'Not Wi-fi connected';
 
-     case APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED:
+    case APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED:
       return 'Nearby service is denied';
-
 
     ///
     ///  SUCCESSES
     ///
-    case APP_ERROR_SUCCESS.OPENED_SERVER:
+    case APP_EXCEPTION.OPENED_SERVER:
       return 'Opened server';
-     
-     case APP_ERROR_SUCCESS.CLOSED_SERVER:
-      return 'Closed server'; 
 
-    case APP_ERROR_SUCCESS.NEARBY_SERVICE_DISCOVERING:
-      return 'Nearby Service discovering'; 
-    case APP_ERROR_SUCCESS.FOUNDED_DEVICE:
-      return 'fOUNDED DEVICE';       
+    case APP_EXCEPTION.CLOSED_SERVER:
+      return 'Closed server';
+
+    case APP_EXCEPTION.NEARBY_SERVICE_STOPPED:
+      return 'Neaby Service stoped discover';  
+
+    case APP_EXCEPTION.NEARBY_SERVICE_DISCOVERING:
+      return 'Nearby Service discovering';
+    case APP_EXCEPTION.FOUNDED_DEVICE:
+      return 'fOUNDED DEVICE';
   }
 }

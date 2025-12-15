@@ -4,11 +4,7 @@ import 'package:bonsoir/bonsoir.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/data/repo/android_nearby_service.dart';
-import 'package:local_share/data/repo/bonsoir_discover_repository_impl.dart';
-import 'package:local_share/di/DI.dart';
 import 'package:local_share/main.dart';
-import 'package:local_share/data/repo/server_client.dart';
-import 'package:local_share/data/repo/file_sender.dart';
 import 'dart:io';
 import 'dart:async';
 
@@ -93,13 +89,13 @@ class SendPageBlocState_sending extends SendPageBlocState {
 class SendPageBlocState_sent extends SendPageBlocState {}
 
 class SendPageBlocState_error extends SendPageBlocState {
-  final APP_ERROR_SUCCESS message;
+  final APP_EXCEPTION message;
 
   SendPageBlocState_error({required this.message});
 }
 
 class SendPageBlocState_success extends SendPageBlocState {
-  final APP_ERROR_SUCCESS message;
+  final APP_EXCEPTION message;
 
   SendPageBlocState_success({required this.message});
 }
@@ -131,7 +127,6 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
       try {
         // init service
         await nearbyService.init();
-
 
         // discover
         add(SendPageBlocEvent_NearbyServiceDiscover());
@@ -168,7 +163,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         logger.e('Error starting nearby discovery: $e');
         emit(
           SendPageBlocState_error(
-            message: APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
           ),
         );
       }
@@ -192,7 +187,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
       } catch (e) {
         emit(
           SendPageBlocState_error(
-            message: APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
           ),
         );
       }
@@ -209,9 +204,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         await nearbyService.openNetworkSetting();
       } catch (e) {
         emit(
-          SendPageBlocState_error(
-            message: APP_ERROR_SUCCESS.NOT_CONNECTED_WIFI,
-          ),
+          SendPageBlocState_error(message: APP_EXCEPTION.NOT_CONNECTED_WIFI),
         );
       }
     });
@@ -225,11 +218,17 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         await nearbyService.stopDiscover();
 
         peers = [];
+
+        // emit(
+        //   SendPageBlocState_success(
+        //     message: APP_EXCEPTION.NEARBY_SERVICE_STOPPED,
+        //   ),
+        // );
         emit(SendPageBlocState_init());
       } catch (e) {
         emit(
           SendPageBlocState_error(
-            message: APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
           ),
         );
       }
@@ -247,7 +246,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
       } catch (e) {
         emit(
           SendPageBlocState_error(
-            message: APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
           ),
         );
       }
@@ -298,9 +297,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
 
           emit(SendPageBlocState_connected(service: event.device));
           emit(
-            SendPageBlocState_success(
-              message: APP_ERROR_SUCCESS.FOUNDED_DEVICE,
-            ),
+            SendPageBlocState_success(message: APP_EXCEPTION.FOUNDED_DEVICE),
           );
         } else {
           throw Exception('Failed to connect to device');
@@ -309,7 +306,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         logger.e('Error connecting to device: $e');
         emit(
           SendPageBlocState_error(
-            message: APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
           ),
         );
       }
@@ -325,7 +322,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
       if (!_isConnected || _connectedNearbyDevice == null) {
         emit(
           SendPageBlocState_error(
-            message: APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
           ),
         );
         return;
@@ -392,9 +389,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
 
           emit(SendPageBlocState_sent());
           emit(
-            SendPageBlocState_success(
-              message: APP_ERROR_SUCCESS.FOUNDED_DEVICE,
-            ),
+            SendPageBlocState_success(message: APP_EXCEPTION.FOUNDED_DEVICE),
           );
         } else {
           throw Exception('Failed to send files');
@@ -403,7 +398,7 @@ class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
         logger.e('Error sending files: $e');
         emit(
           SendPageBlocState_error(
-            message: APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
           ),
         );
       }

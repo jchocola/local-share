@@ -83,6 +83,10 @@ class _SearchingAnimationWithFoundedDevicesState
           showSuccessToatification(context, title: 'Bonsoir Discovery Started');
         }
 
+         if (state is SendPageBlocState_success) {
+          showSuccessToatification(context, title: AppErrorConverter(error: state.message));
+        }
+
         // if (state is SendPageBlocState_NearbyDiscoveryServiceFoundPeers) {
         //   setState(() {
         //     discoveredDevices = state.peers;
@@ -121,7 +125,7 @@ class _SearchingAnimationWithFoundedDevicesState
           showSuccessToatification(
             context,
             title: AppErrorConverter(
-              error: APP_ERROR_SUCCESS.NEARBY_SERVICE_DISCOVERING,
+              error: APP_EXCEPTION.NEARBY_SERVICE_DISCOVERING,
             ),
           );
         }
@@ -131,53 +135,44 @@ class _SearchingAnimationWithFoundedDevicesState
             state is SendPageBlocState_BonsoirDiscoveryStartedEvent) {
           return BlocBuilder<SendPageBloc, SendPageBlocState>(
             builder: (context, state) {
-              if (context.read<SendPageBloc>().peers.isEmpty) {
+              if (context.watch<SendPageBloc>().peers.isEmpty) {
                 return Lottie.asset(
                   'assets/Searching_Animation.json',
                   width: size.width * 0.7,
                   height: size.width * 0.7,
                 );
               } else {
-                  return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppConstant.appPadding),
-                  child: Column(
-                    children: List.generate(
-                      context.watch<SendPageBloc>().peers.length,
-                      (index) {
-                        final device = context
-                            .read<SendPageBloc>()
-                            .peers[index];
-                        return ListTile(
-                          leading: CustomAvatar(name: device.info.displayName),
-                          title: Text(device.info.displayName),
-                          subtitle: Text(device.info.id),
-                          onTap: () {
-                            context.read<SendPageBloc>().add(
-                              SendPageBlocEvent_connectToDevice(device: device),
-                            );
-                          },
-                        );
-                      },
+                return Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppConstant.appPadding),
+                    child: Column(
+                      children: List.generate(
+                        context.watch<SendPageBloc>().peers.length,
+                        (index) {
+                          final device = context
+                              .read<SendPageBloc>()
+                              .peers[index];
+                          return ListTile(
+                            leading: CustomAvatar(
+                              name: device.info.displayName,
+                            ),
+                            title: Text(device.info.displayName),
+                            subtitle: Text(device.info.id),
+                            onTap: () {
+                              context.read<SendPageBloc>().add(
+                                SendPageBlocEvent_connectToDevice(
+                                  device: device,
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-              );
+                );
               }
-
-              
             },
-          );
-        } else if (state is SendPageBlocState_connecting) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 20),
-                Text('Connecting to ${state.service.name}...'),
-              ],
-            ),
           );
         } else if (state is SendPageBlocState_connected) {
           return Center(
@@ -198,34 +193,15 @@ class _SearchingAnimationWithFoundedDevicesState
             ),
           );
         } else if (state is SendPageBlocState_error) {
-          if (state.message ==
-              APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED) {
+          if (state.message == APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED) {
             return Center(child: NearbyServiceNotGranted());
           }
 
-          if (state.message == APP_ERROR_SUCCESS.NOT_CONNECTED_WIFI) {
+          if (state.message == APP_EXCEPTION.NOT_CONNECTED_WIFI) {
             return Center(child: WifiNotConnected());
           }
 
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error, color: Colors.red, size: 60),
-                SizedBox(height: 20),
-                Text('Error: ${state.message}'),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<SendPageBloc>().add(
-                      SendPageBlocEvent_NearbyServiceInit(),
-                    );
-                  },
-                  child: Text('Retry Discovery'),
-                ),
-              ],
-            ),
-          );
+          return Text('Error');
         } else {
           return Center(child: CircularProgressIndicator());
         }

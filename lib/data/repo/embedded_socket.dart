@@ -41,7 +41,7 @@ class EmbeddedSocketServerImpl {
   ///
   /// START SERVER
   ///
-  Future<void> startServer({int port = 4820 ,}) async {
+  Future<void> startServer({int port = 4820}) async {
     logger.i('Start websocket server : $port');
 
     // set port
@@ -54,7 +54,7 @@ class EmbeddedSocketServerImpl {
     // Validate IP
     if (localIP == null || localIP!.isEmpty) {
       logger.e('No local IP address');
-      throw APP_ERROR_SUCCESS.NOT_CONNECTED_WIFI;
+      throw APP_EXCEPTION.NOT_CONNECTED_WIFI;
     }
 
     //Close any  exsisting server

@@ -18,9 +18,9 @@ abstract class ServerBlocEvent extends Equatable {
 
 class ServerBlocEvent_openServer extends ServerBlocEvent {
   final List<File> files; // Add files parameter
-  
+
   ServerBlocEvent_openServer({required this.files});
-  
+
   @override
   List<Object?> get props => [files];
 }
@@ -54,9 +54,7 @@ class ServerBlocState_opened extends ServerBlocState {
   @override
   List<Object?> get props => [switcherValue];
 
-  ServerBlocState_opened copyWith({
-    String? switcherValue,
-  }) {
+  ServerBlocState_opened copyWith({String? switcherValue}) {
     return ServerBlocState_opened(
       switcherValue: switcherValue ?? this.switcherValue,
     );
@@ -64,7 +62,7 @@ class ServerBlocState_opened extends ServerBlocState {
 }
 
 class ServerBlocState_error extends ServerBlocState {
-  final APP_ERROR_SUCCESS error;
+  final APP_EXCEPTION error;
   ServerBlocState_error({required this.error});
 
   @override
@@ -72,7 +70,7 @@ class ServerBlocState_error extends ServerBlocState {
 }
 
 class ServerBlocState_success extends ServerBlocState {
-  final APP_ERROR_SUCCESS success;
+  final APP_EXCEPTION success;
   ServerBlocState_success({required this.success});
 
   @override
@@ -85,46 +83,47 @@ class ServerBlocState_success extends ServerBlocState {
 class ServerBloc extends Bloc<ServerBlocEvent, ServerBlocState> {
   final EmbbededServerRepoImpl serverRepo;
   final SettingBloc settingBloc;
-  ServerBloc({required this.serverRepo, required this.settingBloc}) : super(ServerBlocState_waiting()) {
+  ServerBloc({required this.serverRepo, required this.settingBloc})
+    : super(ServerBlocState_waiting()) {
     ///
     /// ON OPEN SERVER
     ///
     on<ServerBlocEvent_openServer>((event, emit) async {
       try {
         emit(ServerBlocState_loadding());
-        
+
         logger.i('Starting server with ${event.files.length} files');
         for (var i = 0; i < event.files.length; i++) {
           logger.i('File $i: ${event.files[i].path}');
-          
+
           // Validate file
           if (event.files[i].path.isEmpty) {
             logger.w('File $i has empty path');
             continue;
           }
-          
+
           if (!event.files[i].existsSync()) {
             logger.w('File $i does not exist: ${event.files[i].path}');
             continue;
           }
         }
-        
+
         // Set picked files in server repo
         serverRepo.setPickedFiles(event.files);
-        
+
         // Get download location from settings and set it in server repo
         final downloadLocation = await settingBloc.getDownloadLocation();
         serverRepo.setDownloadLocation(downloadLocation);
-        
+
         // Запускаем сервер
         await serverRepo.start();
 
-        emit(ServerBlocState_success(success: APP_ERROR_SUCCESS.OPENED_SERVER));
+        emit(ServerBlocState_success(success: APP_EXCEPTION.OPENED_SERVER));
         emit(ServerBlocState_opened(switcherValue: AppConstant.SEND_KEY));
       } catch (e, stackTrace) {
         logger.e('Error starting server: $e');
         logger.e('Stack trace: $stackTrace');
-        emit(ServerBlocState_error(error: e as APP_ERROR_SUCCESS));
+        emit(ServerBlocState_error(error: e as APP_EXCEPTION));
         emit(ServerBlocState_waiting());
       }
     });
@@ -139,7 +138,7 @@ class ServerBloc extends Bloc<ServerBlocEvent, ServerBlocState> {
         // close server
         await serverRepo.close();
 
-        emit(ServerBlocState_success(success: APP_ERROR_SUCCESS.CLOSED_SERVER));
+        emit(ServerBlocState_success(success: APP_EXCEPTION.CLOSED_SERVER));
 
         emit(ServerBlocState_waiting());
       } catch (e) {}

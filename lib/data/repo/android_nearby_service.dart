@@ -13,13 +13,13 @@ class AndroidNearbyService {
     final isWifiConnected = await isWifiEnabled();
 
     if (isWifiConnected == null || isWifiConnected == false) {
-      throw APP_ERROR_SUCCESS.NOT_CONNECTED_WIFI;
+      throw APP_EXCEPTION.NOT_CONNECTED_WIFI;
     }
 
     final granted = await checkPermission();
 
     if (granted == null || granted == false) {
-      throw APP_ERROR_SUCCESS.NOT_WIFI_NEARBY_SERVICE_GRANTED;
+      throw APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED;
     }
   }
 

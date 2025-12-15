@@ -40,7 +40,7 @@ class ReceivePageBlocState_unvisible extends ReceivePageBlocState {}
 class ReceivePageBlocState_visible extends ReceivePageBlocState {}
 
 class ReceivePageBlocState_error extends ReceivePageBlocState {
-  final APP_ERROR_SUCCESS error;
+  final APP_EXCEPTION error;
   ReceivePageBlocState_error({required this.error});
 }
 
@@ -48,7 +48,6 @@ class ReceivePageBlocState_error extends ReceivePageBlocState {
 /// BLOC
 ///
 class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
-  
   ReceivePageBloc() : super(ReceivePageBlocState_unvisible()) {
     ///
     /// CHANGE VISIBILITY
@@ -56,10 +55,9 @@ class ReceivePageBloc extends Bloc<ReceivePageBlocEvent, ReceivePageBlocState> {
     on<RecievePageBlocEvent_ChangeVisiblity>((event, emit) async {
       final currentState = state;
       logger.i('Changed visibility');
-      if (currentState is ReceivePageBlocState_unvisible)  {
-          emit(ReceivePageBlocState_visible());
+      if (currentState is ReceivePageBlocState_unvisible) {
+        emit(ReceivePageBlocState_visible());
       }
-
 
       if (currentState is ReceivePageBlocState_visible) {
         emit(ReceivePageBlocState_unvisible());

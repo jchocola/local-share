@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -96,13 +95,13 @@ class EmbbededServerRepoImpl {
 
     if (localIP == null) {
       logger.e('No local IP found');
-      throw APP_ERROR_SUCCESS.NOT_CONNECTED_WIFI;
+      throw APP_EXCEPTION.NOT_CONNECTED_WIFI;
     }
 
     // Validate IP
     if (localIP!.isEmpty) {
       logger.e('Local IP is empty');
-      throw APP_ERROR_SUCCESS.NOT_CONNECTED_WIFI;
+      throw APP_EXCEPTION.NOT_CONNECTED_WIFI;
     }
 
     // Close any existing server
@@ -111,7 +110,7 @@ class EmbbededServerRepoImpl {
     server = await HttpServer.bind(localIP, port);
     logger.i('Server bound to ${server?.address}:${server?.port}');
 
-      // set urls
+    // set urls
     _sendUrl = 'http://${localIP}:$port/send';
     _receiveUrl = 'http://${localIP}:$port/receive';
 
