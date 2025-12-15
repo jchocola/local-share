@@ -39,15 +39,11 @@ class ReceivePage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          BlocListener<SendPageBloc,SendPageBlocState>(
-                
-            listener: (context, state) {
-              
-            },
+       
 
-            child: WaitingConnectionWidget()
+             WaitingConnectionWidget()
             
-          ),
+        
 
           // BlocBuilder<ReceivePageBloc, ReceivePageBlocState>(
           //   builder: (context, state) {

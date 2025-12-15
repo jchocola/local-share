@@ -81,11 +81,11 @@ class MyApp extends StatelessWidget {
           ),
         ),
 
-        BlocProvider(
-          create: (context) =>
-              SendPageBloc(nearbyService: getIt<AndroidNearbyService>())
-                ..add(SendPageBlocEvent_NearbyServiceInit()),
-        ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       SendPageBloc(nearbyService: getIt<AndroidNearbyService>())
+        //         ..add(SendPageBlocEvent_NearbyServiceInit()),
+        // ),
       ],
       child: AdaptiveTheme(
         light: lightTheme,

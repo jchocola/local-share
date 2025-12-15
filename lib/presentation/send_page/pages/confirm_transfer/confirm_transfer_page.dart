@@ -29,27 +29,8 @@ class ConfirmTransferPage extends StatelessWidget {
 
   Widget buildBody(BuildContext context) {
     final theme = Theme.of(context);
-    return BlocConsumer<SendPageBloc, SendPageBlocState>(
-      listener: (context, state) {
-        if (state is SendPageBlocState_sending) {
-          // Show progress
-          showInfoToatification(context, title: 'Sending files...', desc: '${state.sentFiles}/${state.totalFiles} files sent');
-        }
-        
-        if (state is SendPageBlocState_sent) {
-          // Show success
-          showSuccessToatification(context, title: 'Files sent successfully!');
-          // Go back to previous screen
-          context.pop();
-        }
-        
-        if (state is SendPageBlocState_error) {
-          // Show error
-          showErrorToatification(context, title: 'Error sending files', desc: AppErrorConverter(error: state.message));
-        }
-      },
-      builder: (context, state) {
-        return Padding(
+    return 
+      Padding(
           padding: EdgeInsets.symmetric(
             vertical: AppConstant.appPadding / 2,
             horizontal: AppConstant.appPadding,
@@ -99,9 +80,9 @@ class ConfirmTransferPage extends StatelessWidget {
                           final files = pickedFilesBloc.files.map((fileModel) => File(fileModel.path)).toList();
                           
                           // Send files with ACK for reliability
-                          context.read<SendPageBloc>().add(
-                            SendPageBlocEvent_sendFiles(files: files)
-                          );
+                          // context.read<SendPageBloc>().add(
+                          //   SendPageBlocEvent_sendFiles(files: files)
+                          // );
                         }
                       },
                     ),
@@ -109,24 +90,23 @@ class ConfirmTransferPage extends StatelessWidget {
                 ],
               ),
               
-              // Show progress indicator if sending
-              if (state is SendPageBlocState_sending)
-                Padding(
-                  padding: EdgeInsets.all(AppConstant.appPadding),
-                  child: Column(
-                    children: [
-                      if (state.currentFileName != null)
-                        Text('Sending: ${state.currentFileName}'),
-                      LinearProgressIndicator(value: state.progress),
-                      SizedBox(height: 10),
-                      Text('${state.sentFiles}/${state.totalFiles} files sent'),
-                    ],
-                  ),
-                ),
+              // // Show progress indicator if sending
+              // if (state is SendPageBlocState_sending)
+              //   Padding(
+              //     padding: EdgeInsets.all(AppConstant.appPadding),
+              //     child: Column(
+              //       children: [
+              //         if (state.currentFileName != null)
+              //           Text('Sending: ${state.currentFileName}'),
+              //         LinearProgressIndicator(value: state.progress),
+              //         SizedBox(height: 10),
+              //         Text('${state.sentFiles}/${state.totalFiles} files sent'),
+              //       ],
+              //     ),
+              //   ),
             ],
           ),
         );
-      },
-    );
+      }
+    
   }
-}

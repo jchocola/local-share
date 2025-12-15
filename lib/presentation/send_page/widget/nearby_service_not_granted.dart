@@ -18,18 +18,18 @@ class NearbyServiceNotGranted extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                context.read<SendPageBloc>().add(
-                  SendPageBlocEvent_NearbyServiceInit(),
-                );
+                // context.read<SendPageBloc>().add(
+                //   SendPageBlocEvent_NearbyServiceInit(),
+                // );
               },
               child: Text('Retry Again'),
             ),
 
             ElevatedButton(
               onPressed: () {
-                context.read<SendPageBloc>().add(
-                  SendPageBlocEvent_openAppSettingForAllowPermisson(),
-                );
+                // context.read<SendPageBloc>().add(
+                //   SendPageBlocEvent_openAppSettingForAllowPermisson(),
+                // );
               },
               child: Text('Open service settings'),
             ),

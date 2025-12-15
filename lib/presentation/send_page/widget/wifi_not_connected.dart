@@ -18,18 +18,14 @@ class WifiNotConnected extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                context.read<SendPageBloc>().add(
-                  SendPageBlocEvent_NearbyServiceInit(),
-                );
+              
               },
               child: Text('Retry Again'),
             ),
 
             ElevatedButton(
               onPressed: () {
-                context.read<SendPageBloc>().add(
-                  SendPageBlocEvent_openNetworkSettingForAllowPermisson(),
-                );
+               
               },
               child: Text('Open WiFi settings'),
             ),

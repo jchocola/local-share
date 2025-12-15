@@ -1,420 +1,413 @@
-// ignore_for_file: camel_case_types
+// // ignore_for_file: camel_case_types
 
-import 'package:bonsoir/bonsoir.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:local_share/core/error/app_error.dart';
-import 'package:local_share/data/repo/android_nearby_service.dart';
-import 'package:local_share/main.dart';
-import 'dart:io';
-import 'dart:async';
+// import 'package:bonsoir/bonsoir.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:local_share/core/error/app_error.dart';
+// import 'package:local_share/data/repo/android_nearby_service.dart';
+// import 'package:local_share/main.dart';
+// import 'dart:io';
+// import 'dart:async';
 
-import 'package:nearby_service/nearby_service.dart';
+// import 'package:nearby_service/nearby_service.dart';
 
-///
-/// EVENT
-///
-abstract class SendPageBlocEvent {}
+// ///
+// /// EVENT
+// ///
+// abstract class SendPageBlocEvent {}
 
-class SendPageBlocEvent_NearbyServiceDiscover extends SendPageBlocEvent {}
+// class SendPageBlocEvent_NearbyServiceDiscover extends SendPageBlocEvent {}
 
-class SendPageBlocEvent_NearbyServiceInit extends SendPageBlocEvent {}
+// class SendPageBlocEvent_NearbyServiceInit extends SendPageBlocEvent {}
 
-class SendPageBlocEvent_openAppSettingForAllowPermisson
-    extends SendPageBlocEvent {}
+// class SendPageBlocEvent_openAppSettingForAllowPermisson
+//     extends SendPageBlocEvent {}
 
-class SendPageBlocEvent_openNetworkSettingForAllowPermisson
-    extends SendPageBlocEvent {}
+// class SendPageBlocEvent_openNetworkSettingForAllowPermisson
+//     extends SendPageBlocEvent {}
 
-class SendPageBlocEvent_stopDiscover extends SendPageBlocEvent {}
+// class SendPageBlocEvent_stopDiscover extends SendPageBlocEvent {}
 
-class SendPageBlocEvent_connectToDevice extends SendPageBlocEvent {
-  final NearbyDevice device;
+// class SendPageBlocEvent_connectToDevice extends SendPageBlocEvent {
+//   final NearbyDevice device;
 
-  SendPageBlocEvent_connectToDevice({required this.device});
-}
-
-class SendPageBlocEvent_sendFiles extends SendPageBlocEvent {
-  final List<File> files;
-
-  SendPageBlocEvent_sendFiles({required this.files});
-}
-
-class SendPageBlocEvent_restartDiscovery extends SendPageBlocEvent {}
-
-///
-/// STATE
-///
-abstract class SendPageBlocState {}
-
-class SendPageBlocState_init extends SendPageBlocState {}
-
-class SendPageBlocState_discovering extends SendPageBlocState {}
-
-class SendPageBlocState_BonsoirDiscoveryStartedEvent
-    extends SendPageBlocState {}
-
-// class SendPageBlocState_NearbyDiscoveryServiceFoundPeers
-//     extends SendPageBlocState {
-//   final List<NearbyDevice> peers;
-
-//   SendPageBlocState_NearbyDiscoveryServiceFoundPeers({required this.peers});
+//   SendPageBlocEvent_connectToDevice({required this.device});
 // }
 
-class SendPageBlocState_connecting extends SendPageBlocState {
-  final BonsoirService service;
+// class SendPageBlocEvent_sendFiles extends SendPageBlocEvent {
+//   final List<File> files;
 
-  SendPageBlocState_connecting({required this.service});
-}
+//   SendPageBlocEvent_sendFiles({required this.files});
+// }
 
-class SendPageBlocState_connected extends SendPageBlocState {
-  final NearbyDevice service;
+// class SendPageBlocEvent_restartDiscovery extends SendPageBlocEvent {}
 
-  SendPageBlocState_connected({required this.service});
-}
+// ///
+// /// STATE
+// ///
+// abstract class SendPageBlocState {}
 
-class SendPageBlocState_sending extends SendPageBlocState {
-  final int totalFiles;
-  final int sentFiles;
-  final double progress;
-  final String? currentFileName;
+// class SendPageBlocState_init extends SendPageBlocState {}
 
-  SendPageBlocState_sending({
-    required this.totalFiles,
-    required this.sentFiles,
-    required this.progress,
-    this.currentFileName,
-  });
-}
+// class SendPageBlocState_discovering extends SendPageBlocState {}
 
-class SendPageBlocState_sent extends SendPageBlocState {}
+// class SendPageBlocState_BonsoirDiscoveryStartedEvent
+//     extends SendPageBlocState {}
 
-class SendPageBlocState_error extends SendPageBlocState {
-  final APP_EXCEPTION message;
+// // class SendPageBlocState_NearbyDiscoveryServiceFoundPeers
+// //     extends SendPageBlocState {
+// //   final List<NearbyDevice> peers;
 
-  SendPageBlocState_error({required this.message});
-}
+// //   SendPageBlocState_NearbyDiscoveryServiceFoundPeers({required this.peers});
+// // }
 
-class SendPageBlocState_success extends SendPageBlocState {
-  final APP_EXCEPTION message;
+// class SendPageBlocState_connecting extends SendPageBlocState {
+//   final BonsoirService service;
 
-  SendPageBlocState_success({required this.message});
-}
+//   SendPageBlocState_connecting({required this.service});
+// }
 
-///
-/// BLOC
-///
-class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
-  ///
-  /// SERVICES
-  ///
-  final AndroidNearbyService nearbyService;
+// class SendPageBlocState_connected extends SendPageBlocState {
+//   final NearbyDevice service;
 
-  ///
-  /// VARIABLES
-  ///
-  List<NearbyDevice> peers = []; // founded peers
-  StreamSubscription<List<NearbyDevice>>?
-  _peerSubscription; // stream nearby devices for tracking founded peers
-  bool _isConnected = false; // connected some one or not
-  NearbyDevice? _connectedNearbyDevice; // info about connected peer
+//   SendPageBlocState_connected({required this.service});
+// }
 
-  SendPageBloc({required this.nearbyService})
-    : super(SendPageBlocState_init()) {
-    ///
-    /// ON INIT NEARBY SERVICE
-    ///
-    on<SendPageBlocEvent_NearbyServiceInit>((event, emit) async {
-      try {
-        // init service
-        await nearbyService.init();
+// class SendPageBlocState_sending extends SendPageBlocState {
+//   final int totalFiles;
+//   final int sentFiles;
+//   final double progress;
+//   final String? currentFileName;
 
-        // discover
-        add(SendPageBlocEvent_NearbyServiceDiscover());
-      } catch (e) {
-        logger.e(e.toString());
-      }
-    });
+//   SendPageBlocState_sending({
+//     required this.totalFiles,
+//     required this.sentFiles,
+//     required this.progress,
+//     this.currentFileName,
+//   });
+// }
 
-    ///
-    /// ON START NEARBY DISCOVER
-    ///
-    on<SendPageBlocEvent_NearbyServiceDiscover>((event, emit) async {
-      try {
-        // start dicover
-        await nearbyService.startDiscover();
+// class SendPageBlocState_sent extends SendPageBlocState {}
 
-        emit(SendPageBlocState_discovering());
+// class SendPageBlocState_error extends SendPageBlocState {
+//   final APP_EXCEPTION message;
 
-        // Cancel any existing subscription
-        await _peerSubscription?.cancel();
+//   SendPageBlocState_error({required this.message});
+// }
 
-        // Start listening to peers
-        _peerSubscription = nearbyService.nearbyService.getPeersStream().listen(
-          (event) {
-            // update peers
-            peers = event;
-            logger.d('Peers $peers');
-            // if (peers.isNotEmpty) {
-            //   add(SendPageBlocEvent_NearbyPeersUpdated(peers: peers));
-            // }
-          },
-        );
-      } catch (e) {
-        logger.e('Error starting nearby discovery: $e');
-        emit(
-          SendPageBlocState_error(
-            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
-          ),
-        );
-      }
-    });
+// class SendPageBlocState_success extends SendPageBlocState {
+//   final APP_EXCEPTION message;
 
-    ///
-    /// HANDLE PEER UPDATES
-    ///
-    // on<SendPageBlocEvent_NearbyPeersUpdated>((event, emit) {
-    //   emit(
-    //     SendPageBlocState_NearbyDiscoveryServiceFoundPeers(peers: event.peers),
-    //   );
-    // });
+//   SendPageBlocState_success({required this.message});
+// }
 
-    ///
-    /// OPEN APP SETTING FOR ALLOW PERMISSION
-    ///
-    on<SendPageBlocEvent_openAppSettingForAllowPermisson>((event, emit) async {
-      try {
-        await nearbyService.openAppSetting();
-      } catch (e) {
-        emit(
-          SendPageBlocState_error(
-            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
-          ),
-        );
-      }
-    });
+// ///
+// /// BLOC
+// ///
+// class SendPageBloc extends Bloc<SendPageBlocEvent, SendPageBlocState> {
+//   ///
+//   /// SERVICES
+//   ///
+//   final AndroidNearbyService nearbyService;
 
-    ///
-    /// OPEN NETWORK SETTING FOR ALLOW PERMISSION
-    ///
-    on<SendPageBlocEvent_openNetworkSettingForAllowPermisson>((
-      event,
-      emit,
-    ) async {
-      try {
-        await nearbyService.openNetworkSetting();
-      } catch (e) {
-        emit(
-          SendPageBlocState_error(message: APP_EXCEPTION.NOT_CONNECTED_WIFI),
-        );
-      }
-    });
+//   ///
+//   /// VARIABLES
+//   ///
+//   List<NearbyDevice> peers = []; // founded peers
+//   StreamSubscription<List<NearbyDevice>>?
+//   _peerSubscription; // stream nearby devices for tracking founded peers
+//   bool _isConnected = false; // connected some one or not
+//   NearbyDevice? _connectedNearbyDevice; // info about connected peer
 
-    ///
-    /// ON STOP NEARBY DISCOVER
-    ///
-    on<SendPageBlocEvent_stopDiscover>((event, emit) async {
-      try {
-        await _peerSubscription?.cancel();
-        await nearbyService.stopDiscover();
+//   SendPageBloc({required this.nearbyService})
+//     : super(SendPageBlocState_init()) {
+//     ///
+//     /// ON INIT NEARBY SERVICE
+//     ///
+//     on<SendPageBlocEvent_NearbyServiceInit>((event, emit) async {
+//       try {
+//         // init service
+//         await nearbyService.init();
 
-        peers = [];
+//         // discover
+//         add(SendPageBlocEvent_NearbyServiceDiscover());
+//       } catch (e) {
+//         logger.e(e.toString());
+//       }
+//     });
 
-        // emit(
-        //   SendPageBlocState_success(
-        //     message: APP_EXCEPTION.NEARBY_SERVICE_STOPPED,
-        //   ),
-        // );
-        emit(SendPageBlocState_init());
-      } catch (e) {
-        emit(
-          SendPageBlocState_error(
-            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
-          ),
-        );
-      }
-    });
+//     ///
+//     /// ON START NEARBY DISCOVER
+//     ///
+//     on<SendPageBlocEvent_NearbyServiceDiscover>((event, emit) async {
+//       try {
+//         // start dicover
+//         await nearbyService.startDiscover();
 
-    ///
-    /// ON RESTART DISCOVERY
-    ///
-    on<SendPageBlocEvent_restartDiscovery>((event, emit) async {
-      try {
-        await _peerSubscription?.cancel();
-        await nearbyService.stopDiscover();
-        await nearbyService.startDiscover();
-        emit(SendPageBlocState_discovering());
-      } catch (e) {
-        emit(
-          SendPageBlocState_error(
-            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
-          ),
-        );
-      }
-    });
+//         emit(SendPageBlocState_discovering());
 
-    ///
-    /// ON CONNECT TO DEVICE
-    ///
-    on<SendPageBlocEvent_connectToDevice>((event, emit) async {
-      try {
-        //emit(SendPageBlocState_connecting(service: event.device));
+//         // Cancel any existing subscription
+//         await _peerSubscription?.cancel();
 
-        // Find the corresponding NearbyDevice
-        // final nearbyDevice = peers.firstWhere(
-        //   (device) => device.info.id == event.device.name,
-        //   orElse: () => throw Exception('Device not found in peer list'),
-        // );
+//         // Start listening to peers
+//         _peerSubscription = nearbyService.nearbyService.getPeersStream().listen(
+//           (event) {
+//             // update peers
+//             peers = event;
+//             logger.d('Peers $peers');
+//             // if (peers.isNotEmpty) {
+//             //   add(SendPageBlocEvent_NearbyPeersUpdated(peers: peers));
+//             // }
+//           },
+//         );
+//       } catch (e) {
+//         logger.e('Error starting nearby discovery: $e');
+//         emit(
+//           SendPageBlocState_error(
+//             message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+//           ),
+//         );
+//       }
+//     });
 
-        // Connect to the device
-        final result = await nearbyService.nearbyService.connectById(
-          event.device.info.id,
-        );
-        if (result) {
-          _isConnected = true;
-          _connectedNearbyDevice = event.device;
+//     ///
+//     /// HANDLE PEER UPDATES
+//     ///
+//     // on<SendPageBlocEvent_NearbyPeersUpdated>((event, emit) {
+//     //   emit(
+//     //     SendPageBlocState_NearbyDiscoveryServiceFoundPeers(peers: event.peers),
+//     //   );
+//     // });
 
-          // Start communication channel with required listeners
-          await nearbyService.nearbyService.startCommunicationChannel(
-            NearbyCommunicationChannelData(
-              event.device.info.id,
-              messagesListener: NearbyServiceMessagesListener(
-                onCreated: () {
-                  logger.i('Communication channel created');
-                },
-                onData: (data) {
-                  logger.i('Received data: $data');
-                },
-                onError: (Object error, [StackTrace? stackTrace]) {
-                  logger.e('Communication channel error: $error');
-                },
-              ),
+//     ///
+//     /// OPEN APP SETTING FOR ALLOW PERMISSION
+//     ///
+//     on<SendPageBlocEvent_openAppSettingForAllowPermisson>((event, emit) async {
+//       try {
+//         await nearbyService.openAppSetting();
+//       } catch (e) {
+//         emit(
+//           SendPageBlocState_error(
+//             message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+//           ),
+//         );
+//       }
+//     });
 
-              filesListener: NearbyServiceFilesListener(
-                onData: (data) async {},
-              ),
-            ),
-          );
+//     ///
+//     /// OPEN NETWORK SETTING FOR ALLOW PERMISSION
+//     ///
+//     on<SendPageBlocEvent_openNetworkSettingForAllowPermisson>((
+//       event,
+//       emit,
+//     ) async {
+//       try {
+//         await nearbyService.openNetworkSetting();
+//       } catch (e) {
+//         emit(
+//           SendPageBlocState_error(message: APP_EXCEPTION.NOT_CONNECTED_WIFI),
+//         );
+//       }
+//     });
 
-          emit(SendPageBlocState_connected(service: event.device));
-          emit(
-            SendPageBlocState_success(message: APP_EXCEPTION.FOUNDED_DEVICE),
-          );
-        } else {
-          throw Exception('Failed to connect to device');
-        }
-      } catch (e) {
-        logger.e('Error connecting to device: $e');
-        emit(
-          SendPageBlocState_error(
-            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
-          ),
-        );
-      }
-    });
+//     ///
+//     /// ON STOP NEARBY DISCOVER
+//     ///
+//     on<SendPageBlocEvent_stopDiscover>((event, emit) async {
+//       try {
+//         await _peerSubscription?.cancel();
+//         await nearbyService.stopDiscover();
 
-    ///
-    /// ON SEND FILES
-    ///
-    on<SendPageBlocEvent_sendFiles>((event, emit) async {
-      // if not connected or connected device info == null
-      // show error
+//         peers = [];
 
-      if (!_isConnected || _connectedNearbyDevice == null) {
-        emit(
-          SendPageBlocState_error(
-            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
-          ),
-        );
-        return;
-      }
+//         // emit(
+//         //   SendPageBlocState_success(
+//         //     message: APP_EXCEPTION.NEARBY_SERVICE_STOPPED,
+//         //   ),
+//         // );
+//         emit(SendPageBlocState_init());
+//       } catch (e) {
+//         emit(
+//           SendPageBlocState_error(
+//             message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+//           ),
+//         );
+//       }
+//     });
 
-      try {
-        final totalFiles = event.files.length;
-        int sentFiles = 0;
+//     ///
+//     /// ON RESTART DISCOVERY
+//     ///
+//     on<SendPageBlocEvent_restartDiscovery>((event, emit) async {
+//       try {
+//         await _peerSubscription?.cancel();
+//         await nearbyService.stopDiscover();
+//         await nearbyService.startDiscover();
+//         emit(SendPageBlocState_discovering());
+//       } catch (e) {
+//         emit(
+//           SendPageBlocState_error(
+//             message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+//           ),
+//         );
+//       }
+//     });
 
-        // Get current device info for sender identification
-        final senderInfo = await nearbyService.nearbyService
-            .getCurrentDeviceInfo();
-        if (senderInfo == null) {
-          throw Exception('Unable to get current device info');
-        }
+//     ///
+//     /// ON CONNECT TO DEVICE
+//     ///
+//     on<SendPageBlocEvent_connectToDevice>((event, emit) async {
+//       try {
+//         //emit(SendPageBlocState_connecting(service: event.device));
 
-        // Send file request
-        final filePaths = event.files.map((file) => file.path).toList();
-        final result = await nearbyService.nearbyService.get(
-          onAndroid: (androidService) {
-            return androidService.send(
-              OutgoingNearbyMessage(
-                content: NearbyMessageFilesRequest.create(
-                  files: filePaths
-                      .map((path) => NearbyFileInfo(path: path))
-                      .toList(),
-                ),
-                receiver: NearbyDeviceInfo(
-                  displayName:
-                      "receiver", // This will be replaced with actual receiver info
-                  id: _connectedNearbyDevice!.info.id,
-                ),
-              ),
-            );
-          },
-          onDarwin: (darwinService) {
-            return darwinService.send(
-              OutgoingNearbyMessage(
-                content: NearbyMessageFilesRequest.create(
-                  files: filePaths
-                      .map((path) => NearbyFileInfo(path: path))
-                      .toList(),
-                ),
-                receiver: NearbyDeviceInfo(
-                  displayName:
-                      "receiver", // This will be replaced with actual receiver info
-                  id: _connectedNearbyDevice!.info.id,
-                ),
-              ),
-            );
-          },
-        );
+//         // Find the corresponding NearbyDevice
+//         // final nearbyDevice = peers.firstWhere(
+//         //   (device) => device.info.id == event.device.name,
+//         //   orElse: () => throw Exception('Device not found in peer list'),
+//         // );
 
-        if (result != null && result) {
-          // Update progress state
-          emit(
-            SendPageBlocState_sending(
-              totalFiles: totalFiles,
-              sentFiles: totalFiles,
-              progress: 1.0,
-              currentFileName: null,
-            ),
-          );
+//         // Connect to the device
+//         final result = await nearbyService.nearbyService.connectById(
+//           event.device.info.id,
+//         );
+//         if (result) {
+//           _isConnected = true;
+//           _connectedNearbyDevice = event.device;
 
-          emit(SendPageBlocState_sent());
-          emit(
-            SendPageBlocState_success(message: APP_EXCEPTION.FOUNDED_DEVICE),
-          );
-        } else {
-          throw Exception('Failed to send files');
-        }
-      } catch (e) {
-        logger.e('Error sending files: $e');
-        emit(
-          SendPageBlocState_error(
-            message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
-          ),
-        );
-      }
-    });
-  }
+//           // Start communication channel with required listeners
+//           await nearbyService.nearbyService.startCommunicationChannel(
+//             NearbyCommunicationChannelData(
+//               event.device.info.id,
+//               messagesListener: NearbyServiceMessagesListener(
+//                 onCreated: () {
+//                   logger.i('Communication channel created');
+//                 },
+//                 onData: (data) {
+//                   logger.i('Received data: $data');
+//                 },
+//                 onError: (Object error, [StackTrace? stackTrace]) {
+//                   logger.e('Communication channel error: $error');
+//                 },
+//               ),
 
-  @override
-  Future<void> close() {
-    _peerSubscription?.cancel();
-    return super.close();
-  }
-}
+//               filesListener: NearbyServiceFilesListener(
+//                 onData: (data) async {},
+//               ),
+//             ),
+//           );
 
-// New event for handling peer updates
-class SendPageBlocEvent_NearbyPeersUpdated extends SendPageBlocEvent {
-  final List<NearbyDevice> peers;
+//           emit(SendPageBlocState_connected(service: event.device));
+//           emit(
+//             SendPageBlocState_success(message: APP_EXCEPTION.FOUNDED_DEVICE),
+//           );
+//         } else {
+//           throw Exception('Failed to connect to device');
+//         }
+//       } catch (e) {
+//         logger.e('Error connecting to device: $e');
+//         emit(
+//           SendPageBlocState_error(
+//             message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+//           ),
+//         );
+//       }
+//     });
 
-  SendPageBlocEvent_NearbyPeersUpdated({required this.peers});
-}
+//     ///
+//     /// ON SEND FILES
+//     ///
+//     on<SendPageBlocEvent_sendFiles>((event, emit) async {
+//       // if not connected or connected device info == null
+//       // show error
+
+//       if (!_isConnected || _connectedNearbyDevice == null) {
+//         emit(
+//           SendPageBlocState_error(
+//             message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+//           ),
+//         );
+//         return;
+//       }
+
+//       try {
+//         final totalFiles = event.files.length;
+//         int sentFiles = 0;
+
+//         // Get current device info for sender identification
+//         final senderInfo = await nearbyService.nearbyService
+//             .getCurrentDeviceInfo();
+//         if (senderInfo == null) {
+//           throw Exception('Unable to get current device info');
+//         }
+
+//         // Send file request
+//         final filePaths = event.files.map((file) => file.path).toList();
+//         final result = await nearbyService.nearbyService.get(
+//           onAndroid: (androidService) {
+//             return androidService.send(
+//               OutgoingNearbyMessage(
+//                 content: NearbyMessageFilesRequest.create(
+//                   files: filePaths
+//                       .map((path) => NearbyFileInfo(path: path))
+//                       .toList(),
+//                 ),
+//                 receiver: NearbyDeviceInfo(
+//                   displayName:
+//                       "receiver", // This will be replaced with actual receiver info
+//                   id: _connectedNearbyDevice!.info.id,
+//                 ),
+//               ),
+//             );
+//           },
+//           onDarwin: (darwinService) {
+//             return darwinService.send(
+//               OutgoingNearbyMessage(
+//                 content: NearbyMessageFilesRequest.create(
+//                   files: filePaths
+//                       .map((path) => NearbyFileInfo(path: path))
+//                       .toList(),
+//                 ),
+//                 receiver: NearbyDeviceInfo(
+//                   displayName:
+//                       "receiver", // This will be replaced with actual receiver info
+//                   id: _connectedNearbyDevice!.info.id,
+//                 ),
+//               ),
+//             );
+//           },
+//         );
+
+//         if (result != null && result) {
+//           // Update progress state
+//           emit(
+//             SendPageBlocState_sending(
+//               totalFiles: totalFiles,
+//               sentFiles: totalFiles,
+//               progress: 1.0,
+//               currentFileName: null,
+//             ),
+//           );
+
+//           emit(SendPageBlocState_sent());
+//           emit(
+//             SendPageBlocState_success(message: APP_EXCEPTION.FOUNDED_DEVICE),
+//           );
+//         } else {
+//           throw Exception('Failed to send files');
+//         }
+//       } catch (e) {
+//         logger.e('Error sending files: $e');
+//         emit(
+//           SendPageBlocState_error(
+//             message: APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED,
+//           ),
+//         );
+//       }
+//     });
+//   }
+
+//   @override
+//   Future<void> close() {
+//     _peerSubscription?.cancel();
+//     return super.close();
+//   }
+// }
