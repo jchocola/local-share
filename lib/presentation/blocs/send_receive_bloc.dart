@@ -104,7 +104,7 @@ class SendReceiveBloc extends Bloc<SendReceiveBlocEvent, SendReceiveBlocState> {
         if (event.isNotEmpty) {
           emit(SendReceiveBloc_foundedDevices(devices: event));
         } else {
-          emit(SendReceiveBlocDiscovering());
+          //emit(SendReceiveBlocDiscovering());
         }
       });
     });
