@@ -67,7 +67,7 @@ class SendReceiveBloc_ConnectedDevice extends SendReceiveBlocState {
   final NearbyDevice device;
   SendReceiveBloc_ConnectedDevice({required this.device});
 
-    @override
+  @override
   List<Object?> get props => [device];
 }
 
@@ -166,8 +166,21 @@ class SendReceiveBloc extends Bloc<SendReceiveBlocEvent, SendReceiveBlocState> {
     ///
     on<SendReceiveBlocEvent_connectDevice>((event, emit) async {
       try {
+
+        // connect device
         await _nearbyService.connectDevice(device: event.device);
+
+        // notify ui
         emit(SendReceiveBloc_ConnectedDevice(device: event.device));
+
+        // start communitcate with other device
+        await _nearbyService.nearbyService.startCommunicationChannel(
+          NearbyCommunicationChannelData(
+            event.device.info.id,
+            messagesListener: NearbyServiceMessagesListener(onData: (data) {}),
+            filesListener: NearbyServiceFilesListener(onData: (pack) async{}),
+          ),
+        );
       } catch (e) {
         logger.e(e.toString());
       }

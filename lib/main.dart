@@ -23,6 +23,7 @@ import 'package:local_share/presentation/blocs/server_bloc.dart';
 import 'package:local_share/presentation/receive_page/pages/setting_page/bloc/setting_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
 import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
+import 'package:local_share/presentation/send_page/bloc/picked_nearby_device_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
 import 'package:local_share/presentation/server_page/bloc/server_page_bloc.dart';
 import 'package:logger/web.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context)=> PickedNearbyDeviceBloc()),
          BlocProvider(create: (context)=> SendReceiveBloc()..add(SendReceiveBlocEvent_nearbyServiceInit())),
         BlocProvider(create: (context) => PickedFilesBloc()),
         BlocProvider(

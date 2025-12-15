@@ -24,7 +24,7 @@ class ProfileInfoWidget extends StatelessWidget {
           children: [
             Expanded(
               flex: 1,
-              child: CustomAvatar(name: nearbyDeviceInfo?.displayName ?? 'Noo name'),
+              child: CustomAvatar(name: nearbyDeviceInfo?.displayName ?? ''),
               // child: CircleAvatar(radius: size.width * 0.07),
             ),
             Expanded(
@@ -35,7 +35,7 @@ class ProfileInfoWidget extends StatelessWidget {
                 spacing: AppConstant.appPadding / 2,
                 children: [
                   Text(
-                    nearbyDeviceInfo?.displayName ?? 'No name',
+                    nearbyDeviceInfo?.displayName ?? '',
                     style: theme.textTheme.titleMedium,
                   ),
                   Text(
