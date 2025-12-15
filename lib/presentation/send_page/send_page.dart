@@ -4,7 +4,9 @@ import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:gap/gap.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
+import 'package:local_share/core/utils/show_toastification.dart';
 import 'package:local_share/presentation/blocs/current_device_bloc.dart';
+import 'package:local_share/presentation/blocs/send_receive_bloc.dart';
 import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
 import 'package:local_share/presentation/send_page/pages/profile_page/profile_page.dart';
@@ -12,6 +14,7 @@ import 'package:local_share/presentation/send_page/widget/context_menu.dart';
 import 'package:local_share/presentation/send_page/widget/founded_devices_list.dart';
 import 'package:local_share/presentation/send_page/widget/invisible_widget.dart';
 import 'package:local_share/presentation/send_page/widget/picked_files.dart';
+import 'package:local_share/presentation/send_page/widget/searching_animation.dart';
 import 'package:local_share/presentation/send_page/widget/searching_animation_with_founded_list.dart';
 import 'package:local_share/presentation/send_page/widget/searching_for_devices.dart';
 import 'package:local_share/presentation/send_page/widget/send_via_server.dart';
@@ -97,8 +100,86 @@ class SendPage extends StatelessWidget {
           SendViaServer(),
           Gap(AppConstant.appPadding * 3),
 
-          FoundedDevicesList(),
-         // SearchingAnimationWithFoundedDevices(),
+          BlocConsumer<SendReceiveBloc, SendReceiveBlocState>(
+            listener: (context, state) {
+              if (state is SendReceiveBlocDiscovering) {
+                showSuccessToatification(context, title: 'Disover Started');
+              }
+
+              if (state is SendReceiveBloc_notWifiNearbyServiceGranted) {
+                showErrorToatification(
+                  context,
+                  title: 'WiFi NearbyService denied',
+                );
+              }
+
+              if (state is SendReceiveBloc_notWifiConnected) {
+                showErrorToatification(context, title: 'WiFi Not Connected');
+              }
+
+              if (state is SendReceiveBloc_foundedDevices) {
+                showSuccessToatification(context, title: 'Founded devices');
+              }
+            },
+
+            builder: (context, state) {
+              if (state is SendReceiveBlocDiscovering) {
+                return SearchingAnimation();
+              } else if (state is SendReceiveBloc_foundedDevices) {
+                return FoundedDevicesList();
+              } else if (state is SendReceiveBloc_notWifiNearbyServiceGranted) {
+                return Column(
+                  children: [
+                    Text('NOT WIIF NEARBY SERVICE GRANTED'),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<SendReceiveBloc>().add(
+                          SendReceiveBlocEvent_nearbyServiceInit(),
+                        );
+                      },
+                      child: Text('Try again'),
+                    ),
+
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<SendReceiveBloc>().add(
+                          SendReceiveBlocEvent_openAppSetting(),
+                        );
+                      },
+                      child: Text('Open App Setting'),
+                    ),
+                  ],
+                );
+              } else if (state is SendReceiveBloc_notWifiConnected) {
+                return Column(
+                  children: [
+                    Text('NOT WIfi connected'),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<SendReceiveBloc>().add(
+                          SendReceiveBlocEvent_nearbyServiceInit(),
+                        );
+                      },
+                      child: Text('Try again'),
+                    ),
+
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<SendReceiveBloc>().add(
+                          SendReceiveBlocEvent_openWiFiSetting(),
+                        );
+                      },
+                      child: Text('Open Wifi Setting'),
+                    ),
+                  ],
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
+          ),
+          //FoundedDevicesList(),
+          // SearchingAnimationWithFoundedDevices(),
           Spacer(),
           PickedFiles(),
         ],

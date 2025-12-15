@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:local_share/presentation/blocs/send_receive_bloc.dart';
 import 'package:local_share/widgets/other_device_card.dart';
 
 class FoundedDevicesList extends StatelessWidget {
@@ -7,15 +9,24 @@ class FoundedDevicesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListView.separated(
-        shrinkWrap: true,
-        itemBuilder: (context, index) => OtherDeviceCard(
-          onTap: () => context.push('/send_page/confirm_transfer'),
-        ),
-        separatorBuilder: (context, index) => Divider(),
-        itemCount: 3,
-      ),
+    return BlocBuilder<SendReceiveBloc, SendReceiveBlocState>(
+      builder: (context, state) {
+        if (state is SendReceiveBloc_foundedDevices) {
+          return Card(
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (context, index) => OtherDeviceCard(
+                device: state.devices[index],
+                onTap: () => context.push('/send_page/confirm_transfer'),
+              ),
+              separatorBuilder: (context, index) => Divider(),
+              itemCount: state.devices.length,
+            ),
+          );
+        } else {
+          return SizedBox();
+        }
+      },
     );
   }
 }

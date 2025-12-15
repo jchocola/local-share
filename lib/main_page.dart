@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/generated/l10n.dart';
+import 'package:local_share/presentation/blocs/send_receive_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
 
 class MainPage extends StatelessWidget {
@@ -18,6 +19,18 @@ class MainPage extends StatelessWidget {
         onTap: (value) {
           navigationShell.goBranch(value);
 
+          ///
+          /// Discover if value == 0
+          ///
+          // if (value == 0) {
+          //   context.read<SendReceiveBloc>().add(
+          //     SendReceiveBlocEvent_nearbyServiceDiscover(),
+          //   );
+          // } else {
+          //   context.read<SendReceiveBloc>().add(
+          //     SendReceiveBlocEvent_nearbyServiceStopDiscover(),
+          //   ); 
+          // }
         },
         items: [
           BottomNavigationBarItem(
