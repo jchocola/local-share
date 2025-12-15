@@ -210,50 +210,53 @@
 //   }
 // }
 
-// class DraggableAvatar extends StatelessWidget {
-//   final String name;
-//   final int index;
-//   final Function(int, DragStartDetails) onPanStart;
-//   final Function(int, DragUpdateDetails) onPanUpdate;
-//   final Function(int, DragEndDetails) onPanEnd;
-//   final VoidCallback onTap;
-//   final bool isDragging;
+import 'package:flutter/material.dart';
+import 'package:local_share/widgets/custom_avatar.dart';
 
-//   const DraggableAvatar({
-//     super.key,
-//     required this.name,
-//     required this.index,
-//     required this.onPanStart,
-//     required this.onPanUpdate,
-//     required this.onPanEnd,
-//     required this.onTap,
-//     required this.isDragging,
-//   });
+class DraggableAvatar extends StatelessWidget {
+  final String name;
+  final int index;
+  final Function(int, DragStartDetails) onPanStart;
+  final Function(int, DragUpdateDetails) onPanUpdate;
+  final Function(int, DragEndDetails) onPanEnd;
+  final VoidCallback onTap;
+  final bool isDragging;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onPanStart: (details) => onPanStart(index, details),
-//       onPanUpdate: (details) => onPanUpdate(index, details),
-//       onPanEnd: (details) => onPanEnd(index, details),
-//       onTap: onTap,
-//       child: Transform.scale(
-//         scale: isDragging ? 1.1 : 1.0,
-//         child: Container(
-//           decoration: BoxDecoration(
-//             shape: BoxShape.circle,
-//             boxShadow: isDragging
-//                 ? [
-//                     BoxShadow(
-//                       color: Colors.black.withOpacity(0.3),
-//                       blurRadius: 10,
-//                     ),
-//                   ]
-//                 : [],
-//           ),
-//           child: CustomAvatar(name: name),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  const DraggableAvatar({
+    super.key,
+    required this.name,
+    required this.index,
+    required this.onPanStart,
+    required this.onPanUpdate,
+    required this.onPanEnd,
+    required this.onTap,
+    required this.isDragging,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onPanStart: (details) => onPanStart(index, details),
+      onPanUpdate: (details) => onPanUpdate(index, details),
+      onPanEnd: (details) => onPanEnd(index, details),
+      onTap: onTap,
+      child: Transform.scale(
+        scale: isDragging ? 1.1 : 1.0,
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: isDragging
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 10,
+                    ),
+                  ]
+                : [],
+          ),
+          child: CustomAvatar(name: name),
+        ),
+      ),
+    );
+  }
+}
