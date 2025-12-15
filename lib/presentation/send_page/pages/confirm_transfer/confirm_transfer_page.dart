@@ -6,6 +6,7 @@ import 'package:local_share/core/error/app_error.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/core/utils/show_toastification.dart';
 import 'package:local_share/generated/l10n.dart';
+import 'package:local_share/presentation/blocs/send_receive_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/picked_nearby_device_bloc.dart';
 import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
@@ -79,31 +80,65 @@ class ConfirmTransferPage extends StatelessWidget {
               ),
               Expanded(
                 flex: 1,
-                child: BigButton(
-                  title: S.of(context).sendFiles,
-                  color: theme.colorScheme.primary,
-                  withIcon: true,
-                  icon: AppIcon.sendIcon,
-                  onTap: () {
-                    final pickedFilesBloc = context.read<PickedFilesBloc>();
-                    if (pickedFilesBloc.files.isEmpty) {
-                      showWarningToatification(
-                        context,
-                        title: 'No file picked',
-                      );
-                    } else {
-                      // Convert picked files to File objects
-                      final files = pickedFilesBloc.files
-                          .map((fileModel) => File(fileModel.path))
-                          .toList();
+                child:
+                    BlocBuilder<
+                      PickedNearbyDeviceBloc,
+                      PickedNearbyDeviceBlocState
+                    >(
+                      builder: (context, state) {
+                        if (state is PickedNearbyDeviceBlocState_picked) {
+                          return BlocListener<
+                            SendReceiveBloc,
+                            SendReceiveBlocState
+                          >(
+                            listener: (context, state) {
+                              if (state is SendReceiveBloc_ConnectedDevice) {
+                                showSuccessToatification(
+                                  context,
+                                  title:
+                                      'Connected to ${state.device.info.displayName}',
+                                );
+                              }
+                            },
 
-                      // Send files with ACK for reliability
-                      // context.read<SendPageBloc>().add(
-                      //   SendPageBlocEvent_sendFiles(files: files)
-                      // );
-                    }
-                  },
-                ),
+                            child: BigButton(
+                              title: S.of(context).sendFiles,
+                              color: theme.colorScheme.primary,
+                              withIcon: true,
+                              icon: AppIcon.sendIcon,
+                              onTap: () {
+                                final pickedFilesBloc = context
+                                    .read<PickedFilesBloc>();
+                                if (pickedFilesBloc.files.isEmpty) {
+                                  showWarningToatification(
+                                    context,
+                                    title: 'No file picked',
+                                  );
+                                } else {
+                                  context.read<SendReceiveBloc>().add(
+                                    SendReceiveBlocEvent_connectDevice(
+                                      device: state.device,
+                                    ),
+                                  );
+
+                                  // Convert picked files to File objects
+                                  final files = pickedFilesBloc.files
+                                      .map((fileModel) => File(fileModel.path))
+                                      .toList();
+
+                                  // Send files with ACK for reliability
+                                  // context.read<SendPageBloc>().add(
+                                  //   SendPageBlocEvent_sendFiles(files: files)
+                                  // );
+                                }
+                              },
+                            ),
+                          );
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
+                    ),
               ),
             ],
           ),

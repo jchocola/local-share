@@ -54,4 +54,12 @@ class AndroidNearbyService {
   Future<NearbyDeviceInfo?> getCurrentDeviceInfo() async {
     return await nearbyService.getCurrentDeviceInfo();
   }
+
+  Future<void> connectDevice({required NearbyDevice device}) async {
+    try {
+      await nearbyService.connectById(device.info.id);
+    } catch (e) {
+      logger.e('failed to connect device');
+    }
+  }
 }

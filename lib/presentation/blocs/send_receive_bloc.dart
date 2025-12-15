@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +30,14 @@ class SendReceiveBlocEvent_openAppSetting extends SendReceiveBlocEvent {}
 
 class SendReceiveBlocEvent_openWiFiSetting extends SendReceiveBlocEvent {}
 
+class SendReceiveBlocEvent_connectDevice extends SendReceiveBlocEvent {
+  final NearbyDevice device;
+
+  SendReceiveBlocEvent_connectDevice({required this.device});
+  @override
+  List<Object?> get props => [device];
+}
+
 ///
 /// STATE
 ///
@@ -52,6 +61,14 @@ class SendReceiveBloc_foundedDevices extends SendReceiveBlocState {
 
   @override
   List<Object?> get props => [devices];
+}
+
+class SendReceiveBloc_ConnectedDevice extends SendReceiveBlocState {
+  final NearbyDevice device;
+  SendReceiveBloc_ConnectedDevice({required this.device});
+
+    @override
+  List<Object?> get props => [device];
 }
 
 ///
@@ -136,9 +153,21 @@ class SendReceiveBloc extends Bloc<SendReceiveBlocEvent, SendReceiveBlocState> {
     ///
     /// OPEN WIFI SETTING
     ///
-    on<SendReceiveBlocEvent_openWiFiSetting>((evet, emit) async {
+    on<SendReceiveBlocEvent_openWiFiSetting>((event, emit) async {
       try {
         await _nearbyService.openNetworkSetting();
+      } catch (e) {
+        logger.e(e.toString());
+      }
+    });
+
+    ///
+    /// connect device
+    ///
+    on<SendReceiveBlocEvent_connectDevice>((event, emit) async {
+      try {
+        await _nearbyService.connectDevice(device: event.device);
+        emit(SendReceiveBloc_ConnectedDevice(device: event.device));
       } catch (e) {
         logger.e(e.toString());
       }
