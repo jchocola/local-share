@@ -32,22 +32,15 @@ class InvisibleWidget extends StatelessWidget {
               style: theme.textTheme.bodyMedium!.copyWith(),
               textAlign: TextAlign.center,
             ),
-            BlocListener<ReceivePageBloc, ReceivePageBlocState>(
-              listener: (context, state) {
-                if (state is ReceivePageBlocState_error) {
-                  showErrorToatification(context , title: AppErrorConverter(error: state.error));
-                }
-              },
-
-              child: BigButton(
+             BigButton(
                 title: S.of(context).becomeVisible,
                 color: theme.colorScheme.primary,
                 textColor: theme.colorScheme.onPrimaryContainer,
-                onTap: () => context.read<ReceivePageBloc>().add(
-                  RecievePageBlocEvent_ChangeVisiblity(),
-                ),
+                // onTap: () => context.read<ReceivePageBloc>().add(
+                //   RecievePageBlocEvent_ChangeVisiblity(),
+                // ),
               ),
-            ),
+          
           ],
         ),
       ),

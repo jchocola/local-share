@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => ReceivePageBloc()),
+
         BlocProvider(create: (context) => PickedFilesBloc()),
         BlocProvider(
           create: (context) =>

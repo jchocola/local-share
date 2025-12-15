@@ -64,17 +64,17 @@ class WaitingConnectionWidget extends StatelessWidget {
           ),
         ),
 
-        BigButton(
-          color: theme.colorScheme.onSecondary.withOpacity(0.3),
-          icon: AppIcon.closeEyeIcon,
-          withIcon: true,
-          onTap: () {
-            context.read<ReceivePageBloc>().add(
-              RecievePageBlocEvent_ChangeVisiblity(),
-            );
-          },
-          title: S.of(context).stop,
-        ),
+        // BigButton(
+        //   color: theme.colorScheme.onSecondary.withOpacity(0.3),
+        //   icon: AppIcon.closeEyeIcon,
+        //   withIcon: true,
+        //   onTap: () {
+        //     // context.read<ReceivePageBloc>().add(
+        //     //   RecievePageBlocEvent_ChangeVisiblity(),
+        //     // );
+        //   },
+        //   title: S.of(context).stop,
+        // ),
       ],
     );
   }
