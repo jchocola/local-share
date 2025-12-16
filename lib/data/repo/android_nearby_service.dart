@@ -63,19 +63,22 @@ class AndroidNearbyService {
     }
   }
 
-  Future<void> sendFileRequest({
+  Future<String?> sendFileRequest({
     required List<NearbyFileInfo> files,
     required NearbyDeviceInfo receiver,
   }) async {
     try {
-      nearbyService.send(
+      final request = NearbyMessageFilesRequest.create(files: files);
+      await nearbyService.send(
         OutgoingNearbyMessage(
-          content: NearbyMessageFilesRequest.create(files: files),
+          content: request,
           receiver: receiver,
         ),
       );
+      return request.id;
     } catch (e) {
       logger.e(e.toString());
+      return null;
     }
   }
 

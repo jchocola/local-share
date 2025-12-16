@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nearby_service/nearby_service.dart';
+import 'package:local_share/presentation/blocs/send_receive_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/data/repo/embbeded_server.dart';
@@ -8,7 +11,9 @@ import 'package:local_share/presentation/server_page/widget/received_file_card.d
 import 'package:local_share/widgets/big_button.dart';
 
 class IncomingTransferWidget extends StatelessWidget {
-  const IncomingTransferWidget({super.key});
+  final NearbyMessageFilesRequest? request;
+
+  const IncomingTransferWidget({super.key, this.request});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +38,16 @@ class IncomingTransferWidget extends StatelessWidget {
                     title: 'Decline',
                     color: theme.scaffoldBackgroundColor,
                     textColor: theme.colorScheme.onSecondary,
+                    onTap: () {
+                      if (request != null) {
+                        // dispatch decline event
+                        // use bloc from context
+                        // ignore: use_build_context_synchronously
+                        final bloc = context.read<SendReceiveBloc>();
+                        bloc.add(SendReceiveBlocEvent_declineIncomingRequest(requestId: request!.id));
+                      }
+                      Navigator.of(context).pop();
+                    },
                   ),
                 ),
                 Expanded(
@@ -43,8 +58,12 @@ class IncomingTransferWidget extends StatelessWidget {
                     withIcon: true,
                     icon: AppIcon.receiveIcon,
                     onTap: () {
+                      if (request != null) {
+                        final bloc = context.read<SendReceiveBloc>();
+                        bloc.add(SendReceiveBlocEvent_acceptIncomingRequest(requestId: request!.id));
+                      }
                       context.push('/receive_page/transfer_progress');
-                      context.pop();
+                      Navigator.of(context).pop();
                     },
                   ),
                 ),

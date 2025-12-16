@@ -5,6 +5,7 @@ import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
+import 'package:local_share/presentation/blocs/send_receive_bloc.dart';
 import 'package:local_share/presentation/receive_page/pages/transfer_progress_page/widget/transfer_complete_card.dart';
 import 'package:local_share/presentation/receive_page/widget/incoming_transfer_widget.dart';
 import 'package:local_share/presentation/receive_page/widget/waiting_annimation_widget.dart';
@@ -17,10 +18,20 @@ class WaitingConnectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      spacing: AppConstant.appPadding,
-      children: [
+    return BlocListener<SendReceiveBloc, SendReceiveBlocState>(
+      listener: (context, state) {
+        if (state is SendReceiveBloc_IncomingFilesRequest) {
+          // show incoming transfer dialog
+          showDialog(
+            context: context,
+            builder: (context) => IncomingTransferWidget(request: state.request),
+          );
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        spacing: AppConstant.appPadding,
+        children: [
         GestureDetector(
           onTap: () {
             // showDialog(
@@ -75,7 +86,8 @@ class WaitingConnectionWidget extends StatelessWidget {
         //   },
         //   title: S.of(context).stop,
         // ),
-      ],
+        ],
+      ),
     );
   }
 }

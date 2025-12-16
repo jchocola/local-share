@@ -49,6 +49,24 @@ class SendReceiveBlocEvent_sendFilesRequest extends SendReceiveBlocEvent {
   List<Object?> get props => [filesInfo];
 }
 
+class SendReceiveBlocEvent_acceptIncomingRequest extends SendReceiveBlocEvent {
+  final String requestId;
+
+  SendReceiveBlocEvent_acceptIncomingRequest({required this.requestId});
+
+  @override
+  List<Object?> get props => [requestId];
+}
+
+class SendReceiveBlocEvent_declineIncomingRequest extends SendReceiveBlocEvent {
+  final String requestId;
+
+  SendReceiveBlocEvent_declineIncomingRequest({required this.requestId});
+
+  @override
+  List<Object?> get props => [requestId];
+}
+
 ///
 /// STATE
 ///
@@ -88,6 +106,52 @@ class SendReceiveBloc_receiverConfirmedRequest extends SendReceiveBlocState {}
 
 class SendReceiveBloc_receiverDeniedRequest extends SendReceiveBlocState {}
 
+class SendReceiveBloc_IncomingFilesRequest extends SendReceiveBlocState {
+  final NearbyMessageFilesRequest request;
+
+  SendReceiveBloc_IncomingFilesRequest({required this.request});
+
+  @override
+  List<Object?> get props => [request.id];
+}
+
+class SendReceiveBloc_TransferProgress extends SendReceiveBlocState {
+  final bool isSender;
+  final int totalFiles;
+  final int processedFiles;
+  final double progress; // 0..1
+  final String? currentFileName;
+
+  SendReceiveBloc_TransferProgress({
+    required this.isSender,
+    required this.totalFiles,
+    required this.processedFiles,
+    required this.progress,
+    this.currentFileName,
+  });
+
+  @override
+  List<Object?> get props => [isSender, totalFiles, processedFiles, progress];
+}
+
+class SendReceiveBloc_TransferCompleted extends SendReceiveBlocState {
+  final List<String> savedPaths;
+
+  SendReceiveBloc_TransferCompleted({required this.savedPaths});
+
+  @override
+  List<Object?> get props => [savedPaths];
+}
+
+class SendReceiveBloc_TransferError extends SendReceiveBlocState {
+  final String message;
+
+  SendReceiveBloc_TransferError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
 ///
 /// BLOC
 ///
@@ -97,6 +161,8 @@ class SendReceiveBloc extends Bloc<SendReceiveBlocEvent, SendReceiveBlocState> {
   StreamSubscription<List<NearbyDevice>>? _peersListener;
   NearbyDeviceInfo? connectedDeviceInfo;
   NearbyDevice? connectedNearbyDevice;
+  NearbyMessageFilesRequest? _pendingIncomingRequest;
+  String? _lastSentRequestId;
 
   SendReceiveBloc() : super(SendReceiveBlocInit()) {
     ///
@@ -212,58 +278,53 @@ class SendReceiveBloc extends Bloc<SendReceiveBlocEvent, SendReceiveBlocState> {
     ///
     on<SendReceiveBlocEvent_sendFilesRequest>((event, emit) async {
       try {
-        // send files request to receviver
-        await _nearbyService.sendFileRequest(
+        // create and send files request to receiver and keep request id
+        final requestId = await _nearbyService.sendFileRequest(
           files: event.filesInfo,
           receiver: connectedDeviceInfo!,
         );
-        
 
-         // start communitcate with other device
+        _lastSentRequestId = requestId;
+
+        // notify UI that we have requested transfer and waiting for response
+        emit(SendReceiveBloc_SomeOnWantToSendFile());
+
+        // start communication channel to listen for responses and file events
         await _nearbyService.nearbyService.startCommunicationChannel(
           NearbyCommunicationChannelData(
             connectedNearbyDevice!.info.id,
             messagesListener: NearbyServiceMessagesListener(
               onData: (ReceivedNearbyMessage message) async {
-                // handle content
                 final content = message.content;
 
-                //1) Request for transferring files
-                // Sender-> Receiver
+                // Incoming request (we are receiver)
                 if (content is NearbyMessageFilesRequest) {
                   final request = content;
 
-                  // confirm recevive or not
-                  final bool accept = true;
+                  // store pending request and notify UI to accept/decline
+                  _pendingIncomingRequest = request;
+                  emit(SendReceiveBloc_IncomingFilesRequest(request: request));
 
-                  //TODO
-                  // notify ui
-                  if (accept) {
-                    emit(SendReceiveBloc_receiverConfirmedRequest());
-                  }
-                  {
-                    emit(SendReceiveBloc_receiverDeniedRequest());
-                  }
-
-                  // get current connected device
-                  if (connectedNearbyDevice != null) {
-                    // send response to sender
-                    await _nearbyService.sendFileResponse(
-                      requestId: request.id,
-                      isAccepted: accept,
-                      receiver: connectedNearbyDevice!.info,
-                    );
-                  }
+                  // do NOT auto accept here; wait for UI to call accept event
                 }
 
-                //2) Received response from recevier
-                // Receiver -> sender
+                // Response to our earlier request (we are sender)
                 if (content is NearbyMessageFilesResponse) {
                   final response = content;
-                  if (response.isAccepted) {
-                    // notify Sender (Receiver confirmed)
-                  } else {
-                    // Notify sender ,( receiver denied his request)
+                  if (_lastSentRequestId != null && response.id == _lastSentRequestId) {
+                    if (response.isAccepted) {
+                      emit(SendReceiveBloc_receiverConfirmedRequest());
+                      // transfer should start automatically by plugin; show sending progress state
+                      emit(SendReceiveBloc_TransferProgress(
+                        isSender: true,
+                        totalFiles: event.filesInfo.length,
+                        processedFiles: 0,
+                        progress: 0.0,
+                        currentFileName: null,
+                      ));
+                    } else {
+                      emit(SendReceiveBloc_receiverDeniedRequest());
+                    }
                   }
                 }
               },
@@ -272,9 +333,7 @@ class SendReceiveBloc extends Bloc<SendReceiveBlocEvent, SendReceiveBlocState> {
               onData: (ReceivedNearbyFilesPack pack) async {
                 try {
                   // Обработка принятого пакета файлов (pack содержит уже сохранённые в tmp пути)
-                  logger.d(
-                    'Got files pack id = ${pack.id} , total = ${pack.files.length}',
-                  );
+                  logger.d('Got files pack id = ${pack.id} , total = ${pack.files.length}');
 
                   // Получаем папку приложения (Documents) для сохранения
                   final docDir = await getApplicationDocumentsDirectory();
@@ -285,11 +344,21 @@ class SendReceiveBloc extends Bloc<SendReceiveBlocEvent, SendReceiveBlocState> {
 
                   final savedPaths = <String>[];
 
+                  int processed = 0;
                   for (final received in pack.files) {
                     // received.path — путь во временной папке плагина
                     final src = File(received.path);
-                    final filename = received.name;
-                    final destPath = targetDir.path + filename;
+                    final filename = received.name ?? src.path.split('/').last;
+                    final destPath = targetDir.path + '/' + filename;
+
+                    // emit progress before copying current file
+                    emit(SendReceiveBloc_TransferProgress(
+                      isSender: false,
+                      totalFiles: pack.files.length,
+                      processedFiles: processed,
+                      progress: processed / (pack.files.length > 0 ? pack.files.length : 1),
+                      currentFileName: filename,
+                    ));
 
                     // Копируем/перемещаем в постоянное хранилище
                     await src.copy(destPath);
@@ -300,17 +369,81 @@ class SendReceiveBloc extends Bloc<SendReceiveBlocEvent, SendReceiveBlocState> {
                       await src.delete();
                     } catch (_) {}
 
-                    // Готово — можно уведомить UI, показать список savedPaths и т.п.
-                    logger.e('Saved received files: $savedPaths');
+                    processed += 1;
+
+                    // emit progress after finishing this file
+                    emit(SendReceiveBloc_TransferProgress(
+                      isSender: false,
+                      totalFiles: pack.files.length,
+                      processedFiles: processed,
+                      progress: processed / (pack.files.length > 0 ? pack.files.length : 1),
+                      currentFileName: null,
+                    ));
                   }
+
+                  // Готово — можно уведомить UI, показать список savedPaths и т.п.
+                  logger.e('Saved received files: $savedPaths');
+                  emit(SendReceiveBloc_TransferCompleted(savedPaths: savedPaths));
                 } catch (e, st) {
                   logger.e('Error handling received files pack: $e\n$st');
+                  emit(SendReceiveBloc_TransferError(message: e.toString()));
                 }
               },
             ),
           ),
         );
-      } catch (e) {}
+      } catch (e) {
+        logger.e(e.toString());
+        emit(SendReceiveBloc_TransferError(message: e.toString()));
+      }
+    });
+
+    // Accept incoming request (receiver side)
+    on<SendReceiveBlocEvent_acceptIncomingRequest>((event, emit) async {
+      try {
+        final pending = _pendingIncomingRequest;
+        if (pending == null || pending.id != event.requestId) {
+          emit(SendReceiveBloc_TransferError(message: 'No such incoming request'));
+          return;
+        }
+
+        // send positive response
+        await _nearbyService.sendFileResponse(
+          requestId: pending.id,
+          isAccepted: true,
+          receiver: connectedDeviceInfo!,
+        );
+
+        emit(SendReceiveBloc_receiverConfirmedRequest());
+
+        // waiting for plugin to deliver files and filesListener to receive pack
+      } catch (e) {
+        logger.e(e.toString());
+        emit(SendReceiveBloc_TransferError(message: e.toString()));
+      }
+    });
+
+    // Decline incoming request (receiver side)
+    on<SendReceiveBlocEvent_declineIncomingRequest>((event, emit) async {
+      try {
+        final pending = _pendingIncomingRequest;
+        if (pending == null || pending.id != event.requestId) {
+          emit(SendReceiveBloc_TransferError(message: 'No such incoming request'));
+          return;
+        }
+
+        await _nearbyService.sendFileResponse(
+          requestId: pending.id,
+          isAccepted: false,
+          receiver: connectedDeviceInfo!,
+        );
+
+        emit(SendReceiveBloc_receiverDeniedRequest());
+        _pendingIncomingRequest = null;
+      } catch (e) {
+        logger.e(e.toString());
+        emit(SendReceiveBloc_TransferError(message: e.toString()));
+      }
     });
   }
 }
