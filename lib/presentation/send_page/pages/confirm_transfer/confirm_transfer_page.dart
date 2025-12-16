@@ -18,6 +18,8 @@ import 'package:local_share/widgets/appbar.dart';
 import 'package:local_share/widgets/big_button.dart';
 import 'dart:io';
 
+import 'package:nearby_service/nearby_service.dart';
+
 class ConfirmTransferPage extends StatelessWidget {
   const ConfirmTransferPage({super.key});
 
@@ -80,65 +82,83 @@ class ConfirmTransferPage extends StatelessWidget {
               ),
               Expanded(
                 flex: 1,
-                child:
-                    BlocBuilder<
-                      PickedNearbyDeviceBloc,
-                      PickedNearbyDeviceBlocState
-                    >(
-                      builder: (context, state) {
-                        if (state is PickedNearbyDeviceBlocState_picked) {
-                          return BlocListener<
-                            SendReceiveBloc,
-                            SendReceiveBlocState
-                          >(
-                            listener: (context, state) {
-                              if (state is SendReceiveBloc_ConnectedDevice) {
+                child: BlocBuilder<PickedNearbyDeviceBloc, PickedNearbyDeviceBlocState>(
+                  builder: (context, state) {
+                    if (state is PickedNearbyDeviceBlocState_picked) {
+                      return BlocListener<
+                        SendReceiveBloc,
+                        SendReceiveBlocState
+                      >(
+                        listener: (context, state) {
+                          if (state is SendReceiveBloc_ConnectedDevice) {
+                            showSuccessToatification(
+                              context,
+                              title:
+                                  'Connected to ${state.device.info.displayName}',
+                            );
+                          }
+
+                          if (state
+                              is SendReceiveBloc_receiverConfirmedRequest) {
+                            showSuccessToatification(
+                              context,
+                              title:
+                                  'Reciver Confirmed request',
+                            );
+                          }
+
+                           if (state is SendReceiveBloc_receiverDeniedRequest) {
                                 showSuccessToatification(
                                   context,
                                   title:
-                                      'Connected to ${state.device.info.displayName}',
+                                      'Receiver Denied request',
                                 );
                               }
-                            },
+                        },
 
-                            child: BigButton(
-                              title: S.of(context).sendFiles,
-                              color: theme.colorScheme.primary,
-                              withIcon: true,
-                              icon: AppIcon.sendIcon,
-                              onTap: () {
-                                final pickedFilesBloc = context
-                                    .read<PickedFilesBloc>();
-                                if (pickedFilesBloc.files.isEmpty) {
-                                  showWarningToatification(
-                                    context,
-                                    title: 'No file picked',
-                                  );
-                                } else {
-                                  context.read<SendReceiveBloc>().add(
-                                    SendReceiveBlocEvent_connectDevice(
-                                      device: state.device,
-                                    ),
-                                  );
+                        child: BigButton(
+                          title: S.of(context).sendFiles,
+                          color: theme.colorScheme.primary,
+                          withIcon: true,
+                          icon: AppIcon.sendIcon,
+                          onTap: () {
+                            final pickedFilesBloc = context
+                                .read<PickedFilesBloc>();
+                            if (pickedFilesBloc.files.isEmpty) {
+                              showWarningToatification(
+                                context,
+                                title: 'No file picked',
+                              );
+                            } else {
+                              context.read<SendReceiveBloc>().add(
+                                SendReceiveBlocEvent_connectDevice(
+                                  device: state.device,
+                                ),
+                              );
 
-                                  // Convert picked files to File objects
-                                  final files = pickedFilesBloc.files
-                                      .map((fileModel) => File(fileModel.path))
-                                      .toList();
+                              // Convert picked files to List<NearFileInfo>
+                              final files = pickedFilesBloc.files
+                                  .map(
+                                    (fileModel) =>
+                                        NearbyFileInfo(path: fileModel.path),
+                                  )
+                                  .toList();
 
-                                  // Send files with ACK for reliability
-                                  // context.read<SendPageBloc>().add(
-                                  //   SendPageBlocEvent_sendFiles(files: files)
-                                  // );
-                                }
-                              },
-                            ),
-                          );
-                        } else {
-                          return CircularProgressIndicator();
-                        }
-                      },
-                    ),
+                              // send files request
+                              context.read<SendReceiveBloc>().add(
+                                SendReceiveBlocEvent_sendFilesRequest(
+                                  filesInfo: files,
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      );
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  },
+                ),
               ),
             ],
           ),

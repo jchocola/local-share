@@ -62,4 +62,41 @@ class AndroidNearbyService {
       logger.e('failed to connect device');
     }
   }
+
+  Future<void> sendFileRequest({
+    required List<NearbyFileInfo> files,
+    required NearbyDeviceInfo receiver,
+  }) async {
+    try {
+      nearbyService.send(
+        OutgoingNearbyMessage(
+          content: NearbyMessageFilesRequest.create(files: files),
+          receiver: receiver,
+        ),
+      );
+    } catch (e) {
+      logger.e(e.toString());
+    }
+  }
+
+  Future<void> sendFileResponse({
+    required String requestId,
+    required bool isAccepted,
+    required NearbyDeviceInfo receiver,
+  }) async {
+    try {
+      await nearbyService.send(
+        OutgoingNearbyMessage(
+          content: NearbyMessageFilesResponse(
+            id: requestId,
+            isAccepted: isAccepted,
+          ),
+          receiver: receiver,
+        ),
+      );
+    } catch (e) {
+      logger.e(e.toString());
+    }
+  }
+
 }
