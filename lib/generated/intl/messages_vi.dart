@@ -51,6 +51,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chunkSize": MessageLookupByLibrary.simpleMessage("Kích thước khối"),
     "chunksizeMb": m0,
+    "close": MessageLookupByLibrary.simpleMessage("Close"),
     "closedServer": MessageLookupByLibrary.simpleMessage("Server đã đóng!"),
     "confirmTransfer": MessageLookupByLibrary.simpleMessage("Xác nhận chuyển"),
     "connectToWifiOrYourPersonalInternetConnection":
@@ -115,6 +116,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Nhận thông báo về các yêu cầu đến và các tác vụ đã hoàn thành.",
         ),
+    "receivedFiles": MessageLookupByLibrary.simpleMessage("Received Files"),
     "receivedFilesReceivedfilescount": m3,
     "resetDeviceId": MessageLookupByLibrary.simpleMessage("Đổi Device ID"),
     "searchingForDevices": MessageLookupByLibrary.simpleMessage(

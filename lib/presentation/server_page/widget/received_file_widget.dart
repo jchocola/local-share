@@ -50,7 +50,7 @@ class ReceivedFileWidget extends StatelessWidget {
                 //   },
                 // );
               }
-              return Text('Received files (0)');
+              return Text(S.of(context).receivedFilesReceivedfilescount(0));
             },
           ),
           TextButton(
@@ -71,7 +71,7 @@ class ReceivedFileWidget extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Received Files'),
+          title: Text(S.of(context).receivedFiles),
           content: Container(
             width: double.maxFinite,
             child: ReceivedFilesList(),
@@ -81,7 +81,7 @@ class ReceivedFileWidget extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Close'),
+              child: Text(S.of(context).close),
             ),
           ],
         );

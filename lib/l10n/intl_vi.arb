@@ -76,5 +76,7 @@
   "openAppSetting": "Mở Cài đặt Ứng dụng",
   "openedServer": "Server đã mở!",
   "closedServer": "Server đã đóng!",
-  "transferringFilesBetweenDevicesnbetweenOperatingSystems": "Chuyển file giữa các thiết bị. Giữa các hệ điều hành."
+  "transferringFilesBetweenDevicesnbetweenOperatingSystems": "Chuyển file giữa các thiết bị. Giữa các hệ điều hành.",
+  "receivedFiles": "Received Files",
+  "close": "Close"
 }

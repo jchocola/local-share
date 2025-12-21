@@ -76,5 +76,7 @@
   "openAppSetting": "Открыть настройки приложения",
   "openedServer": "Сервер открыт!",
   "closedServer": "Сервер закрыт!",
-  "transferringFilesBetweenDevicesnbetweenOperatingSystems": "Передача файлов между устройствами. Между операционными системами."
+  "transferringFilesBetweenDevicesnbetweenOperatingSystems": "Передача файлов между устройствами. Между операционными системами.",
+  "receivedFiles": "Received Files",
+  "close": "Close"
 }

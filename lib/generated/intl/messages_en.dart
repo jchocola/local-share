@@ -52,6 +52,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chunkSize": MessageLookupByLibrary.simpleMessage("Chunk Size"),
     "chunksizeMb": m0,
+    "close": MessageLookupByLibrary.simpleMessage("Close"),
     "closedServer": MessageLookupByLibrary.simpleMessage("Closed server"),
     "confirmTransfer": MessageLookupByLibrary.simpleMessage("Confirm Transfer"),
     "connectToWifiOrYourPersonalInternetConnection":
@@ -116,6 +117,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Receive alerts for incoming requests and completions.",
         ),
+    "receivedFiles": MessageLookupByLibrary.simpleMessage("Received Files"),
     "receivedFilesReceivedfilescount": m3,
     "resetDeviceId": MessageLookupByLibrary.simpleMessage("Reset Device ID"),
     "searchingForDevices": MessageLookupByLibrary.simpleMessage(

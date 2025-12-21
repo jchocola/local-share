@@ -76,5 +76,7 @@
   "openAppSetting": "Open App Setting",
   "openedServer": "Opened server!",
   "closedServer": "Closed server",
-  "transferringFilesBetweenDevicesnbetweenOperatingSystems": "Transferring files between devices.\\nBetween operating systems."
+  "transferringFilesBetweenDevicesnbetweenOperatingSystems": "Transferring files between devices.\\nBetween operating systems.",
+  "receivedFiles": "Received Files",
+  "close": "Close"
 }

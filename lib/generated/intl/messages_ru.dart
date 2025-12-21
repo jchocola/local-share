@@ -50,6 +50,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chunkSize": MessageLookupByLibrary.simpleMessage("Размер блока"),
     "chunksizeMb": m0,
+    "close": MessageLookupByLibrary.simpleMessage("Close"),
     "closedServer": MessageLookupByLibrary.simpleMessage("Сервер закрыт!"),
     "confirmTransfer": MessageLookupByLibrary.simpleMessage(
       "Подтвердить передачу",
@@ -118,6 +119,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Получать оповещения о входящих запросах и завершении передач.",
         ),
+    "receivedFiles": MessageLookupByLibrary.simpleMessage("Received Files"),
     "receivedFilesReceivedfilescount": m3,
     "resetDeviceId": MessageLookupByLibrary.simpleMessage(
       "Сбросить ID устройства",
