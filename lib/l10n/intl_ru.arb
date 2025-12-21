@@ -75,5 +75,6 @@
   "openWifiSettings": "Открыть настройки WiFi",
   "openAppSetting": "Открыть настройки приложения",
   "openedServer": "Сервер открыт!",
-  "closedServer": "Сервер закрыт!"
+  "closedServer": "Сервер закрыт!",
+  "transferringFilesBetweenDevicesnbetweenOperatingSystems": "Передача файлов между устройствами. Между операционными системами."
 }

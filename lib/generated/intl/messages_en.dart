@@ -158,6 +158,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "transferViaServer": MessageLookupByLibrary.simpleMessage(
       "Transfer via Server",
     ),
+    "transferringFilesBetweenDevicesnbetweenOperatingSystems":
+        MessageLookupByLibrary.simpleMessage(
+          "Transferring files between devices.\\nBetween operating systems.",
+        ),
     "tryAgain": MessageLookupByLibrary.simpleMessage("Try Again"),
     "turnOnVisibilityToAllowOtherDevicesToDiscoverAnd":
         MessageLookupByLibrary.simpleMessage(

@@ -75,5 +75,6 @@
   "openWifiSettings": "Mở cài đặt WiFi",
   "openAppSetting": "Mở Cài đặt Ứng dụng",
   "openedServer": "Server đã mở!",
-  "closedServer": "Server đã đóng!"
+  "closedServer": "Server đã đóng!",
+  "transferringFilesBetweenDevicesnbetweenOperatingSystems": "Chuyển file giữa các thiết bị. Giữa các hệ điều hành."
 }

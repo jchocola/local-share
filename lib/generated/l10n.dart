@@ -718,6 +718,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Transferring files between devices.\nBetween operating systems.`
+  String get transferringFilesBetweenDevicesnbetweenOperatingSystems {
+    return Intl.message(
+      'Transferring files between devices.\\nBetween operating systems.',
+      name: 'transferringFilesBetweenDevicesnbetweenOperatingSystems',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

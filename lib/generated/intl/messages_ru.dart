@@ -164,6 +164,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "transferViaServer": MessageLookupByLibrary.simpleMessage(
       "Передача через сервер",
     ),
+    "transferringFilesBetweenDevicesnbetweenOperatingSystems":
+        MessageLookupByLibrary.simpleMessage(
+          "Передача файлов между устройствами. Между операционными системами.",
+        ),
     "tryAgain": MessageLookupByLibrary.simpleMessage("Попробовать еще раз"),
     "turnOnVisibilityToAllowOtherDevicesToDiscoverAnd":
         MessageLookupByLibrary.simpleMessage(

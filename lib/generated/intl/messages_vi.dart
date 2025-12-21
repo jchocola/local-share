@@ -155,6 +155,10 @@ class MessageLookup extends MessageLookupByLibrary {
           "Tốc độ truyền tải phụ thuộc vào chất lượng mạng và kích thước khối đã thiết lập.",
         ),
     "transferViaServer": MessageLookupByLibrary.simpleMessage("Gửi qua Server"),
+    "transferringFilesBetweenDevicesnbetweenOperatingSystems":
+        MessageLookupByLibrary.simpleMessage(
+          "Chuyển file giữa các thiết bị. Giữa các hệ điều hành.",
+        ),
     "tryAgain": MessageLookupByLibrary.simpleMessage("Thử lại"),
     "turnOnVisibilityToAllowOtherDevicesToDiscoverAnd":
         MessageLookupByLibrary.simpleMessage(
