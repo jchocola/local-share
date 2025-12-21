@@ -101,47 +101,47 @@ class TransferSetting extends StatelessWidget {
                         child: Text(state.downloadLocation),
                       ),
                     ),
-                    Divider(),
-                    SettingTitle(
-                      icon: AppIcon.deleteFile,
-                      title: S.of(context).overwriteExistingFiles,
-                      subtitle: S
-                          .of(context)
-                          .ifDisabledDuplicateFilesAreRenamedAutomatically,
-                      trailingWidget: CustomSwitcher(
-                        value: state.overwriteExistingFile,
-                        onChanged: (_) => context.read<SettingBloc>().add(
-                          SettingBlocEvent_toogleOverwriteExistingFile(),
-                        ),
-                      ),
-                    ),
-                    Divider(),
-                    SettingTitle(
-                      icon: AppIcon.fileCheck,
-                      title: S.of(context).autoAcceptSmallFiles,
-                      subtitle: S
-                          .of(context)
-                          .automaticallyAcceptTransfersUnder10mbFromKnownDevices,
-                      trailingWidget: CustomSwitcher(
-                        value: state.autoAcceptSmallFile,
-                        onChanged: (_) => context.read<SettingBloc>().add(
-                          SettingBlocEvent_toogleAutoAcceptSmallFile(),
-                        ),
-                      ),
-                    ),
+                    // Divider(),
+                    // SettingTitle(
+                    //   icon: AppIcon.deleteFile,
+                    //   title: S.of(context).overwriteExistingFiles,
+                    //   subtitle: S
+                    //       .of(context)
+                    //       .ifDisabledDuplicateFilesAreRenamedAutomatically,
+                    //   trailingWidget: CustomSwitcher(
+                    //     value: state.overwriteExistingFile,
+                    //     onChanged: (_) => context.read<SettingBloc>().add(
+                    //       SettingBlocEvent_toogleOverwriteExistingFile(),
+                    //     ),
+                    //   ),
+                    // ),
+                    // Divider(),
+                    // SettingTitle(
+                    //   icon: AppIcon.fileCheck,
+                    //   title: S.of(context).autoAcceptSmallFiles,
+                    //   subtitle: S
+                    //       .of(context)
+                    //       .automaticallyAcceptTransfersUnder10mbFromKnownDevices,
+                    //   trailingWidget: CustomSwitcher(
+                    //     value: state.autoAcceptSmallFile,
+                    //     onChanged: (_) => context.read<SettingBloc>().add(
+                    //       SettingBlocEvent_toogleAutoAcceptSmallFile(),
+                    //     ),
+                    //   ),
+                    // ),
 
-                    Divider(),
-                    SettingTitle(
-                      icon: AppIcon.chunkIcon,
-                      title: S.of(context).chunkSize,
-                      subtitle: S
-                          .of(context)
-                          .theSizeOfAPieceOfDataDuringTransferring,
-                      trailingWidget: TextButton(
-                        onPressed: setChunkSize,
-                        child: Text(S.of(context).chunksizeMb(state.chunkSize)),
-                      ),
-                    ),
+                    // Divider(),
+                    // SettingTitle(
+                    //   icon: AppIcon.chunkIcon,
+                    //   title: S.of(context).chunkSize,
+                    //   subtitle: S
+                    //       .of(context)
+                    //       .theSizeOfAPieceOfDataDuringTransferring,
+                    //   trailingWidget: TextButton(
+                    //     onPressed: setChunkSize,
+                    //     child: Text(S.of(context).chunksizeMb(state.chunkSize)),
+                    //   ),
+                    // ),
                   ],
                 ),
               );

@@ -115,20 +115,20 @@ class AppearanceSetting extends StatelessWidget {
                             : AdaptiveThemeMode.light,
                       ),
                     ),
-                    Divider(),
-                    SettingTitle(
-                      icon: AppIcon.notificationOffIcon,
-                      title: S.of(context).transferNotifications,
-                      subtitle: S
-                          .of(context)
-                          .receiveAlertsForIncomingRequestsAndCompletions,
-                      trailingWidget: CustomSwitcher(
-                        value: state.transferNotification,
-                        onChanged: (_) => context.read<SettingBloc>().add(
-                          SettingBlocEvent_toogleTransferNotification(),
-                        ),
-                      ),
-                    ),
+                    // Divider(),
+                    // SettingTitle(
+                    //   icon: AppIcon.notificationOffIcon,
+                    //   title: S.of(context).transferNotifications,
+                    //   subtitle: S
+                    //       .of(context)
+                    //       .receiveAlertsForIncomingRequestsAndCompletions,
+                    //   trailingWidget: CustomSwitcher(
+                    //     value: state.transferNotification,
+                    //     onChanged: (_) => context.read<SettingBloc>().add(
+                    //       SettingBlocEvent_toogleTransferNotification(),
+                    //     ),
+                    //   ),
+                    // ),
                     // Divider(),
                     // SettingTitle(
                     //   icon: AppIcon.fileCheck,

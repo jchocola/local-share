@@ -148,6 +148,7 @@ class ServerPage extends StatelessWidget {
                     children: [
                       Center(
                         child: QrWidget(
+                        
                           data: state.switcherValue == AppConstant.SEND_KEY
                               ? sendUrl
                               : receiveUrl,

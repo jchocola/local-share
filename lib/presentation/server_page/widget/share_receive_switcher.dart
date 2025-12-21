@@ -11,10 +11,13 @@ class ShareReceiveSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocBuilder<ServerBloc, ServerBlocState>(
       builder: (context, state) {
         if (state is ServerBlocState_opened) {
           return CupertinoSlidingSegmentedControl(
+            backgroundColor: theme.colorScheme. primary.withOpacity(0.1),
+            thumbColor: theme.scaffoldBackgroundColor,
             groupValue: state.switcherValue,
             children: {
               AppConstant.SEND_KEY: Text(S.of(context).send),

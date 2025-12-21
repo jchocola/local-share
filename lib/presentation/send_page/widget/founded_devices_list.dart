@@ -19,16 +19,16 @@ class FoundedDevicesList extends StatelessWidget {
               itemBuilder: (context, index) => OtherDeviceCard(
                 device: state.devices[index],
                 onTap: () {
-                  context.read<PickedNearbyDeviceBloc>().add(
-                    PickedNearbyDeviceBlocEvent_pickDevice(
-                      device: state.devices[index],
-                    ),
+                  // context.read<PickedNearbyDeviceBloc>().add(
+                  //   PickedNearbyDeviceBlocEvent_pickDevice(
+                  //     device: state.devices[index],
+                  //   ),
 
                     
-                  );
+                  // );
                   
 
-                  context.push('/send_page/confirm_transfer');
+                  // context.push('/send_page/confirm_transfer');
                 },
               ),
               separatorBuilder: (context, index) => Divider(),

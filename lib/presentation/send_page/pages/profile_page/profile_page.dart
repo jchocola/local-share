@@ -42,15 +42,15 @@ class ProfilePage extends StatelessWidget {
             InfoListile(icon: AppIcon.feedbackIcon, title: S.of(context).sendFeedback, onTap: () {
                Wiredash.of(context).show(inheritMaterialTheme: true);
             },),
-            InfoListile(
-              icon: AppIcon.resetIcon,
-              title: S.of(context).resetDeviceId,
-              onTap: () {
-                context.read<CurrentDeviceBloc>().add(
-                  CurrentDeviceBlocEvent_resetDeviceID(),
-                );
-              },
-            ),
+            // InfoListile(
+            //   icon: AppIcon.resetIcon,
+            //   title: S.of(context).resetDeviceId,
+            //   onTap: () {
+            //     context.read<CurrentDeviceBloc>().add(
+            //       CurrentDeviceBlocEvent_resetDeviceID(),
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),
