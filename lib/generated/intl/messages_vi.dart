@@ -51,7 +51,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chunkSize": MessageLookupByLibrary.simpleMessage("Kích thước khối"),
     "chunksizeMb": m0,
+    "closedServer": MessageLookupByLibrary.simpleMessage("Server đã đóng!"),
     "confirmTransfer": MessageLookupByLibrary.simpleMessage("Xác nhận chuyển"),
+    "connectToWifiOrYourPersonalInternetConnection":
+        MessageLookupByLibrary.simpleMessage(
+          "Kết nối với Wi-Fi hoặc kết nối internet cá nhân của bạn.",
+        ),
     "dark": MessageLookupByLibrary.simpleMessage("Tối"),
     "downloadLocation": MessageLookupByLibrary.simpleMessage(
       "Vị trí tải xuống",
@@ -77,6 +82,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "listeningForRequests": MessageLookupByLibrary.simpleMessage(
       "Lắng nghe các yêu cầu",
     ),
+    "localshare": MessageLookupByLibrary.simpleMessage("LocalShare"),
+    "lookingForEachOther": MessageLookupByLibrary.simpleMessage(
+      "Tìm kiếm thiết bị quanh ta",
+    ),
     "makeSureThatYouAndTheRecipientAreOnThe":
         MessageLookupByLibrary.simpleMessage(
           "Hãy đảm bảo rằng bạn và người nhận đang ở trên cùng một mạng!",
@@ -87,7 +96,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "notFoundsReceiverTrySendViaServer": MessageLookupByLibrary.simpleMessage(
       "Không tìm thấy người nhận?\nHãy thử gửi qua máy chủ.",
     ),
+    "openAppSetting": MessageLookupByLibrary.simpleMessage(
+      "Mở Cài đặt Ứng dụng",
+    ),
     "openServer": MessageLookupByLibrary.simpleMessage("Mở Server"),
+    "openWifiSettings": MessageLookupByLibrary.simpleMessage("Mở cài đặt WiFi"),
+    "openedServer": MessageLookupByLibrary.simpleMessage("Server đã mở!"),
     "overwriteExistingFiles": MessageLookupByLibrary.simpleMessage(
       "Ghi đè lên các tệp hiện có",
     ),
@@ -117,6 +131,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "server": MessageLookupByLibrary.simpleMessage("Server"),
     "settings": MessageLookupByLibrary.simpleMessage("Cài đặt"),
     "show": MessageLookupByLibrary.simpleMessage("Show"),
+    "startDiscovering": MessageLookupByLibrary.simpleMessage(
+      "Bắt đầu khám phá",
+    ),
     "stop": MessageLookupByLibrary.simpleMessage("Ngừng"),
     "termsOfService": MessageLookupByLibrary.simpleMessage(
       "Điều khoản dịch vụ",
@@ -138,6 +155,7 @@ class MessageLookup extends MessageLookupByLibrary {
           "Tốc độ truyền tải phụ thuộc vào chất lượng mạng và kích thước khối đã thiết lập.",
         ),
     "transferViaServer": MessageLookupByLibrary.simpleMessage("Gửi qua Server"),
+    "tryAgain": MessageLookupByLibrary.simpleMessage("Thử lại"),
     "turnOnVisibilityToAllowOtherDevicesToDiscoverAnd":
         MessageLookupByLibrary.simpleMessage(
           "Bật tính năng hiển thị để cho phép các thiết bị khác phát hiện và gửi tệp tin cho bạn.",
@@ -149,11 +167,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "waitingForIncomingConnections": MessageLookupByLibrary.simpleMessage(
       "Đang chờ kết nối đến...",
     ),
+    "weFoundSomeone": MessageLookupByLibrary.simpleMessage(
+      "Chúng ta đã tìm thấy ai đó!",
+    ),
     "whereReceivedFilesAreSaved": MessageLookupByLibrary.simpleMessage(
       "Nơi lưu trữ các tệp đã nhận.",
     ),
+    "wifiNearbyServiceDenied": MessageLookupByLibrary.simpleMessage(
+      "Dịch vụ Wi-Fi Nearby bị từ chối",
+    ),
+    "wifiNotConnected": MessageLookupByLibrary.simpleMessage(
+      "Không kết nối Wi-Fi",
+    ),
+    "yohooo": MessageLookupByLibrary.simpleMessage("Tuyệt"),
     "youAreInvisibleToOtherDevices": MessageLookupByLibrary.simpleMessage(
       "Bạn không hiển thị cho các thiết bị khác!",
+    ),
+    "youCanOpenServerForTransferingFilesNow":
+        MessageLookupByLibrary.simpleMessage(
+          "Bạn có thể mở server để chuyển file ngay bây giờ!",
+        ),
+    "youCanStillTransferFiles": MessageLookupByLibrary.simpleMessage(
+      "Bạn vẫn có thể chuyển file.",
+    ),
+    "youCantSeeOtherstheyCantSeeYou": MessageLookupByLibrary.simpleMessage(
+      "Bạn không thể nhìn thấy người khác. Họ cũng không thể nhìn thấy bạn.",
     ),
     "yourDeviceIsReadyToReceiveFilesOtherDevicesCan":
         MessageLookupByLibrary.simpleMessage(

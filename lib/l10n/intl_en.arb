@@ -59,5 +59,21 @@
   "cancel": "Cancel",
   "sendFiles": "Send Files",
   "chunksizeMb": "{chunkSize} MB",
-  "theMoreTheFasterTheLessTheBetter": "The more, the faster. The less, the better!"
+  "theMoreTheFasterTheLessTheBetter": "The more, the faster. The less, the better!",
+  "localshare": "LocalShare",
+  "startDiscovering": "Start Discovering",
+  "lookingForEachOther": "Looking for each other",
+  "wifiNearbyServiceDenied": "Wi-Fi Nearby Service Denied",
+  "youCantSeeOtherstheyCantSeeYou": "You can't see others.They can't see you.",
+  "wifiNotConnected": "Wi-Fi Not Connected",
+  "connectToWifiOrYourPersonalInternetConnection": "Connect to Wi-Fi or your personal internet connection.",
+  "yohooo": "Yohooo",
+  "weFoundSomeone": "We found someone!",
+  "youCanOpenServerForTransferingFilesNow": "You can open server for transfering files now!",
+  "youCanStillTransferFiles": "You can still transfer files.",
+  "tryAgain": "Try Again",
+  "openWifiSettings": "Open WiFi settings",
+  "openAppSetting": "Open App Setting",
+  "openedServer": "Opened server!",
+  "closedServer": "Closed server"
 }

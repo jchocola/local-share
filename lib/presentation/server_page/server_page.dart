@@ -78,13 +78,15 @@ class ServerPage extends StatelessWidget {
           if (state is ServerBlocState_error) {
             showErrorToatification(
               context,
-              title: AppErrorConverter(error: state.error),
+              title: AppErrorConverter(context, error: state.error),
+              desc: ''
             );
           }
           if (state is ServerBlocState_success) {
             showSuccessToatification(
               context,
-              title: AppErrorConverter(error: state.success),
+              title: AppErrorConverter(context, error: state.success),
+              desc: ''
             );
           }
         },

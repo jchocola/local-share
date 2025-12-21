@@ -50,9 +50,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chunkSize": MessageLookupByLibrary.simpleMessage("Размер блока"),
     "chunksizeMb": m0,
+    "closedServer": MessageLookupByLibrary.simpleMessage("Сервер закрыт!"),
     "confirmTransfer": MessageLookupByLibrary.simpleMessage(
       "Подтвердить передачу",
     ),
+    "connectToWifiOrYourPersonalInternetConnection":
+        MessageLookupByLibrary.simpleMessage(
+          "Подключитесь к Wi-Fi или вашему личному интернет-соединению.",
+        ),
     "dark": MessageLookupByLibrary.simpleMessage("Темная"),
     "downloadLocation": MessageLookupByLibrary.simpleMessage("Папка загрузки"),
     "filesFiles": m1,
@@ -76,6 +81,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "listeningForRequests": MessageLookupByLibrary.simpleMessage(
       "Ожидание запросов",
     ),
+    "localshare": MessageLookupByLibrary.simpleMessage("LocalShare"),
+    "lookingForEachOther": MessageLookupByLibrary.simpleMessage(
+      "В поисках друг друга",
+    ),
     "makeSureThatYouAndTheRecipientAreOnThe":
         MessageLookupByLibrary.simpleMessage(
           "Убедитесь, что вы и получатель находитесь в одной сети!",
@@ -86,7 +95,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "notFoundsReceiverTrySendViaServer": MessageLookupByLibrary.simpleMessage(
       "Не нашли получателя?\nПопробуйте отправить через сервер",
     ),
+    "openAppSetting": MessageLookupByLibrary.simpleMessage(
+      "Открыть настройки приложения",
+    ),
     "openServer": MessageLookupByLibrary.simpleMessage("Открыть сервер"),
+    "openWifiSettings": MessageLookupByLibrary.simpleMessage(
+      "Открыть настройки WiFi",
+    ),
+    "openedServer": MessageLookupByLibrary.simpleMessage("Сервер открыт!"),
     "overwriteExistingFiles": MessageLookupByLibrary.simpleMessage(
       "Перезаписывать существующие файлы",
     ),
@@ -120,6 +136,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "server": MessageLookupByLibrary.simpleMessage("Сервер"),
     "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
     "show": MessageLookupByLibrary.simpleMessage("Показать"),
+    "startDiscovering": MessageLookupByLibrary.simpleMessage("В поиске"),
     "stop": MessageLookupByLibrary.simpleMessage("Остановить"),
     "termsOfService": MessageLookupByLibrary.simpleMessage(
       "Условия использования",
@@ -147,6 +164,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "transferViaServer": MessageLookupByLibrary.simpleMessage(
       "Передача через сервер",
     ),
+    "tryAgain": MessageLookupByLibrary.simpleMessage("Попробовать еще раз"),
     "turnOnVisibilityToAllowOtherDevicesToDiscoverAnd":
         MessageLookupByLibrary.simpleMessage(
           "Включите видимость, чтобы другие устройства могли обнаружить и отправить вам файлы",
@@ -158,11 +176,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "waitingForIncomingConnections": MessageLookupByLibrary.simpleMessage(
       "Ожидание входящих соединений...",
     ),
+    "weFoundSomeone": MessageLookupByLibrary.simpleMessage("Мы кого-то нашли!"),
     "whereReceivedFilesAreSaved": MessageLookupByLibrary.simpleMessage(
       "Куда сохраняются полученные файлы.",
     ),
+    "wifiNearbyServiceDenied": MessageLookupByLibrary.simpleMessage(
+      "Отказ в доступе к Wi-Fi поблизости",
+    ),
+    "wifiNotConnected": MessageLookupByLibrary.simpleMessage(
+      "Wi-Fi не подключен",
+    ),
+    "yohooo": MessageLookupByLibrary.simpleMessage("Отлично!"),
     "youAreInvisibleToOtherDevices": MessageLookupByLibrary.simpleMessage(
       "Вы невидимы для других устройств!",
+    ),
+    "youCanOpenServerForTransferingFilesNow":
+        MessageLookupByLibrary.simpleMessage(
+          "Вы можете открыть сервер для передачи файлов прямо сейчас!",
+        ),
+    "youCanStillTransferFiles": MessageLookupByLibrary.simpleMessage(
+      "Вы по-прежнему можете передавать файлы.",
+    ),
+    "youCantSeeOtherstheyCantSeeYou": MessageLookupByLibrary.simpleMessage(
+      "Вы не видите других. Они не видят вас.",
     ),
     "yourDeviceIsReadyToReceiveFilesOtherDevicesCan":
         MessageLookupByLibrary.simpleMessage(

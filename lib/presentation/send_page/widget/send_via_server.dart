@@ -30,7 +30,7 @@ class SendViaServer extends StatelessWidget {
                     S.of(context).makeSureThatYouAndTheRecipientAreOnThe,
                     style: theme.textTheme.bodySmall,
                   ),
-                  Text('Now, you can open server for transfering files',style: theme.textTheme.bodySmall,)
+                  Text(S.of(context).youCanOpenServerForTransferingFilesNow,style: theme.textTheme.bodySmall,)
 
 
                 ],

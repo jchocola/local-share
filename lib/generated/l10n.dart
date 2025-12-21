@@ -573,6 +573,151 @@ class S {
       args: [],
     );
   }
+
+  /// `LocalShare`
+  String get localshare {
+    return Intl.message('LocalShare', name: 'localshare', desc: '', args: []);
+  }
+
+  /// `Start Discovering`
+  String get startDiscovering {
+    return Intl.message(
+      'Start Discovering',
+      name: 'startDiscovering',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Looking for each other`
+  String get lookingForEachOther {
+    return Intl.message(
+      'Looking for each other',
+      name: 'lookingForEachOther',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wi-Fi Nearby Service Denied`
+  String get wifiNearbyServiceDenied {
+    return Intl.message(
+      'Wi-Fi Nearby Service Denied',
+      name: 'wifiNearbyServiceDenied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can't see others.They can't see you.`
+  String get youCantSeeOtherstheyCantSeeYou {
+    return Intl.message(
+      'You can\'t see others.They can\'t see you.',
+      name: 'youCantSeeOtherstheyCantSeeYou',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wi-Fi Not Connected`
+  String get wifiNotConnected {
+    return Intl.message(
+      'Wi-Fi Not Connected',
+      name: 'wifiNotConnected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect to Wi-Fi or your personal internet connection.`
+  String get connectToWifiOrYourPersonalInternetConnection {
+    return Intl.message(
+      'Connect to Wi-Fi or your personal internet connection.',
+      name: 'connectToWifiOrYourPersonalInternetConnection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yohooo`
+  String get yohooo {
+    return Intl.message('Yohooo', name: 'yohooo', desc: '', args: []);
+  }
+
+  /// `We found someone!`
+  String get weFoundSomeone {
+    return Intl.message(
+      'We found someone!',
+      name: 'weFoundSomeone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can open server for transfering files now!`
+  String get youCanOpenServerForTransferingFilesNow {
+    return Intl.message(
+      'You can open server for transfering files now!',
+      name: 'youCanOpenServerForTransferingFilesNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can still transfer files.`
+  String get youCanStillTransferFiles {
+    return Intl.message(
+      'You can still transfer files.',
+      name: 'youCanStillTransferFiles',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Try Again`
+  String get tryAgain {
+    return Intl.message('Try Again', name: 'tryAgain', desc: '', args: []);
+  }
+
+  /// `Open WiFi settings`
+  String get openWifiSettings {
+    return Intl.message(
+      'Open WiFi settings',
+      name: 'openWifiSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open App Setting`
+  String get openAppSetting {
+    return Intl.message(
+      'Open App Setting',
+      name: 'openAppSetting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Opened server!`
+  String get openedServer {
+    return Intl.message(
+      'Opened server!',
+      name: 'openedServer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Closed server`
+  String get closedServer {
+    return Intl.message(
+      'Closed server',
+      name: 'closedServer',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

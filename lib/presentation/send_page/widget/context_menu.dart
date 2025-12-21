@@ -9,7 +9,7 @@ import 'package:local_share/presentation/send_page/bloc/picked_files_bloc.dart';
 getEntries(BuildContext context) => <ContextMenuEntry>[
   //const MenuHeader(text: "Context Menu"),
   MenuItem(
-    label:  Text(S.of(context).selectFile),
+    label: Text(S.of(context).selectFile),
     icon: const Icon(AppIcon.documentIcon),
     onSelected: (value) {
       context.read<PickedFilesBloc>().add(PickedFilesBlocEvent_selectFile());
@@ -18,30 +18,32 @@ getEntries(BuildContext context) => <ContextMenuEntry>[
   MenuItem.submenu(
     items: [
       MenuItem(
-        label:  Text(S.of(context).fromGallery),
+        label: Text(S.of(context).fromGallery),
         value: "gallery",
         icon: const Icon(AppIcon.imageIcon),
         onSelected: (value) {
-            context.read<PickedFilesBloc>().add(PickedFilesBlocEvent_selectPhotoFromGallery());
+          context.read<PickedFilesBloc>().add(
+            PickedFilesBlocEvent_selectPhotoFromGallery(),
+          );
         },
       ),
       MenuItem(
-        label:  Text(S.of(context).fromCamera),
+        label: Text(S.of(context).fromCamera),
         value: 'camera',
         icon: const Icon(AppIcon.cameraIcon),
         onSelected: (value) {
-           context.read<PickedFilesBloc>().add(PickedFilesBlocEvent_selectPhotoFromCamera()); 
+          context.read<PickedFilesBloc>().add(
+            PickedFilesBlocEvent_selectPhotoFromCamera(),
+          );
         },
       ),
     ],
-    label:  Text(S.of(context).selectPhoto),
+    label: Text(S.of(context).selectPhoto),
     icon: const Icon(AppIcon.imageIcon),
-    onSelected: (value) {
-    
-    },
+    onSelected: (value) {},
   ),
   MenuItem(
-    label:  Text(S.of(context).selectMultipleFiles),
+    label: Text(S.of(context).selectMultipleFiles),
     icon: const Icon(AppIcon.multipleFileIcon),
     onSelected: (value) {
       context.read<PickedFilesBloc>().add(
@@ -52,8 +54,11 @@ getEntries(BuildContext context) => <ContextMenuEntry>[
 ];
 
 // initialize a context menu
-ContextMenu menu(BuildContext context) => ContextMenu(
-  entries: getEntries(context),
-  position: const Offset(400, 450),
-  padding: const EdgeInsets.all(8.0),
-);
+ContextMenu menu(BuildContext context) {
+  final size = MediaQuery.of(context).size;
+  return ContextMenu(
+    entries: getEntries(context),
+    position:  Offset(size.width , size.height * 0.7),
+    padding: const EdgeInsets.all(8.0),
+  );
+}

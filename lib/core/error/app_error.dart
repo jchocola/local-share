@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:local_share/generated/l10n.dart';
+
 enum APP_EXCEPTION {
   ///
   /// ERRORS
@@ -16,13 +19,13 @@ enum APP_EXCEPTION {
 
 }
 
-String AppErrorConverter({required APP_EXCEPTION error}) {
+String AppErrorConverter(BuildContext context, {required APP_EXCEPTION error}) {
   switch (error) {
     ///
     /// ERRORS
     ///
     case APP_EXCEPTION.NOT_CONNECTED_WIFI:
-      return 'Not Wi-fi connected';
+      return S.of(context).wifiNotConnected;
 
     case APP_EXCEPTION.NOT_WIFI_NEARBY_SERVICE_GRANTED:
       return 'Nearby service is denied';
@@ -31,10 +34,10 @@ String AppErrorConverter({required APP_EXCEPTION error}) {
     ///  SUCCESSES
     ///
     case APP_EXCEPTION.OPENED_SERVER:
-      return 'Opened server';
+      return S.of(context).openedServer;
 
     case APP_EXCEPTION.CLOSED_SERVER:
-      return 'Closed server';
+      return S.of(context).closedServer;
 
     case APP_EXCEPTION.NEARBY_SERVICE_STOPPED:
       return 'Neaby Service stoped discover';  

@@ -52,7 +52,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "chunkSize": MessageLookupByLibrary.simpleMessage("Chunk Size"),
     "chunksizeMb": m0,
+    "closedServer": MessageLookupByLibrary.simpleMessage("Closed server"),
     "confirmTransfer": MessageLookupByLibrary.simpleMessage("Confirm Transfer"),
+    "connectToWifiOrYourPersonalInternetConnection":
+        MessageLookupByLibrary.simpleMessage(
+          "Connect to Wi-Fi or your personal internet connection.",
+        ),
     "dark": MessageLookupByLibrary.simpleMessage("Dark"),
     "downloadLocation": MessageLookupByLibrary.simpleMessage(
       "Download Location",
@@ -78,6 +83,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "listeningForRequests": MessageLookupByLibrary.simpleMessage(
       "Listening for requests",
     ),
+    "localshare": MessageLookupByLibrary.simpleMessage("LocalShare"),
+    "lookingForEachOther": MessageLookupByLibrary.simpleMessage(
+      "Looking for each other",
+    ),
     "makeSureThatYouAndTheRecipientAreOnThe":
         MessageLookupByLibrary.simpleMessage(
           "Make sure that you and the recipient are on the same network!",
@@ -88,7 +97,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "notFoundsReceiverTrySendViaServer": MessageLookupByLibrary.simpleMessage(
       "Not founds receiver? Try send via server",
     ),
+    "openAppSetting": MessageLookupByLibrary.simpleMessage("Open App Setting"),
     "openServer": MessageLookupByLibrary.simpleMessage("Open Server"),
+    "openWifiSettings": MessageLookupByLibrary.simpleMessage(
+      "Open WiFi settings",
+    ),
+    "openedServer": MessageLookupByLibrary.simpleMessage("Opened server!"),
     "overwriteExistingFiles": MessageLookupByLibrary.simpleMessage(
       "Overwrite Existing Files",
     ),
@@ -118,6 +132,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "server": MessageLookupByLibrary.simpleMessage("Server"),
     "settings": MessageLookupByLibrary.simpleMessage("Settings"),
     "show": MessageLookupByLibrary.simpleMessage("Show"),
+    "startDiscovering": MessageLookupByLibrary.simpleMessage(
+      "Start Discovering",
+    ),
     "stop": MessageLookupByLibrary.simpleMessage("Stop"),
     "termsOfService": MessageLookupByLibrary.simpleMessage("Terms of Service"),
     "theMoreTheFasterTheLessTheBetter": MessageLookupByLibrary.simpleMessage(
@@ -141,6 +158,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "transferViaServer": MessageLookupByLibrary.simpleMessage(
       "Transfer via Server",
     ),
+    "tryAgain": MessageLookupByLibrary.simpleMessage("Try Again"),
     "turnOnVisibilityToAllowOtherDevicesToDiscoverAnd":
         MessageLookupByLibrary.simpleMessage(
           "Turn on visibility to allow other devices to discover and send files to you",
@@ -152,11 +170,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "waitingForIncomingConnections": MessageLookupByLibrary.simpleMessage(
       "Waiting for incoming connections...",
     ),
+    "weFoundSomeone": MessageLookupByLibrary.simpleMessage("We found someone!"),
     "whereReceivedFilesAreSaved": MessageLookupByLibrary.simpleMessage(
       "Where received files are saved.",
     ),
+    "wifiNearbyServiceDenied": MessageLookupByLibrary.simpleMessage(
+      "Wi-Fi Nearby Service Denied",
+    ),
+    "wifiNotConnected": MessageLookupByLibrary.simpleMessage(
+      "Wi-Fi Not Connected",
+    ),
+    "yohooo": MessageLookupByLibrary.simpleMessage("Yohooo"),
     "youAreInvisibleToOtherDevices": MessageLookupByLibrary.simpleMessage(
       "You are invisible to other devices!",
+    ),
+    "youCanOpenServerForTransferingFilesNow":
+        MessageLookupByLibrary.simpleMessage(
+          "You can open server for transfering files now!",
+        ),
+    "youCanStillTransferFiles": MessageLookupByLibrary.simpleMessage(
+      "You can still transfer files.",
+    ),
+    "youCantSeeOtherstheyCantSeeYou": MessageLookupByLibrary.simpleMessage(
+      "You can\'t see others.They can\'t see you.",
     ),
     "yourDeviceIsReadyToReceiveFilesOtherDevicesCan":
         MessageLookupByLibrary.simpleMessage(

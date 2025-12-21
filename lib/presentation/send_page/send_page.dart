@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:local_share/core/constant/app_constant.dart';
 import 'package:local_share/core/icons/app_icon.dart';
 import 'package:local_share/core/utils/show_toastification.dart';
+import 'package:local_share/generated/l10n.dart';
 import 'package:local_share/presentation/blocs/current_device_bloc.dart';
 import 'package:local_share/presentation/blocs/send_receive_bloc.dart';
 import 'package:local_share/presentation/receive_page/bloc/receive_page_bloc.dart';
@@ -48,16 +49,24 @@ class SendPage extends StatelessWidget {
                   },
                 );
               } else {
-                return CircularProgressIndicator();
+                return CustomAvatar(
+                  name: 'NoName',
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => ProfilePage(),
+                    );
+                  },
+                );
               }
             },
           ),
         ),
-        title: 'LocalShare',
+        title: S.of(context).localshare,
       ),
       body: buildBody(context),
 
-      floatingActionButton: FloatingActionButton.small(
+      floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await menu(context).show(context);
           //           void showMenu() async {
@@ -89,22 +98,23 @@ class SendPage extends StatelessWidget {
           BlocConsumer<SendReceiveBloc, SendReceiveBlocState>(
             listener: (context, state) {
               if (state is SendReceiveBlocDiscovering) {
-                showSuccessToatification(context, title: 'Disover Started');
+                showSuccessToatification(context, title: S.of(context).startDiscovering, desc: S.of(context).lookingForEachOther);
               }
 
               if (state is SendReceiveBloc_notWifiNearbyServiceGranted) {
                 showErrorToatification(
                   context,
-                  title: 'WiFi NearbyService denied',
+                  title: S.of(context).wifiNearbyServiceDenied,
+                  desc: S.of(context).youCantSeeOtherstheyCantSeeYou
                 );
               }
 
               if (state is SendReceiveBloc_notWifiConnected) {
-                showErrorToatification(context, title: 'WiFi Not Connected');
+                showErrorToatification(context, title: S.of(context).wifiNotConnected,desc: S.of(context).connectToWifiOrYourPersonalInternetConnection);
               }
 
               if (state is SendReceiveBloc_foundedDevices) {
-                showSuccessToatification(context, title: 'Founded devices');
+                showSuccessToatification(context, title: S.of(context).yohooo,desc: S.of(context).weFoundSomeone);
               }
             },
 
