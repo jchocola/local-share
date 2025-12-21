@@ -43,10 +43,10 @@ class MainPage extends StatelessWidget {
             label: S.of(context).server,
           ),
 
-          BottomNavigationBarItem(
-            icon: Icon(AppIcon.receiveIcon),
-            label: S.of(context).receive,
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(AppIcon.receiveIcon),
+          //   label: S.of(context).receive,
+          // ),
         ],
       ),
     );

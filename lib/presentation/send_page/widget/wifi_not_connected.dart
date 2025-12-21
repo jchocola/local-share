@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/core/constant/app_constant.dart';
-import 'package:local_share/presentation/send_page/bloc/send_page_bloc.dart';
+import 'package:local_share/presentation/blocs/send_receive_bloc.dart';
 
 class WifiNotConnected extends StatelessWidget {
   const WifiNotConnected({super.key});
@@ -18,14 +18,18 @@ class WifiNotConnected extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-              
+               context.read<SendReceiveBloc>().add(
+                          SendReceiveBlocEvent_nearbyServiceInit(),
+                        ); 
               },
               child: Text('Retry Again'),
             ),
 
             ElevatedButton(
               onPressed: () {
-               
+               context.read<SendReceiveBloc>().add(
+                          SendReceiveBlocEvent_openWiFiSetting(),
+                        );
               },
               child: Text('Open WiFi settings'),
             ),

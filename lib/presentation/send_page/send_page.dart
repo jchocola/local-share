@@ -18,6 +18,8 @@ import 'package:local_share/presentation/send_page/widget/searching_animation.da
 import 'package:local_share/presentation/send_page/widget/searching_animation_with_founded_list.dart';
 import 'package:local_share/presentation/send_page/widget/searching_for_devices.dart';
 import 'package:local_share/presentation/send_page/widget/send_via_server.dart';
+import 'package:local_share/presentation/send_page/widget/wifi_nerby_service_not_granted.dart';
+import 'package:local_share/presentation/send_page/widget/wifi_not_connected.dart';
 import 'package:local_share/widgets/appbar.dart';
 import 'package:local_share/widgets/custom_avatar.dart';
 import 'package:local_share/widgets/other_device_card.dart';
@@ -31,22 +33,6 @@ class SendPage extends StatelessWidget {
       appBar: Appbar(
         withLeading: true,
         withTrailing: true,
-        // trailing: BlocBuilder<ReceivePageBloc, ReceivePageBlocState>(
-        //   builder: (context, state) {
-        //     if (state is ReceivePageBlocState_loaded) {
-        //       return IconButton(
-        //         onPressed: () => context.read<ReceivePageBloc>().add(
-        //           RecievePageBlocEvent_ChangeVisiblity(),
-        //         ),
-        //         icon: Icon(
-        //           state.visible ? AppIcon.openEyeIcon : AppIcon.closeEyeIcon,
-        //         ),
-        //       );
-        //     } else {
-        //       return CircularProgressIndicator();
-        //     }
-        //   },
-        // ),
         leading: Padding(
           padding: EdgeInsetsGeometry.only(left: AppConstant.appPadding),
           child: BlocBuilder<CurrentDeviceBloc, CurrentDeviceBlocState>(
@@ -128,51 +114,9 @@ class SendPage extends StatelessWidget {
               } else if (state is SendReceiveBloc_foundedDevices) {
                 return FoundedDevicesList();
               } else if (state is SendReceiveBloc_notWifiNearbyServiceGranted) {
-                return Column(
-                  children: [
-                    Text('NOT WIIF NEARBY SERVICE GRANTED'),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<SendReceiveBloc>().add(
-                          SendReceiveBlocEvent_nearbyServiceInit(),
-                        );
-                      },
-                      child: Text('Try again'),
-                    ),
-
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<SendReceiveBloc>().add(
-                          SendReceiveBlocEvent_openAppSetting(),
-                        );
-                      },
-                      child: Text('Open App Setting'),
-                    ),
-                  ],
-                );
+                return WifiNerbyServiceNotGranted();
               } else if (state is SendReceiveBloc_notWifiConnected) {
-                return Column(
-                  children: [
-                    Text('NOT WIfi connected'),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<SendReceiveBloc>().add(
-                          SendReceiveBlocEvent_nearbyServiceInit(),
-                        );
-                      },
-                      child: Text('Try again'),
-                    ),
-
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<SendReceiveBloc>().add(
-                          SendReceiveBlocEvent_openWiFiSetting(),
-                        );
-                      },
-                      child: Text('Open Wifi Setting'),
-                    ),
-                  ],
-                );
+                return WifiNotConnected();
               } else {
                 return CircularProgressIndicator();
               }

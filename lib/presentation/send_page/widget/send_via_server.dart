@@ -22,21 +22,17 @@ class SendViaServer extends StatelessWidget {
                 // go to server page
                 context.go('/server');
               },
-              child: Row(
+              child: Column(
                 spacing: AppConstant.appPadding,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(AppIcon.serverIcon, color: theme.colorScheme.primary),
-
-                  // AnimatedTextKit(
-                  //   isRepeatingAnimation: true,
-                  //   animatedTexts: [
-                  // WavyAnimatedText('Searching for devices...',textStyle: theme.textTheme.bodySmall , ),
-                  // ])
                   Text(
-                    S.of(context).notFoundsReceiverTrySendViaServer,
+                    S.of(context).makeSureThatYouAndTheRecipientAreOnThe,
                     style: theme.textTheme.bodySmall,
                   ),
+
+                  Text('Если вы оба установили приложение , то видите друг друга')
+
                 ],
               ),
             );

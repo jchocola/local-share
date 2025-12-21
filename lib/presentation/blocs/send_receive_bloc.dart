@@ -443,7 +443,7 @@ class SendReceiveBloc extends Bloc<SendReceiveBlocEvent, SendReceiveBlocState> {
                 e.toString(),
           );
         }
-        
+
          // create and send files request to receiver and keep request id
         final requestId = await _nearbyService.sendFileRequest(
           files: event.filesInfo,
