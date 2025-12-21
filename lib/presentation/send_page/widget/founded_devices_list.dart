@@ -23,7 +23,11 @@ class FoundedDevicesList extends StatelessWidget {
                     PickedNearbyDeviceBlocEvent_pickDevice(
                       device: state.devices[index],
                     ),
+
+                    
                   );
+                  
+
                   context.push('/send_page/confirm_transfer');
                 },
               ),

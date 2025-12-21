@@ -77,7 +77,7 @@ class AndroidNearbyService {
       );
       return request.id;
     } catch (e) {
-      logger.e(e.toString());
+      logger.e('Send file request error' + e.toString());
       return null;
     }
   }
